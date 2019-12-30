@@ -1,0 +1,93 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view style="display: flex;justify-content: center;align-items: center;height: 220rpx;background-color: #333;">
+    <image src="http://cdn.classx.cn/tandian/logo1.png" style="width:100rpx;height:100rpx;border-radius: 100rpx;border: 4rpx solid #222;"></image>
+</view>
+<view class="datas" style="background-color: #333;">
+    <view class="data" bindtap="toQrcodes">
+        <view class="name" style="color: #08be31;">新激活</view>
+        <view class="value">{{report.wifiToday || 0}}</view>
+        <view class="value2">昨日{{report.wifiYesterday || 0}}</view>
+        <view class="value2">总计{{report.wifi || 0}}</view>
+    </view>
+    <view class="data" bindtap="toConnects">
+        <view class="name" style="color: #08be31;">新连接</view>
+        <view class="value">{{report.connectToday || 0}}</view>
+        <view class="value2">昨日{{report.connectYesterday || 0}}</view>
+        <view class="value2">总计{{report.connect || 0}}</view>
+    </view>
+    <view class="data" bindtap="toSubsribers">
+        <view class="name" style="color: #08be31;">新关注</view>
+        <view class="value">{{report.wifisubscribeToday || 0}}</view>
+        <view class="value2">昨日{{report.wifisubscribeYesterday || 0}}</view>
+        <view class="value2">总计{{report.wifisubscribe || 0}}</view>
+    </view>
+</view>
+<div style="margin-top: 20rpx;">
+    <view class="more-line"></view>
+    <view class="more">WiFi码访问数据</view>
+</div>
+
+<!-- <view class="grids">
+    <view class="grid">
+        <view>
+            <image class="icon" src="http://cdn.vlite.pro/cc-menu-circle-2.png" style="width:80rpx;height: 80rpx;"></image>
+            <view>我的店铺</view>
+        </view>
+    </view>
+    <view class="grid">
+        <view>
+            <image class="icon" src="http://cdn.vlite.pro/cc-menu-circle-2.png" style="width:80rpx;height: 80rpx;"></image>
+            <view>我的粉丝</view>
+        </view>
+    </view>
+    <view class="grid">
+        <view>
+            <image class="icon" src="http://cdn.vlite.pro/cc-menu-circle-2.png" style="width:80rpx;height: 80rpx;"></image>
+            <view>我的收入</view>
+        </view>
+    </view>
+</view> -->
+
+<view style="display: flex;justify-content: center;;text-align: center;color: #36ca58;font-weight: bold;position:fixed;bottom: 100rpx;width:750rpx;">
+    <!-- <view style="width:200rpx;" bindtap="toIndex">新版预览</view>
+    <view style="width:200rpx;" bindtap="toMessages">用户消息</view> -->
+    <div>
+        <button class="connect" bindtap="toCreate">创建Wifi码</button>
+        <button wx:if="{{wxapp.appid=='wx7a58519f5e3929b7'}}" class="connect" style="background-color: #111;margin-top: 40rpx;color: #fff;border: unset;" bindtap="toCreateGroupCode">创建商圈码</button>
+        <!-- <button class="connect" style="background-color: #111;margin-top: 40rpx;color: #fff;border: unset;" bindtap="showContact">回复留言</button> -->
+    </div>
+</view>
+
+<view class="mask-dark" wx:if="{{moreDataModal}}" bindtap="hideMoreData">
+    <view class="card" style="width:560rpx;" catchtap="doNothing">
+        <view class="card-head" style="background-color: #08be31;padding: 30rpx;">
+            <view>
+                <image src="/res/images/info-6.png" style="width:100rpx;height: 100rpx;margin-top: 16rpx;"></image>
+            </view>
+        </view>
+        <view class="setting" style="padding:30rpx 40rpx;color:#333;background-color: #fff;text-align: left;border-top: 1rpx solid #333;border-bottom: 1rpx solid #333;">
+            即将打开“小程序数据助手”，仅小程序管理员可查看更多数据，管理员可在<text style="font-weight: bold;">小程序数据助手内</text>授权其它用户查看
+        </view>
+        <view class="card-foot" bindtap="showDataCode" style="font-weight: bold;">我知道了，继续</view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{contactModal}}" bindtap="hideContact">
+    <view class="card" style="width:560rpx;" catchtap="doNothing">
+        <view class="card-head" style="background-color: #08be31;padding: 30rpx;">
+            <view>
+                <image src="/res/images/info-6.png" style="width:100rpx;height: 100rpx;margin-top: 16rpx;"></image>
+            </view>
+        </view>
+        <view class="setting" style="display: flex;justify-content: space-between;align-items: center;padding:30rpx 40rpx;color:#333;background-color: #fff;text-align: left;border-top: 1rpx solid #333;">
+            <view>新留言通过inwifi+通知我</view>
+            <switch checked="{{!wxapp.stopMessageNotification}}" bindchange="stopMessageNotification" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+        </view>
+        <view class="setting" style="padding:30rpx 40rpx;color:#333;background-color: #fff;text-align: left;border-top: 1rpx solid #f1f1f1;border-bottom: 1rpx solid #333;">
+            即将打开“客服小助手”，仅客服人员可回复消息，管理员可在<text style="font-weight: bold;">小程序网页后台的客服</text>功能中进行客服人员绑定
+        </view>
+        <view class="card-foot" bindtap="showContactCode" style="font-weight: bold;">我知道了，继续</view>
+    </view>
+</view>

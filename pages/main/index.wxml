@@ -1,0 +1,426 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+<view class="page">
+    <view class="sticky">
+        <pagenav>
+            <view slot="tab" class="navtab boxpadding">
+                <view class="navitem {{pageType == 'boxs' ? 'activetab' : ''}}" bindtap="onChangeNav" data-type="boxs" data-index="0">首页</view>
+                <view class="navitem {{pageType == 'gous' ? 'activetab' : ''}}" bindtap="onChangeNav" data-type="gous" data-index="1">代金券</view>
+                <view class="navitem {{pageType == 'bows' ? 'activetab' : ''}}" bindtap="onChangeNav" data-type="bows" data-index="2">霸王餐</view>
+            </view>
+        </pagenav>
+
+        <view class="seletebox boxpadding justify-SB center-vertical">
+            <view class="boxleft center-vertical">
+                <view class="{{query.sort == 'dis' ? 'activebar' : ''}}" bindtap="onChangeQuery" data-query="dis">附近</view>
+                <view class="{{query.sort == 'time' ? 'activebar' : ''}}" style="margin-left: 50rpx" bindtap="onChangeQuery" data-query="time">最新</view>
+            </view>
+            <view class="boxright center-vertical" wx:if="{{!showSearch}}">
+                <view class="boxitem" bindtap="toUpdateLocation">{{user.lastLocation?user.city:'附近'}}</view>
+                <view class="boxitem" bindtap="onChangeCategory">{{category || '好吃的'}}</view>
+                <view class="boxitem nowrap" style="max-width: 200rpx" bindtap="handleShowSearch">{{query.keywords || '搜索'}}</view>
+            </view>
+            <view class="searchBox center-vertical" wx:if="{{showSearch}}">
+                <view class="iconfont icon-search"></view>
+                <input value="{{query.keywords}}" focus style="padding: 0 60rpx 0 10rpx;flex: 1;" placeholder="输入关键字搜索" placeholder-style="color: #999" bindinput="keywordsChanged" bindconfirm="doSearch"></input>
+                <view class="iconfont icon-wrong" bindtap="onDeleteKeywords"></view>
+            </view>
+        </view>
+    </view>
+
+    <view wx:if="{{query.sort=='dis' && !query.location}}" class="nodataBox center-all">
+        <view class="defaultbox" wx:if="{{locateFailed}}">
+            <image src="/res/images/address_default.png" style="width: 420rpx;height: 239rpx" />
+            <view style="color: #999;font-size: 28rpx;margin-top: 50rpx">该功能需要使用您的地理位置</view>
+            <view class="addbtn" bindtap="toSetLocation">去设置</view>
+        </view>
+    </view>
+
+    <view wx:else style="min-height: calc(100vh - 113px)">
+        <swiper duration="{{100}}" style="height: calc(100vh - 113px)" bindchange="handleSwiper" current="{{swiperCurrent}}">
+            <swiper-item>
+                <scroll-view scroll-y="true" style="height: calc(100vh - 113px)" bindscrolltolower="handlelower" enable-back-to-top>
+                    <view class="adbox" wx:if="{{setting.banners.length}}">
+                        <swiper style="width:750rpx;height:375rpx;" indicator-dots="{{(setting.banners.length<5&&setting.banners.length>1)?true:false}}" autoplay="{{true}}" circular="{{true}}" interval="{{5000}}" duration="{{1000}}">
+                            <block wx:for="{{setting.banners}}" wx:key="index">
+                                <swiper-item>
+                                    <image src="{{item.image+'@banner'}}" mode="aspectFill" class="bannerimg" bindtap="toBannerPath" data-item="{{item}}" />
+                                </swiper-item>
+                            </block>
+                        </swiper>
+                    </view>
+                    <view class="center-all" wx:if="{{!boxs.length && tabChange}}" style="height: calc(100vh - 300px);z-index: 1000;background: #fff">
+                        <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+                    </view>
+                    <view class="listbox" style="{{boxs.length?'min-height: calc(100vh - 113px)':''}}" style="background: #fff">
+                        <view class="listboxitem" wx:for="{{boxs}}" wx:key="index" data-item="{{item}}" bindtap="toShop">
+                            <shopcard item="{{item}}" query="{{query}}" onactions="shopActions"></shopcard>
+                        </view>
+                    </view>
+                    <view wx:if="{{!loadingmore && !nomore.boxs}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore.boxs}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore.boxs && boxs.length > 0}}" style="margin-top: 40rpx;padding: 0 30rpx;box-sizing: border-box;">
+                        <view class="combox">
+                            <serverinfo bindoncontact="handleShowContact"></serverinfo>
+                        </view>
+                    </view>
+                    <view wx:if="{{nomore.boxs && boxs.length == 0}}" class="nodataBox center-all" style="min-height: 400rpx">
+                        <view wx:if="{{query.keywords}}" class="blankbox">
+                            <image src="/res/images/data_none.png" />
+                            <view style="color: #999;font-size: 28rpx;margin-top: 60rpx">非常抱歉，暂无数据</view>
+                        </view>
+                        <view wx:if="{{!query.keywords}}" class="blankbox">
+                            <image src="/res/images/address_default.png" />
+                            <view style="color: #999;font-size: 28rpx;margin-top: 60rpx">非常抱歉，你所在城市暂无数据</view>
+                            <view class="center-vertical justify-SB" style="margin-top:70rpx">
+                                <view class="blankbox-btn" bindtap="handleShowContact" data-img="http://cdn.classx.cn/tandian/luluwechat.jpg" data-content="lulu92777" style="width: 220rpx;background: #fff;border: 1rpx solid #f0f0f0;color: #666">商务合作</view>
+                                <view class="blankbox-btn" style="width: 330rpx;margin-left: 30rpx" bindtap="toUpdateLocation">查看其他城市</view>
+                            </view>
+                        </view>
+                    </view>
+                </scroll-view>
+            </swiper-item>
+            <swiper-item>
+                <scroll-view scroll-y="true" style="height: calc(100vh - 113px)" bindscrolltolower="handlelower" enable-back-to-top>
+                    <!-- <view class="adbox" wx:if="{{setting.banners.length}}">
+                        <swiper style="width:750rpx;height:375rpx;" indicator-dots="{{(setting.banners.length<5&&setting.banners.length>1)?true:false}}" autoplay="{{true}}" circular="{{true}}" interval="{{5000}}" duration="{{1000}}">
+                            <block wx:for="{{setting.banners}}" wx:key="index">
+                                <swiper-item>
+                                    <image src="{{item.image+'@banner'}}" mode="aspectFill" class="bannerimg" bindtap="toBannerPath" data-item="{{item}}" />
+                                </swiper-item>
+                            </block>
+                        </swiper>
+                    </view> -->
+                     <view class="center-all" wx:if="{{tabChange && !gous.length}}" style="height: calc(100vh - 113px);z-index: 1000;background: #fff">
+                        <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+                    </view>
+                    <view class="signbox" wx:if="{{shopshare}}">
+                        <view class="signbox_left">
+                            <view style="font-size: 24rpx;color: #666;margin-left: 0;">吃喝玩乐商家开放入驻ING ··· 欢迎咨询合作，或</view>
+                        </view>
+                        <view class="signbtn" style="background-color: #333;color:#FFD08A;" bindtap="toCreateShop">立即入驻</view>
+                    </view>
+                    <view wx:else>
+                        <view class="signbox" wx:if="{{showTips1}}">
+                            <view class="signbox_left">
+                                <view style="font-size: 24rpx;color: #666;margin-left: 0;">每当有人<text style="color: #FF4925;font-weight: bold;">砍一刀</text>，都会使价格下降，直到卖出！</view>
+                            </view>
+                            <view class="signbtn" style="background:none ;" bindtap="hideTips1">不再显示</view>
+                        </view>
+                        <view class="signbox" wx:if="{{!showTips1 && showTips2}}" data-content="ss317903133" bindtap="handleCopy" bindlongpress="handleCopy">
+                            <view class="signbox_left">
+                                <image src="http://cdn.classx.cn/tandian/2455e313f229ac53acc80136f32cc3f.jpg@avatar" style="border-radius: 48rpx;height: 48rpx;width:48rpx;"></image>
+                                <view>
+                                    <view style="font-size: 24rpx;font-weight: bold;margin-bottom: 8rpx;">小师妹</view>
+                                    <view style="font-size: 24rpx;color: #666;">加客服微信，<text style="color: #111;font-weight: bold;"></text>领福利进群，找到组织！</view>
+                                </view>
+                            </view>
+                            <view class="signbtn" style="background:none ;" catchtap="hideTips2" data-content="ss317903133">复制微信号</view>
+                        </view>
+                    </view>
+                    <view class="listbox" style="{{gous.length?'min-height: calc(100vh - 456rpx)':''}}" wx:if="{{gous.length}}">
+                        <view wx:for="{{gous}}" wx:key="index" data-item="{{item}}" class="listitem">
+                            <goubox item="{{item}}" query="{{query}}" bindongou="toGou" bindonactions="gouActions">
+                                <view slot="cardbtn">
+                                    <view wx:if="{{item.recommendToIndex}}">
+                                        <view class="joinbtn" wx:if="{{item.status==0}}" style="background: #f0f0f0;color: #666;">
+                                            未开始
+                                        </view>
+                                        <view class="joinbtn" wx:if="{{item.status==2}}" style="background: #f0f0f0;color: #666;">
+                                            已抢光
+                                        </view>
+                                        <view wx:if="{{item.status==1}}">
+                                            <button class="normal" wx:if="{{item.joined || true}}" data-item="{{item}}">
+                                                <view class="joinbtn" style="background: #ff4925;color: #fff;">立即抢购</view>
+                                            </button>
+                                            <view wx:else>
+                                                <view class="joinbtn" catchtap="joinIt" style="background: #ffdb09;color:#242627" data-item="{{item}}" data-index="{{index}}" wx:if="{{user.authed}}">砍一刀</view>
+                                                <button class="normal" open-type="getUserInfo" bindgetuserinfo="authThenJoin" data-item="{{item}}" data-index="{{index}}" catchtap="doNothing" wx:if="{{!user.authed}}">
+                                                    <view class="joinbtn" style="background: #ffdb09;color:#242627">砍一刀</view>
+                                                </button>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view wx:else>
+                                        <view class="joinbtn" style="background: #f0f0f0;color: #666">
+                                            未推荐
+                                        </view>
+                                    </view>
+                                </view>
+                            </goubox>
+                        </view>
+                    </view>
+                    <view wx:if="{{!loadingmore && !nomore.gous && gous.length}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore.gous && gous.length}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore.gous && gous.length > 0}}" style="margin-top: 40rpx;padding: 0 30rpx;box-sizing: border-box;">
+                        <view class="combox">
+                            <serverinfo bindoncontact="handleShowContact"></serverinfo>
+                        </view>
+                    </view>
+                    <view wx:if="{{nomore && gous.length == 0}}" class="nodataBox center-all" style="min-height: 400rpx">
+                        <view wx:if="{{query.keywords}}" class="blankbox">
+                            <image src="/res/images/data_none.png" />
+                            <view style="color: #999;font-size: 28rpx;margin-top: 60rpx">非常抱歉，暂无数据</view>
+                        </view>
+                        <view wx:if="{{!query.keywords}}" class="blankbox">
+                            <image src="/res/images/address_default.png" />
+                            <view style="color: #999;font-size: 28rpx;margin-top: 60rpx">非常抱歉，你所在城市暂无数据</view>
+                            <view class="center-vertical justify-SB" style="margin-top:70rpx">
+                                <view class="blankbox-btn" bindtap="handleShowContact" data-img="http://cdn.classx.cn/tandian/luluwechat.jpg" data-content="lulu92777" style="width: 220rpx;background: #fff;border: 1rpx solid #f0f0f0;color: #666">商务合作</view>
+                                <view class="blankbox-btn" style="width: 330rpx;margin-left: 30rpx" bindtap="toUpdateLocation">查看其他城市</view>
+                            </view>
+                        </view>
+                    </view>
+                </scroll-view>
+            </swiper-item>
+
+            <swiper-item>
+                <scroll-view scroll-y="true" style="height: calc(100vh - 113px)" bindscrolltolower="handlelower" enable-back-to-top>
+                    <!-- <view class="adbox" wx:if="{{setting.banners.length}}">
+                        <swiper style="width:750rpx;height:375rpx;" indicator-dots="{{(setting.banners.length<5&&setting.banners.length>1)?true:false}}" autoplay="{{true}}" circular="{{true}}" interval="{{5000}}" duration="{{1000}}">
+                            <block wx:for="{{setting.banners}}" wx:key="index">
+                                <swiper-item>
+                                    <image src="{{item.image+'@banner'}}" mode="aspectFill" class="bannerimg" bindtap="toBannerPath" data-item="{{item}}" />
+                                </swiper-item>
+                            </block>
+                        </swiper>
+                    </view> -->
+                    <view class="center-all" wx:if="{{!bows.length && tabChange}}" style="height: calc(100vh - 113px);z-index: 1000;background: #fff">
+                        <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+                    </view>
+                    <view class="listbox" style="{{bows.length?'min-height: calc(100vh - 113px)':''}}" wx:if="{{bows.length}}">
+                        <view class="listitem" wx:for="{{bows}}" wx:key="index">
+                            <bowbox item="{{item}}" query="{{query}}" bindonbow="toBow" data-item="{{item}}" bindonactions="bowActions">
+                                <view slot="cardbtn">
+                                    <view wx:if="{{item.recommendToIndex}}">
+                                        <view class="joinbtn" wx:if="{{item.status==1}}" style="background: #f0f0f0;color: #666;">已开奖</view>
+                                        <view wx:if="{{item.status==0}}">
+                                            <view class="joinbtn" wx:if="{{item.joined}}" style="background: #f0f0f0;color: #666;">待开奖</view>
+                                            <view wx:else>
+                                                <view class="joinbtn" catchtap="joinIt" data-item="{{item}}" data-index="{{index}}" wx:if="{{user.authed}}">免费抽</view>
+                                                <button class="normal" open-type="getUserInfo" bindgetuserinfo="authThenJoin" data-item="{{item}}" data-index="{{index}}" catchtap="doNothing" wx:if="{{!user.authed}}">
+                                                    <view class="joinbtn">免费抽</view>
+                                                </button>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view wx:else>
+                                        <view class="joinbtn" style="background: #f0f0f0;color: #666">
+                                            未推荐
+                                        </view>
+                                    </view>
+                                </view>
+                            </bowbox>
+                        </view>
+                    </view>
+                    <view wx:if="{{!loadingmore && !nomore.bows && bows.length}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore.bows && bows.length}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore.bows && bows.length > 0}}" style="margin-top: 40rpx;padding: 0 30rpx;box-sizing: border-box;">
+                        <view class="combox">
+                            <serverinfo bindoncontact="handleShowContact"></serverinfo>
+                        </view>
+                    </view>
+                    <view wx:if="{{nomore && bows.length == 0}}" class="nodataBox center-all" style="height: calc(100vh - 113px)">
+                        <view wx:if="{{query.keywords}}" class="blankbox">
+                            <image src="/res/images/data_none.png" />
+                            <view style="color: #999;font-size: 28rpx;margin-top: 60rpx">非常抱歉，暂无数据</view>
+                        </view>
+                        <view wx:if="{{!query.keywords}}" class="blankbox" style="padding-top: 0">
+                            <image src="/res/images/address_default.png" />
+                            <view style="color: #999;font-size: 28rpx;margin-top: 60rpx">非常抱歉，你所在城市暂无数据</view>
+                            <view class="center-vertical justify-SB" style="margin-top:70rpx">
+                                <view class="blankbox-btn" bindtap="handleShowContact" data-img="http://cdn.classx.cn/tandian/luluwechat.jpg" data-content="lulu92777" style="width: 220rpx;background: #fff;border: 1rpx solid #f0f0f0;color: #666">商务合作</view>
+                                <view class="blankbox-btn" style="width: 330rpx;margin-left: 30rpx" bindtap="toUpdateLocation">查看其他城市</view>
+                            </view>
+                        </view>
+                    </view>
+                </scroll-view>
+            </swiper-item>
+        </swiper>
+
+        <view class="newsbox2" wx:if="{{user.invited && !user.vip && !skipVipTips}}" bindtap="toVip">
+            <view class="news">
+                <view>限量黑卡已可激活!</view>
+            </view>
+        </view>
+        <block wx:else>
+            <view class="newsbox" wx:if="{{expiringCouponCount}}" bindtap="toCoupons">
+                <view class="news">
+                    <view>有{{expiringCouponCount}}张券即将过期</view>
+                    <image src="/res/images/icon_close.png" bindtap="hideNewsbox" style="width:30rpx ;height: 30rpx"></image>
+                </view>
+            </view>
+        </block>
+    </view>
+</view>
+
+<!-- gou -->
+<view class="mask-dark" wx:if="{{joinModal}}" bindtap="hideJoinModal">
+    <view catchtap="doNothing">
+        <view class="mask-card" style="width: 590rpx;padding:70rpx 0 70rpx 0" catchtap="doNothing">
+            <image src="/res/images/icon_userkanjia.png" style="width:476rpx;height: 211rpx;display: block;margin: 0 auto;" />
+            <view class="card-body" style="text-align:center">
+                <view style="color:#242627;font-size: 32rpx;font-weight: bold;margin-top: 60rpx;line-height:1;">少侠好刀法！一刀砍掉<text style="color: #f65459">{{usergou.valueStr}}</text>元</view>
+                <view class="listcell" style="margin-top: 72rpx;">
+                    <view class="cellleft">
+                        <view class="sale">
+                            <view><text style="font-size: 36rpx;font-weight: bold">{{usergou.gou.originPrice}}</text>元</view>
+                            <view style="margin-top: 24rpx">代金券</view>
+                        </view>
+                        <image class="coupondashed" src="/res/images/coupon_dashed.png"></image>
+                    </view>
+                    <view class="cellright">
+                        <view class="cellrightname nowrap">{{usergou.gou.shop.name}}</view>
+                        <view class="shop">无门槛 可转赠</view>
+                        <view class="rotatebox" class="rotatebox" wx:if="{{!currentItem.repeat}}">仅剩{{currentItem.amount - (currentItem.data.paid||0)}}份</view>
+                        <view class="rotatebox" wx:if="{{currentItem.repeat=='day'}}">仅剩{{currentItem.amount - (currentItem.data.paidToday||0)}}份</view>
+                    </view>
+                    <view class="circlecover" />
+                    <view class="circlecover1" />
+                </view>
+                <view style="font-size: 24rpx;color: #999;text-align: center;line-height:1;margin-top: 40rpx">当前价格：<text style="font-size: 32rpx;color: #FF4925">{{usergou.priceStr}}</text><text style="color: #ff4925">元</text></view>
+            </view>
+            <view class="maskbtn" style="margin-top: 40rpx;background: #ff4925;color: #fff" bindtap="toGou">立即抢购</view>
+        </view>
+    </view>
+</view>
+<!-- bow -->
+<view class="mask-dark" bindtap="hideSuccessModal" wx:if="{{successModal}}">
+    <view class="mask-card" style="background: #fff;width: 590rpx;padding-bottom:70rpx;box-sizing: border-box;border-radius: 10rpx;" catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="normal" formType="submit">
+                <view class="center-vertical column">
+                    <image src="/res/images/mask_circlebg.png" style="width: 590rpx;height: 220rpx;position: relative">
+                        <view style="font-size: 40rpx;color: #E8CB93;font-weight: 500;position: absolute;left: 50%;transform: translate(-50%,0);top: 90rpx">参与成功</view>
+                    </image>
+                    <view style="color:#666;font-size: 24rpx;margin-top: 90rpx">我的幸运码</view>
+                    <view style="font-size: 36rpx;color: #FF4925;margin-top: 20rpx">{{code}}</view>
+                    <view class="funintro">
+                        <view class="introcell" style="margin-right: 50rpx">
+                            <image src="/res/images/icon_award1.png"></image>
+                            <view>抽奖</view>
+                            <view class="introtext" style="width: 110rpx">
+                                <view>一键抽取</view>
+                                <view>获得幸运码</view>
+                            </view>
+                        </view>
+                        <image class="nextimg" style="margin-right: 50rpx;margin-top: 16rpx" src="/res/images/icon_next.png"></image>
+                        <view class="introcell" style="margin-right: 50rpx">
+                            <image src="/res/images/icon_award2.png"></image>
+                            <view>开奖</view>
+                            <view class="introtext" style="width: 170rpx">
+                                <view>随机选取中奖号码</view>
+                                <view>微信通知中奖</view>
+                            </view>
+                        </view>
+                        <image class="nextimg" style="margin-right: 50rpx;margin-top: 16rpx" src="/res/images/icon_next.png"></image>
+                        <view class="introcell">
+                            <image src="/res/images/icon_award3.png"></image>
+                            <view>兑奖</view>
+                            <view class="introtext" style="width: 130rpx">
+                                <view>凭中奖二维码</view>
+                                <view>到店兑奖</view>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:if="{{showAd}}">
+                        <button class="normal" bindtap="showVideo" style="{{ading?'opacity: 0.3;':''}}">
+                            <view class="maskbtn" style="margin-top: 140rpx;background: #D24D39;color: #fff">
+                                获取更多幸运码
+                            </view>
+                        </button>
+                        <view style="color: #999;font-size: 24rpx;margin-top: 20rpx;text-align: center;">
+                            看一段视频广告，获取额外幸运码
+                        </view>
+                    </view>
+                    <view wx:else>
+                        <button class="normal" open-type="share">
+                            <view class="maskbtn" style="margin-top: 140rpx;background: #D24D39;color: #fff">
+                                邀请好友抽奖
+                            </view>
+                        </button>
+                        <view style="color: #999;font-size: 24rpx;margin-top: 20rpx;text-align: center;">
+                            好友参与抽奖，你也可以获得额外幸运码
+                        </view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{coinSuccessModal}}" bindtap="hideCoinSuccessModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:600rpx;border-radius: 8rpx;padding: 70rpx 0;box-sizing: border-box">
+            <view class="center-vertical column" style="padding: 40rpx;">
+                <image src="/res/images/mask_otherluckcode.png" style="width: 224rpx;height: 156rpx;margin-top: 20rpx;" />
+                <view style="margin-top: 70rpx;font-size: 36rpx;color: #242627">恭喜获得额外幸运码</view>
+                <view style="font-size: 36rpx;margin-top: 50rpx;color:#FF4925;font-weight: 500">
+                    {{code}}
+                </view>
+            </view>
+            <view wx:if="{{extraInfoType}}" style="margin-top: 40rpx;">
+                <view style="display: flex;align-items: center;justify-content: space-between;width:600rpx;" wx:if="{{(extraInfoType==1 && wxserviceLoad) || extraInfoType==2 || extraInfoType==3}}">
+                    <view style="height: 2rpx;width:120rpx;background-color: #f8f8f8;"></view>
+                    <view style="color: #aaa;" wx:if="{{extraInfoType==1 || extraInfoType==2}}">更多福利请关注</view>
+                    <view style="color: #aaa;" wx:if="{{extraInfoType==3}}">加入粉丝群获取更多福利</view>
+                    <view style="height: 2rpx;width:120rpx;background-color: #f8f8f8;"></view>
+                </view>
+                <view wx:else style="color: #aaa;text-align: center;"> ··· </view>
+                <view wx:if="{{extraInfoType==1 && !wxserviceError}}" style="margin-top: 40rpx;">
+                    <official-account bindload="wxserviceLoad" binderror="wxserviceError"></official-account>
+                </view>
+                <view wx:if="{{(extraInfoType==1 && wxserviceError)||extraInfoType==2}}" style="padding: 40rpx 20rpx;">
+                    <view style="background-color: #fafafa;display: flex;align-items: center;justify-content: space-between;">
+                        <view style="display: flex;align-items: center;">
+                            <image src="http://cdn.classx.cn/tandian/userapp/res/images/wechaticon.png" style="width:100rpx;height:100rpx;border-radius: 10rpx;display: block;margin-right: 10rpx;"></image>
+                            <view>
+                                <view style="font-weight: bold;">探店大师</view>
+                                <view style="color: #aaa;font-size: 20rpx;">让更多人体验更多好店</view>
+                            </view>
+                        </view>
+                        <button class="smallbtn" open-type="contact" style="margin-right: 10rpx;">回复666关注</button>
+                    </view>
+                </view>
+                <view wx:if="{{extraInfoType==3}}" style="padding: 40rpx 20rpx;">
+                    <view style="background-color: #fafafa;display: flex;align-items: center;justify-content: space-between;">
+                        <view style="display: flex;align-items: center;">
+                            <image src="http://cdn.classx.cn/tandian/userapp/res/images/group.png" style="width:100rpx;height:100rpx;border-radius: 10rpx;display: block;margin-right: 10rpx;"></image>
+                            <view>
+                                <view style="font-weight: bold;">探店大师福利群</view>
+                                <view style="color: #aaa;font-size: 20rpx;">福利不断，惊喜不断</view>
+                            </view>
+                        </view>
+                        <button class="smallbtn" open-type="contact" style="margin-right: 10rpx;">回复111加入</button>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{newItemModal}}" bindtap="hideNewItemModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding-bottom: 70rpx;box-sizing: border-box;line-height: 1;font-width: 500">
+            <view class="center-vertical column">
+                <image src="/res/images/mask_chance.png" style="width: 590rpx;height: 400rpx;" />
+                <view style="margin-top: 50rpx;font-size: 32rpx;color: #242627">有 <text style="font-size:48rpx;color: #FF4925">{{newItemCount}}</text> 个</view>
+                <view style="margin-top: 30rpx;font-size: 32rpx;color: #242627">新的免单机会上线了</view>
+                <view class="maskbtn" style="margin-top: 50rpx" bindtap="hideNewItemModal">我知道了</view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{adImage}}" bindtap="hideAdImage">
+    <view style="text-align: center;">
+        <view class="mask-card" style="width:600rpx;border-radius: 12rpx;" catchtap="doNothing">
+            <image src="{{adImage}}" style="width:600rpx;height:800rpx;display: block;border-top-right-radius: 12rpx;border-top-left-radius: 12rpx;border-radius: 12rpx;" mode="aspectFill" bindtap="previewAdImage"></image>
+        </view>
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/LogonClosed.png" style="width:60rpx;height:60rpx;margin-top: 40rpx;opacity: 0.3;"></image>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{showContactModal}}" bindtap="hideContactModal">
+    <view class="mask-card" style="width:590rpx;min-height:600rpx;border-radius: 10rpx;padding-bottom: 30rpx " catchtap="doNothing">
+        <image src="{{contactImage}}" data-image="{{contactImage}}" style="width: 590rpx;height: 784rpx;margin: 0 auto 0 auto;display: block;border-radius: 10rpx" bindtap="handlePreviewImg" bindlongpress="handlePreviewImg"></image>
+        <view class="mask-btn" style="margin: 20rpx auto 10rpx auto" catchtap="handleCopy" data-content="{{contactNum}}">复制微信号</view>
+    </view>
+</view>

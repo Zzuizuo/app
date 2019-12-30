@@ -1,0 +1,78 @@
+.mask-dark {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1100;
+
+    .mask-card {
+        width: 590rpx;
+        height: auto;
+        background: #fff;
+        border-radius: 10rpx;
+        line-height: 1;
+        box-sizing: border-box;
+        padding: 70rpx 0;
+        margin-top: -80rpx;
+        position: relative;
+
+        .hidemask {
+            position: absolute;
+            bottom: -80rpx;
+            left: 50%;
+            transform: translate(-50%, 0);
+            font-size: 50rpx;
+            color: #fff;
+        }
+    }
+
+    .mask-bottom {
+        width: 100vw;
+        height: auto;
+        color: #242627;
+        background: #fff;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        .splitline {
+            width: 100vw;
+            height: 20rpx;
+            background: #fafafa;
+        }
+
+        .maskcancel {
+            line-height: 1;
+            width: 100vw;
+            height: 120rpx;
+            font-size: 32rpx;
+            font-weight: 500;
+        }
+    }
+
+    .mask-share {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+
+        .boxbottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            min-height: 160rpx;
+            background: #fff;
+
+            .boxbtn {
+                min-height: 160rpx;
+
+                image {
+                    width: 90rpx;
+                    height: 90rpx;
+                }
+            }
+        }
+    }
+}

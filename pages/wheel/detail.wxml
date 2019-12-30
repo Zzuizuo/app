@@ -1,0 +1,96 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+
+<view class="main">
+    <swiper autoplay vertical circular interval="{{4000}}" duration="{{500}}" class="swiperbox">
+        <block wx:for="{{bigwheels}}" wx:key="index">
+            <swiper-item>
+                <view class="tipsbox">
+                    <image class="userheadimg" src="{{item.user.headimgurl}}"></image>
+                    <view class="nowrap" style="margin-left: 20rpx;max-width: 600rpx">恭喜{{item.user.nickname}},在幸运大转盘中获得{{item.bonus.coupon.name}}</view>
+                </view>
+            </swiper-item>
+        </block>
+    </swiper>
+    <view class="rulebox" bindtap="showRuleModal">规则</view>
+    
+    <view class="wheelbg">
+        <view class="wheelbg-top">
+            <image src="http://cdn.classx.cn/tandian/userapp/res/images/wheel-title.png"></image>
+            <view class="wheeltimes">您还有 <text style="color: #FD594B">{{userwheelcounter.total-userwheelcounter.current}}</text> 次抽奖机会</view>
+        </view>
+        <view class="wheelbg-center">
+            <image src="http://cdn.classx.cn/tandian/userapp/res/images/wheel-colorline.png"></image>
+        </view>
+        <view class="wheelbg-bottom">
+            <image class="wheelbg-bottombg" src="http://cdn.classx.cn/tandian/userapp/res/images/wheel-bg.png"></image>
+            <image class="wheeltable" src="/res/images/wheel-table.png"></image>
+            <image class="wheelgirl" src="/res/images/wheel-girl.png"></image>
+            <image class="wheelgifticon" src="http://cdn.classx.cn/tandian/userapp/res/images/wheel-gifticon.png"></image>
+        </view>
+    </view>
+
+    <view class="wheeloutbox">
+        <view class="wheeloutbox-bg">
+            <image wx:if="{{running}}" style="z-index: 5" src="http://cdn.classx.cn/tandian/userapp/res/images/wheel-runlight.png"></image>
+            <image src="http://cdn.classx.cn/tandian/userapp/res/images/wheel-runlight2.png"></image>
+        </view>
+        <view class="wheelbox" animation="{{animationData}}">
+            <!-- 扇形 -->
+            <view class="wheelcell"  wx:for="{{wheel.gifts}}" wx:key="index" style="transform: rotate({{360 / wheel.gifts.length * index + 360 / wheel.gifts.length / 2}}deg) skewY({{360 / wheel.gifts.length - 90}}deg);"></view> 
+            <!-- 内容 -->
+            <view class="wheeltextbox" wx:for="{{wheel.gifts}}" wx:key="index" style="transform: rotate({{360 / wheel.gifts.length * index + 360 / wheel.gifts.length / 2}}deg)">
+                <view class="wheeltext nowrap" style="width: {{itemWidth * 2}}rpx; transform: rotate({{360 / wheel.gifts.length/2}}deg)">{{item.coupon.name || '谢谢参与'}}</view>
+            </view>
+        </view>
+        <view class="wheelbtn" catchtap="toJoin" wx:if="{{user.authed}}">
+            <image src="http://cdn.classx.cn/tandian/userapp/res/images/wheel-dir.png"></image>
+            <view class="wheelbtn-txt">点击抽奖</view>
+        </view>
+        <button class="normal" style="z-index: 11;position: unset" open-type="getUserInfo" bindgetuserinfo="authThenJoin" wx:if="{{!user.authed}}">
+             <view class="wheelbtn">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/wheel-dir.png"></image>
+                <view class="wheelbtn-txt">点击抽奖</view>
+            </view>
+        </button>
+    </view>
+
+    <view class="pagebottom" style="height: calc(100vh - 1020rpx)">
+        <view class="pagebtn" bindtap="toCoupons">我的奖品</view>
+    </view>
+</view>
+
+
+<view class="mask-dark" wx:if="{{awardModal}}" bindtap="hideAwardModal">
+    <view catchtap="doNothing">
+        <view class="awardbox">
+            <image src="http://cdn.classx.cn/tandian/wheel-awardBorder3.png"></image>
+            <view class="awardcontent">
+                <view class="awardtext">
+                    <view style="font-size: 32rpx">恭喜你获得{{usercoupon.coupon.type == 'dazhe' ? '折扣券' : usercoupon.coupon.type == 'duihuan' ? '兑换券' : '代金券'}}</view>
+                    <view style="margin-top: 50rpx">{{usercoupon.coupon.name}}</view>
+                </view>
+                <view class="awardwish">{{usercoupon.coupon.expiryTimeStr}}</view>
+            </view>
+            <view class="convertbtn" bindtap="toUse" data-coupon-id="{{userwheel.usercoupon.coupon._id}}" data-user-id="{{userwheel.usercoupon._id}}">立即兑换</view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{ruleModal}}" bindtap="hideRuleModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:500rpx;min-height: 400rpx;border-radius: 8rpx;padding: 40rpx;">
+            <view style="text-align: center">大转盘活动规则</view>
+            <text decode="{{true}}" style="font-size: 24rpx">
+                1、用户可以通过打卡等方式获得大转盘抽奖机会，同一用户可能获得多次机会。
+                2、用户若中奖，奖励将以券的形式发放至用户在探店大师小程序的账户中。
+                3、用户可以到店出示奖券对应的二维码，请商家核销并兑换奖励。
+                4、一个奖券只能兑换一次。
+                5、大转盘奖励受奖品数量限制，若奖品已经发放完毕或无库存，视为未中奖。
+                6、用户通过大转盘抽到的奖励，由活动商家提供，探店大师仅提供活动工具，不提供具体奖品的兑换或相关服务。
+                7、商家保留对该活动的解释权。
+            </text>
+        </view>
+    </view>
+</view>

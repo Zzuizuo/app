@@ -1,0 +1,34 @@
+.navbox {
+    height: 56rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* padding: 0 20rpx; */
+    box-sizing: border-box;
+}
+
+.navitem {
+    /* flex: 1; */
+    min-width: 60rpx;
+    display: flex;
+    justify-content: center;
+}
+
+.navcontent {
+    height: 56rpx;
+    line-height: 1.2;
+    font-size: 32rpx;
+    color: #666;
+    font-weight: 500;
+    position: relative;
+}
+
+.navline {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 6rpx;
+    border-radius: 3rpx;
+    background: #FFDB09;
+}

@@ -1,0 +1,12 @@
+{
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "抢购记录",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "dark",
+    "usingComponents": {
+        "searchbox": "/pages/component/searchbox",
+        "navbar": "/pages/component/navbar",
+        "goubox": "/pages/component/goubox"
+    }
+}

@@ -1,0 +1,463 @@
+.main {
+    min-height: 100vh;
+    padding-bottom: 120rpx;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.couponbg {
+    width: 100vw;
+    height: 374rpx;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.pagetop {
+    height: 374rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    padding-top: 20rpx;
+    box-sizing: border-box;
+}
+
+.allcenter {
+    display: flex;
+    align-items: center;
+}
+
+.findcoupon {
+    font-size: 24rpx;
+    color: #E8CB93;
+    line-height: 1;
+    margin-top: 30rpx;
+    z-index: 10;
+}
+
+.pagetop .avatar {
+    width: 88rpx;
+    height: 88rpx;
+    border-radius: 10rpx;
+    border: 2rpx solid #E8CB93;
+    z-index: 20;
+}
+
+.findcoupon image {
+    width: 24rpx;
+    height: 24rpx;
+    margin-left: 10rpx;
+    z-index: 20;
+    border-radius: 0;
+    border: 0;
+}
+
+.name {
+    margin-top: 20rpx;
+    z-index: 20;
+    color: #E8CB93;
+}
+
+.couponvalue {
+    color: #E8CB93;
+    font-size: 28rpx;
+    line-height: 1;
+    margin-top: 40rpx;
+    z-index: 20;
+}
+
+.couponinfo {
+    margin-top: 80rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+}
+
+.couponname {
+    font-size: 32rpx;
+    line-height: 1;
+    color: #242627;
+}
+
+.condition {
+    display: flex;
+    align-items: center;
+    font-size: 28rpx;
+    color: #666;
+    margin-top: 30rpx;
+    line-height: 1;
+}
+
+.dashed {
+    width: 10rpx;
+    height: 10rpx;
+    background: #D24D39;
+    margin-right: 16rpx;
+}
+
+.origin {
+    font-size: 28rpx;
+    color: #999;
+    margin-top: 20rpx;
+    line-height: 1;
+}
+
+.panel {
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    margin-top: 70rpx;
+}
+
+.paneltitle {
+    font-size: 32rpx;
+    color: #242627;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.panelcontent {
+    margin-top: 40rpx;
+    font-size: 24rpx;
+}
+
+.panelcell {
+    display: flex;
+    align-items: center;
+    font-size: 28rpx;
+    line-height: 1;
+    margin-top: 20rpx;
+}
+
+.celltitle {
+    color: #666;
+}
+
+.cellvalue {
+    color: #242627;
+}
+
+.bottombtnbox {
+    padding: 20rpx 30rpx;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 120rpx;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.onebtn {
+    width: 690rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 32rpx;
+    border-radius: 40rpx;
+    background: #D24D39;
+    color: #fff;
+}
+
+.twobtn {
+    width: 690rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.refundbtn {
+    width: 220rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    border: 2rpx solid #ccc;
+    border-radius: 40rpx;
+    font-size: 28rpx;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.usecouponbtn {
+    width: 270rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 32rpx;
+    border-radius: 40rpx;
+    background: #D24D39;
+    color: #fff;
+}
+
+.tags {
+    display: flex;
+    align-items: center;
+    margin-top: 20rpx;
+}
+
+.tagitem {
+    height: 40rpx;
+    line-height: 40rpx;
+    padding: 0 20rpx;
+    border: 1rpx solid #E8CB93;
+    font-size: 24rpx;
+    color: #B29C71;
+    border-radius: 2rpx;
+    background: #FAF2E1;
+}
+
+.maskbtn {
+    width: 420rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 32rpx;
+    font-weight: 500;
+    color: #242627;
+    background: #e8cb93;
+    border-radius: 40rpx;
+    position: absolute;
+    left: 50%;
+    bottom: 40rpx;
+    transform: translate(-50%, 0)
+}
+
+.zhuanbox {
+    position: relative;
+    height: calc(100vh - 554rpx);
+    width: 100vw;
+}
+
+.boxitem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    color: #242627;
+}
+
+.iconbtn {
+    width: 80rpx;
+    height: 90rpx;
+}
+
+.ruleitem {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 24rpx;
+    margin: 24rpx 0;
+    line-height: 1.6;
+}
+
+.ruleitem::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16rpx;
+    width: 6rpx;
+    height: 6rpx;
+    border-radius: 100%;
+    background: #242627;
+}
+
+.rulecircle {
+    width: 6rpx;
+    height: 6rpx;
+    border-radius: 100%;
+    margin-right: 20rpx;
+}
+
+.vertical {
+    display: flex;
+    align-items: center;
+}
+
+.maskcell {
+    width: 100%;
+    height: 140rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    font-size: 28rpx;
+    color: #242627;
+}
+
+.maskcellbtn {
+    width: 152rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    text-align: center;
+    font-size: 24rpx;
+    border-radius: 30rpx;
+    background: #FFDB09;
+}
+
+.splitline {
+    width: 530rpx;
+    height: 2rpx;
+    background: #f0f0f0;
+}
+
+.maskcontent-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+    height: 420rpx;
+    width: 100%;
+}
+
+.content-cell {
+    width: 100%;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+}
+
+.maskcellleft {
+    line-height: 1;
+}
+
+.maskcelllefttitle {
+    color: #242627;
+    font-size: 32rpx;
+    font-weight: bold;
+}
+
+.maskcelltips {
+    color: #FF4925;
+    font-size: 20rpx;
+    margin-top: 10rpx;
+}
+
+.maskcellbtn {
+    height: 60rpx;
+    line-height: 60rpx;
+    text-align: center;
+    width: 152rpx;
+    border-radius: 30rpx;
+    background: #ffdb09;
+    font-size: 24rpx;
+}
+
+.maskline {
+    width: 690rpx;
+    background: #f0f0f0;
+    margin: 0 auto;
+}
+
+.signbox {
+    height: 100rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    position: relative;
+    background: rgba(255, 219, 9, .2);
+    border-radius: 10rpx;
+    margin-top: 50rpx;
+    line-height: 1;
+}
+
+.signbox_left {
+    display: flex;
+    align-items: center;
+}
+
+.signbox_left image {
+    width: 42rpx;
+    height: 36rpx;
+    margin-right: 14rpx;
+}
+
+.signbtn {
+    height: 52rpx;
+    padding: 0 16rpx;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 52rpx;
+    border-radius: 26rpx;
+    font-size: 22rpx;
+    background: #ffdb09;
+    color: #242627;
+    font-weight: 500;
+}
+
+.paidbox {
+    position: relative;
+}
+
+.paidbg {
+    display: block;
+    width: 590rpx;
+    height: 734rpx;
+    z-index: -1;
+}
+
+.paidboxcontent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 590rpx;
+    height: 734rpx;
+    padding: 120rpx 0 0 0;
+    box-sizing: border-box;
+    line-height: 1;
+    align-items: center;
+    color: #242627;
+}
+
+.paidtxt1 {
+    font-size: 42rpx;
+}
+
+.paidtxt2 {
+    font-size: 20rpx;
+    color: #999;
+    margin-top: 10rpx;
+}
+
+.paidtxt3 {
+    color: #FF4925;
+    font-size: 48rpx;
+    margin-top: 50rpx;
+}
+
+.paidtxt4 {
+    font-size: 24rpx;
+    margin-top: 20rpx;
+}
+
+.paidBtn {
+    position: absolute;
+    bottom: 106rpx;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 432rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    text-align: center;
+    font-size: 28rpx;
+    background: #E8CB93;
+    border-radius: 44rpx;
+}
+
+.paidtips {
+    position: absolute;
+    bottom: 64rpx;
+    left: 50%;
+    transform: translate(-50%, 0);
+    color: #E8CB93;
+    font-size: 24rpx;
+}
+
+.showbtn {
+    padding: 0 20rpx;
+    font-size: 20rpx;
+    color: #fff;
+    background: #D24D39;
+    height: 36rpx;
+    border-radius: 18rpx;
+    margin-left: 20rpx;
+}

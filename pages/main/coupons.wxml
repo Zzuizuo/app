@@ -1,0 +1,70 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+<view class="content">
+    <view class="pagetop">
+        <searchbox placeholder="请输入关键字" bindinputing="handleSearchInputChange" bindsearching="handleSearch" />
+    </view>
+    <view class="pagemiddle">
+        <navbar navs="{{navs}}" active="{{activeIndex}}" bindChangeNav="handleChangeNav" />
+    </view>
+    <view wx:if="{{!changeNavConfirm}}" class="nodatabox">
+        <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;opacity: 0.6;" />
+    </view>
+    <view class="nodatabox" wx:if="{{!usercoupons.length}}">
+        <image src="/res/images/coupon_none.png" />
+        <view class="nodatatips" wx:if="{{query.keywords}}">暂无搜索结果</view>
+        <view class="nodatatips" wx:else>
+            <view wx:if="{{tab == 3}}">暂无已过期券哦~</view>
+            <view wx:elif="{{tab == 2}}">暂无已使用券哦~</view>
+            <view wx:elif="{{tab == 1}}">暂无未使用券哦~</view>
+            <view wx:else>暂时没有券哦~</view>
+        </view>
+    </view>
+    <view class="listbox" wx:else>
+        <view class="listcell" wx:for="{{usercoupons}}" wx:key="index" bindtap="toDetail" data-item="{{item}}" style="background: {{(item.dateExpiry || item.used || item.refund) ? '#fff' : '#FFFBFA'}}">
+            <view class="cellleft" style="{{(item.dateExpiry || item.used || item.refund || item.zhuaned) ? 'background: #e6e6e6' : 'background: #FF764C'}}">
+                <view class="sale">
+                    <view wx:if="{{!item.coupon.type || item.coupon.type == 'jiangjia'}}" style="font-size: 64rpx">
+                        <text style="font-size: 40rpx"> ￥ </text>
+                        {{item.coupon.value}}
+                    </view>
+                    <view wx:if="{{item.coupon.type == 'dazhe'}}" class="dazhesale" style="font-size: 64rpx">
+                        <view>{{item.coupon.discountStr}}</view>
+                        <text style="font-size: 40rpx;line-height: 1.9;margin-left: 6rpx;"> 折 </text>
+                    </view>
+                    <view wx:if="{{item.coupon.type == 'duihuan'}}" style="font-size: 50rpx">兑换券</view>
+                </view>
+                <view class="condition" style="margin-top: {{item.coupon.type == 'dazhe' ? 0 : '20rpx'}}">{{!item.coupon.condition ? '无门槛使用' : '满'+item.coupon.condition+'元可用'}}</view>
+                <image src="/res/images/coupon_dashed.png" />
+            </view>
+            <view class="cellright">
+                <view class="name nowrap" style="color:{{ (item.dateExpiry || item.used || item.refund || item.zhuaned) ? '#666' : '#242627'}}">{{item.coupon.name}}</view>
+                <view class="shop nowrap" style="color:{{ (item.dateExpiry || item.used || item.refund || item.zhuaned) ? '#999' : '#666'}}">{{item.coupon.shop.name}}</view>
+                <view class="time">
+                    <view>
+                        <view wx:if="{{item.expiryTime}}">{{item.expiryTimeStr}}</view>
+                        <view wx:else>永久有效</view>
+                    </view>
+                    <view>
+                        <view wx:if="{{item.refund}}">已退款</view>
+                        <view wx:else>
+                            <view wx:if="{{item.used}}">
+                                <view class="offline" wx:if="{{!item.comment}}">待评价</view>
+                                <view class="offline" wx:else>已评价</view>
+                            </view>
+                            <view wx:else>
+                                <view class="offline" wx:if="{{item.zhuaned}}">已转让</view>
+                                <view wx:else>
+                                    <view wx:if="{{item.dateExpiry}}" class="offline">已过期</view>
+                                    <view wx:else class="using">立即使用</view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="circlecover" />
+        </view>
+    </view>
+</view>

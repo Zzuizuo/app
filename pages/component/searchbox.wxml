@@ -1,0 +1,6 @@
+<view class="searchbox" style="{{css ? css : ''}}">
+	<view class="imgbox">
+		<image src="/res/images/icon_search.png" />
+	</view>
+	<input class="inputbox" value="{{keywords}}" placeholder="{{placeholder}}" bindinput="onKeywordsChanged" bindconfirm="onSearch" confirm-type="search" />
+</view>

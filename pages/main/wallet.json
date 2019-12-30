@@ -1,0 +1,12 @@
+{
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "钱包",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#ffffff",
+    "usingComponents": {
+        "searchbox": "/pages/component/searchbox",
+        "navbar": "/pages/component/navbar",
+        "mask": "/pages/component/mask"
+    }
+}

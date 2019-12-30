@@ -1,0 +1,12 @@
+{
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "探店大师 · 霸王餐抽奖",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "dark",
+    "usingComponents": {
+        "serverinfo": "/pages/component/serverinfo",
+        "circle": "/pages/component/circle",
+        "mask": "/pages/component/mask"
+    }
+}

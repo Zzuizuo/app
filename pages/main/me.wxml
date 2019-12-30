@@ -1,0 +1,391 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view class="page">
+    <view class="contentbox">
+        <view class="contenttop" style="{{(!user.invited && !user.vip)?'padding-bottom:60rpx;':''}}">
+            <view class="pagetop">
+                <view style="display: flex;justify-content: space-between;align-items: center;width:100%">
+                    <button open-type="getUserInfo" bindgetuserinfo="auth" class="simple" style="z-index: 20">
+                        <view class="userbox">
+                            <image src="{{user.headimgurl}}"></image>
+                            <view>
+                                <view class="nowrap" style="max-width: 500rpx;font-size: 32rpx">{{user.nickname}}</view>
+                                <view style="width:500rpx;display: flex;align-items: center;">
+                                    <view class="vipsign" style="width: 140rpx;margin-right: 10rpx;background: #1E1E1E;color: #FFD08A;border: 0" wx:if="{{user.vip}}" catchtap="showVipModal">
+                                        <image src="/res/images/mask_viptag.png" style="width: 22rpx;height: 18rpx;margin-right: 10rpx;border-radius: 0"></image>
+                                        黑卡会员
+                                    </view>
+                                    <view class="vipsign" style="width: 140rpx;margin-right: 10rpx;background: #1E1E1E;color: #FFD08A;border: 0" wx:if="{{user.xxvip}}" catchtap="toMoney">
+                                        <image src="/res/images/icon_heart.png" style="width: 20rpx;height: 18rpx;margin-right: 10rpx;border-radius: 0"></image>
+                                        探店团长
+                                    </view>
+                                    <view class="vipsign" style="width: 140rpx;margin-right: 10rpx;background: #1E1E1E;color: #FFD08A;border: 0" wx:if="{{user.xvip && !user.xxvip}}" catchtap="toMoney">
+                                        <image src="/res/images/icon_star.png" style="width: 20rpx;height: 18rpx;margin-right: 10rpx;border-radius: 0"></image>
+                                        探店达人
+                                    </view>
+                                    <view class="vipsign" wx:if="{{!user.vip && !user.xvip && !user.xxvip}}">普通用户</view>
+                                </view>
+                            </view>
+                        </view>
+                    </button>
+                    <view class="favTips" wx:if="{{!user.faved}}" bindtap="toFav">
+                        <view class="triangle" style="{{phoneSystem == 'iOS' ? 'right: 106rpx' : 'right: 136rpx'}}"></view>
+                        <text>点击“ </text>
+                        <image style="width: 24rpx;height: 10rpx" src="/res/images/spot_icon.png"></image>
+                        <text> ”添加到我的小程序</text>
+                        <image style="width: 18rpx;height:18rpx;margin-left: 20rpx;" src="/res/images/line-closeicon.png"></image>
+                    </view>
+                </view>
+            </view>
+            <view class="databox">
+                <view class="datacell" bindtap="toMoney">
+                    <view class="datanum">{{user.moneyStr|| '0.00'}}</view>
+                    <view class="datatext" wx:if="{{user.channel}}">余额 / 推广</view>
+                    <view class="datatext" wx:else>余额</view>
+                    <!-- <view class="tosigninbox">
+                        <image src="/res/images/icon_topush.png"></image>
+                    </view> -->
+                </view>
+                <view class="datacell" bindtap="showSignModal">
+                    <view class="datanum">{{user.coin||0}}</view>
+                    <view class="datatext">幸运币</view>
+                    <view class="tosigninbox" wx:if="{{!user.signed}}">
+                        <image src="/res/images/icon_tosignin.png"></image>
+                    </view>
+                </view>
+                <view class="datacell" bindtap="toCoupons">
+                    <view class="datanum">{{couponCount || 0}}</view>
+                    <view class="datatext">卡券</view>
+                </view>
+            </view>
+            <view class="vipblock" bindtap="showVipModal" wx:if="{{user.invited || user.vip}}">
+                <image src="/res/images/me_vipblock.png" style="width: 690rpx;height: 90rpx"></image>
+                <view class="vipblockcontent center-vertical justify-SB">
+                    <view class="center-vertical" style="display: flex;align-items: center;">
+                        <image src="/res/images/mask_viptag.png" style="width: 40rpx;height: 36rpx;margin-right: 20rpx"></image>
+                        <view wx:if="{{user.vip}}">黑卡有效期：{{user.vip.expiryTimeStr}}</view>
+                        <view wx:else>小师妹送给你一张限量黑卡</view>
+                    </view>
+                    <view class="vipblockbtn center-all" wx:if="{{user.vip}}">查看特权</view>
+                    <view class="vipblockbtn center-all" wx:if="{{!user.vip}}">查看特权</view>
+                </view>
+            </view>
+        </view>
+
+        <!-- <view class="signbox" bindtap="toSign">
+            <view class="signbox_left">
+                <view style="font-size: 24rpx;color: #666" wx:if="{{user.signed && user.signNoticed}}">明天{{user.signNotice}}系统将发送微信通知提醒您签到</view>
+                <view style="font-size: 24rpx;color: #666" wx:else>签到领取幸运币，抽奖时兑换额外幸运码</view>
+            </view>
+            <view class="signbtn" wx:if="{{!user.signed}}" style="{{ading?'opacity: 0.2;':''}}">立即签到</view>
+            <view wx:if="{{user.signed}}">
+                <view class="signbtn" catchtap="noticeMe" wx:if="{{!user.signNoticed}}" catchtap="noticeMe">明天提醒我</view>
+                <view class="signbtn" style="background-color: unset;" catchtap="toCancelNoticeMe" wx:if="{{user.signNoticed}}">取消提醒</view>
+            </view>
+        </view> -->
+        <!-- <view class="signbox" bindtap="showWechatModal" wx:if="{{!user.subscribe}}">
+            <view class="signbox_left">
+                <image src="/res/images/icon_horn.png"></image>
+                <view style="font-size: 24rpx;color: #666">关注探店大师公众号，解锁签到功能</view>
+            </view>
+            <view class="signbtn" style="{{ading?'opacity: 0.2;':''}}">立即关注</view>
+        </view> -->
+        <view class="navbox">
+            <view class="navcell" bindtap="toBows">
+                <image src="/res/images/navicon_bow.png"></image>
+                <view class="cellname">霸王餐</view>
+            </view>
+            <view class="navcell" bindtap="toGous">
+                <image src="/res/images/navicon_gou.png"></image>
+                <view class="cellname">抢购</view>
+            </view>
+            <!-- <view class="navcell" bindtap="toKanjias">
+                <image src="/res/images/navicon_kanjia.png"></image>
+                <view class="cellname">砍价</view>
+            </view> -->
+            <view class="navcell" bindtap="toDakas">
+                <image src="/res/images/navicon_daka.png"></image>
+                <view class="cellname">打卡</view>
+            </view>
+        </view>
+        <view class="divideline"></view>
+        <view class="singlebox singleboxStyle" bindtap="toComments">
+            <view class="singleboxtitle">点评</view>
+            <view style="display:flex;font-size: 24rpx;align-items: center;color:#aaa;" wx:if="{{!uncomments.length}}">
+                <view>卡券核销后点评一下，支持商家</view>
+                <image class="righticon" src="/res/images/line-righticon.png" style="margin-left: 20rpx"></image>
+            </view>
+            <view wx:else class="avatarlist center-vertical">
+                <image class="avatarcell" wx:for="{{uncomments}}" wx:key="index" src="{{item.avatar}}"></image>
+                <image class="avatarcell" wx:if="{{uncomments.length>4}}" src="/res/images/icon_headimgmore.png"></image>
+                <image class="righticon" src="/res/images/line-righticon.png" style="margin-left: 20rpx"></image>
+            </view>
+        </view>
+        <view class="divideline"></view>
+        <view class="singleboxs">
+            <view class="singlebox" bindtap="toBindCode" wx:if="{{user.icode}}">
+                <view class="singleboxtitle" style="color:#fd9f16;">我的邀请码</view>
+                <view style="display:flex;font-size: 24rpx;align-items: center;color:#aaa;">
+                    <view style="color:#fd9f16;">{{user.icode}}</view>
+                    <image class="righticon" src="/res/images/line-righticon.png" style="margin-left: 20rpx"></image>
+                </view>
+            </view>
+        </view>
+        <view class="singlebox" bindtap="toBindCode" wx:if="{{!user.icode}}">
+                <view class="singleboxtitle center-vertical" style="color:#fd9f16">
+                    <view>探店达人</view>
+                    <image src="/res/images/icon_fire.png" style="width: 22rpx;height: 26rpx;margin-left: 10rpx"></image>
+                </view>
+                <view style="display:flex;font-size: 24rpx;align-items: center;color:#aaa;">
+                    <view style="color:#fd9f16;">输入邀请码，升级探店达人</view>
+                    <image class="righticon" src="/res/images/line-righticon.png" style="margin-left: 20rpx"></image>
+                </view>
+            </view>
+        <view class="divideline"></view>
+        <view class="singleboxs">
+            <view class="singlebox" bindtap="handlejoin">
+                <view class="singleboxtitle">商务合作</view>
+                <view style="display:flex;font-size: 24rpx;align-items: center;color:#aaa;">
+                    <view>好店入驻 / 渠道合作 / 城市代理</view>
+                    <image class="righticon" src="/res/images/line-righticon.png" style="margin-left: 20rpx"></image>
+                </view>
+            </view>
+
+            <view class="singlebox" bindtap="toAdminSetting" wx:if="{{user.super || user.tester}}">
+                <view class="singleboxtitle">系统</view>
+                <view style="display:flex;font-size: 24rpx;align-items: center;color:#aaa;">
+                    <view wx:if="{{env=='develop'}}">本地服</view>
+                    <view wx:if="{{env=='trial'}}">体验服</view>
+                    <view wx:if="{{env=='release'}}">正式服</view>
+                    <image class="righticon" src="/res/images/line-righticon.png" style="margin-left: 20rpx"></image>
+                </view>
+            </view>
+            <view class="singlebox" wx:else>
+                <button catchtap="handleShowContact" class="simple singlebox" style="width: 100%">
+                    <view style="width: 100%;height: 100rpx;display: flex;align-items: center;justify-content: space-between">
+                        <view class="singleboxtitle">联系客服</view>
+                        <view style="display:flex;font-size: 24rpx;align-items: center;color:#aaa;">
+                            <view>{{serviceStr}}</view>
+                            <image class="righticon" src="/res/images/line-righticon.png" style="margin-left: 20rpx"></image>
+                        </view>
+                    </view>
+                </button>
+            </view>
+            <view class="singlebox" bindtap="cancelMocking" wx:if="{{mocking}}">
+                <view class="singleboxtitle">Cancel Mocking</view>
+            </view>
+            
+
+            <!-- <button class="simple" open-type="share">
+                <view class="singlebox">
+                    <view class="singleboxtitle">分享一下</view>
+                    <view style="display:flex;font-size: 24rpx;align-items: center;color:#aaa;">
+                        <view>分享给朋友，帮朋友少花钱吃大餐</view>
+                        <image class="righticon" src="/res/images/line-righticon.png" style="margin-left: 20rpx"></image>
+                    </view>
+                </view>
+            </button> -->
+        </view>
+        <view class="divideline"></view>
+    </view>
+</view>
+<view class="mask-dark" bindtap="hideWechatModal" wx:if="{{wechatModal}}">
+    <view class="mask-card" style="width: 590rpx;padding:120rpx 0 80rpx" catchtap="doNothing">
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/weixin.png" style="width:176rpx;height: 144rpx;display: block;margin: 0 auto 50rpx;"></image>
+        <view class="card-body" style="text-align:center;padding-bottom:90rpx;">
+            <view style="color:#333;font-size: 28rpx">关注公众号解锁更多福利</view>
+        </view>
+        <button class="mask-btn" style="background: #171a17;" catchtap="handleShowContact">
+            <view style="color: #fff;">回复 <text style="color: #f7d830;font-weight: bold">666</text></view>
+        </button>
+    </view>
+</view>
+<view class="mask-dark" bindtap="hideJoinModal" wx:if="{{joinModal}}">
+    <view class="mask-card" style="width: 590rpx;padding:0 0 80rpx;position: relative" catchtap="doNothing">
+        <image src="/res/images/bg_signin.png" style="width: 590rpx;height: 265rpx;display: block;"></image>
+        <image src="/res/images/icon-colorshop.png" style="width: 135rpx;height: 135rpx;display: block;position: absolute;top: 65rpx;left: 228rpx"></image>
+        <view style="text-align: center;color:#333;font-size: 28rpx;font-weight: bold;margin-top: 40rpx">商务合作请联系</view>
+        <view class="contactbox" style="margin-top: 40rpx">
+            <view class="contactcell">
+                <view style="display: flex;align-items: center;color: #242627;font-size: 24rpx">
+                    <image style="width: 30rpx;height: 30rpx;margin-right: 10rpx" src="/res/images/share_phone.png"></image>
+                    183-8045-9072
+                </view>
+                <view class="contactbtn" style="background: #FFDB09;font-weight:500" bindtap="handleCall">拨打</view>
+            </view>
+            <view class="contactcell">
+                <view style="display: flex;align-items: center;color: #242627;font-size: 24rpx">
+                    <image style="width: 30rpx;height: 30rpx;margin-right: 10rpx" src="/res/images/share_shop.png"></image>
+                    商家免费入驻
+                </view>
+                <button class="simple" catchtap="toCreateShop">
+                    <view style="background-color: #333;color:#FFD08A;font-weight: 500;" class="contactbtn">入驻</view>
+                </button>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" bindtap="hideSignSuccessModal" wx:if="{{signSuccessModal}}">
+    <view class="mask-card" style="width: 590rpx;padding:40rpx 68rpx 80rpx 68rpx" catchtap="doNothing">
+        <image src="{{user.vip?'http://cdn.classx.cn/tandian/userapp/res/images/icon_coin3.png':'http://cdn.classx.cn/tandian/userapp/res/images/icon_coin.png'}}" style="width: 272rpx;height: 216rpx;display: block;margin: 0 auto 70rpx;"></image>
+        <view class="card-body">
+            <view class="cardtitle">获得{{user.vip?3:1}}枚幸运币！</view>
+            <view class="cardcontent">幸运币可用于在任意霸王餐抽奖活动中，额外获取一个幸运号码</view>
+        </view>
+    </view>
+</view>
+
+<mask wx:if="{{vipModal}}" bindtap="hideVipModal" bindcancel="hideVipModal" css="background: #1e1e1e">
+    <view slot="maskcard" class="center-all column vipmask">
+        <image class="maskbg" src="/res/images/bg_vip.png" mode="widthFix"></image>
+        <view class="center-vertical titlebox">
+            <image class="viptag" src="/res/images/mask_viptag.png"></image>
+            <view style="font-size: 40rpx;font-weight: bold">黑卡会员特权</view>
+        </view>
+        <view class="text1" wx:if="{{user.vip.expiryTimeStr}}">{{user.vip.expiryTimeStr}} 到期</view>
+        <view class="center-vertical" style="margin-top: 50rpx">
+            <view class="center-all column vipcell">
+                <image src="/res/images/mask_listicon1.png"></image>
+                <view class="text1" style="margin-top: 30rpx">霸王餐特权</view>
+                <view class="text2">每天签到可领取的幸运币增加至<text style="color: #FFD08A">3枚</text></view>
+            </view>
+            <view class="center-all column vipcell" style="margin-left: 20rpx">
+                <image src="/res/images/mask_listicon2.png"></image>
+                <view class="text1" style="margin-top: 30rpx">抢购特权</view>
+                <view class="text2">每天首次抢购均可享受<text style="color: #FFD08A">5折</text>优惠</view>
+            </view>
+        </view>
+        <view wx:if="{{user.vip}}">
+            <view class="vipbtn center-all" wx:if="{{promotion}}" bindtap="toBuy">
+                <view style="text-decoration: line-through;color: #666;margin-right: 20rpx;font-size: 20rpx">￥<text style="font-weight: bold">29.9</text>/月</view>
+                <view style="font-weight: bold">立即续费</view>
+                <image src="/res/images/mask_limitsale.png" class="image_limit">
+                    <view class="imagetxt" style="font-family: monospace">限时优惠 ￥<text style="font-size: 32rpx">{{promotion.price}}</text>/月 剩{{clock.hour}}时{{clock.min}}分{{clock.sec}}秒</view>
+                </image>
+            </view>
+            <view class="vipbtn center-all" wx:else bindtap="toBuy">
+                <view style="font-weight: bold">￥{{priceStr}} 立即续费</view>
+            </view>
+        </view>
+        <view wx:else>
+            <view class="vipbtn center-all" wx:if="{{promotion}}" bindtap="toBuy">
+                <view style="text-decoration: line-through;color: #666;margin-right: 20rpx;font-size: 20rpx">￥<text style="font-weight: bold">29.9</text>/月</view>
+                <view style="font-weight: bold">立即激活</view>
+                <image src="/res/images/mask_limitsale.png" class="image_limit">
+                    <view class="imagetxt" style="font-family: monospace">限时优惠 ￥<text style="font-size: 32rpx">{{promotion.price}}</text>/月 剩{{clock.hour}}时{{clock.min}}分{{clock.sec}}秒</view>
+                </image>
+            </view>
+            <view class="vipbtn center-all" wx:else bindtap="toBuy">
+                <view style="font-weight: bold">￥{{priceStr}} 立即激活</view>
+            </view>
+        </view>
+    </view>
+</mask>
+
+<view class="mask-dark" bindtap="hidePayModal" wx:if="{{payModal}}" style="color:#333;">
+    <view class="payModal" catchtap="doNothing">
+        <view style="padding: 0 30rpx 20rpx 30rpx;">
+            <view class="title" style="margin-top: 20rpx;margin-bottom: 20rpx;">购买时长</view>
+            <view class="options">
+                <view class="option" style="{{orderForm.time==1?'background-color: #FF4925;color:white;height: 70rpx;':''}}" bindtap="timeChanged" data-time="{{1}}">1个月</view>
+                <view class="option" style="{{orderForm.time==3?'background-color: #FF4925;color:white;height: 70rpx;':''}}" bindtap="timeChanged" data-time="{{3}}">3个月</view>
+                <view class="option" style="{{orderForm.time==6?'background-color: #FF4925;color:white;height: 70rpx;':''}}" bindtap="timeChanged" data-time="{{6}}">6个月</view>
+                <view class="option" style="{{orderForm.time==12?'background-color: #FF4925;color:white;height: 70rpx;':''}}" bindtap="timeChanged" data-time="{{12}}">1年</view>
+            </view>
+            <view wx:if="{{promotion}}">
+                <view class="title" style="margin-top: 20rpx;">优惠信息</view>
+                <view style="color: #FF4925"><text style="color:#333">在 {{promotion.expiryTimeStr}}前 享受优惠价：</text>{{promotion.price}}元/月</view>
+            </view>
+        </view>
+        <view class="buy">
+            <view class="xieyi">
+                <checkbox-group bindchange="licenseChanged">
+                    <checkbox checked="{{true}}" color="#FF4925" value="agree" />
+                    我已阅读并同意
+                    <text style="color:#FF4925" bindtap="showLicenseModal">《服务协议》</text>
+                </checkbox-group>
+            </view>
+            <view>
+                <view class="confirm" bindtap="pay" style="line-height: 1;">
+                    <view>
+                        <view style="font-size: 22rpx;text-decoration: line-through;margin-bottom: 10rpx;" wx:if="{{orderForm.originPrice != orderForm.price}}">原价{{orderForm.originPriceStr}}元</view>
+                        <view style="font-weight:bold">{{orderForm.priceStr}}元</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark-long" bindtap="hideLicenseModal" wx:if="{{licenseModal}}" style="color:#333;z-index: 9999;">
+    <view>
+        <view class="jiecard-loading" wx:if="{{loading}}">
+            <image src="/res/images/logo.png" style="width:400rpx;height:400rpx;opacity:0.3"></image>
+        </view>
+        <view class="mask-card lightcard" wx:if="{{!loading}}" style="padding-bottom:60rpx;width:660rpx;">
+            <view class="card-head">服务协议</view>
+            <view class="card-body">
+                <view>尊敬的用户您好，使用本服务代表您同意本服务所附带的用户协议各项条款。</view>
+                <view>本产品由成都植星科技有限公司研发并提供服务。</view>
+                <view>未经用户许可公司不会向任何第三方公开、透露用户信息。并对相关信息采用专业加密存储与传输方式，以保障用户信息的安全。</view>
+                <view>由于商品特殊性，不支持退款。</view>
+                <view>用户在使用本软件及服务时，须自行承担如下来自本公司不可掌控的风险内容，包括但不限于</view>
+                <view>· 由于不可抗拒因素可能引起的用户信息丢失、泄漏等风险</view>
+                <view>· 用户必须选择与所安装终端设备相匹配的软件版本，否则，由于软件与终端设备型号不相匹配所导致的任何问题或损害，均由用户自行承担</view>
+                <view>· 用户将本软件产生的内容向他人转发、分享，因此等传播可能带来的风险和责任</view>
+                <view>· 由于网络信号不稳定、网络带宽小等网络原因，所引起的登录失败、资料同步不完整、页面打开速度慢等风险</view>
+                <view>· 由于政府政策、法律法规导致服务不能正常提供的</view>
+                <view>· 由于第三方平台出现异常导致服务不能正常提供的</view>
+            </view>
+            <view class="card-body"></view>
+        </view>
+        <view class="jie" wx:if="{{!loading}}">我知道了</view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{adModal}}" bindtap="hideAdModal">
+    <view class="mask-card" style="width:560rpx;min-height:600rpx;border-radius: 10rpx;" catchtap="doNothing">
+        <image src="http://cdn.classx.cn/inwifi/channel1.jpg" style="width:560rpx;height:700rpx;display: block;border-top-right-radius: 10rpx;border-top-left-radius: 10rpx" mode="aspectFill"></image>
+        <view style="background-color: white;padding: 40rpx 20rpx;border-bottom-left-radius: 10rpx;border-bottom-right-radius: 10rpx;">
+            <button class="primary" style="width:300rpx;background-color: #08be31;color: white;border-radius: 60rpx;font-size: 32rpx;" catchtap="handleShowContact">回复 <text style="font-weight: bold;">123</text> 查看</button>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{signModal}}" bindtap="hideSignModal">
+    <view class="mask-card" style="width:590rpx;min-height:600rpx;border-radius: 10rpx;padding-bottom: 70rpx" catchtap="doNothing">
+        <view class="signinbox">
+            <image src="/res/images/bg_signin.png"></image>
+            <view class="signtext">
+                <view style="font-weight: bold">已连续签到</view>
+                <view style="font-size: 20rpx;margin-top: 30rpx"><text style="font-size: 40rpx;color: #FF4925">{{user.signCount||0}}</text> 天</view>
+            </view>
+        </view>
+        <view class="cornlist center-vertical justify-SB">
+            <view class="cornitem" wx:for="{{cornList}}" wx:key="index">
+                <image src="{{(user.signCount >= (index + 1) && user.signCount < 7) ? '/res/images/icon_signined.png' : '/res/images/icon_signin.png'}}"></image>
+                <view class="corntext" wx:if="{{user.signCount < (index + 1)}}">+{{user.vip ? 3 : item.amount}}</view>
+                <view style="color: #999;margin-top: 10rpx">{{index+1}}天</view>
+            </view>
+        </view>
+        <view class="mask-btn" style="margin: 120rpx auto 0 auto" wx:if="{{!user.signed}}" bindtap="toSign">立即签到</view>
+        <view wx:if="{{user.signed}}">
+            <view class="mask-btn" style="margin: 120rpx auto 0 auto" wx:if="{{!user.signNoticed}}" catchtap="noticeMe">明天提醒我</view>
+            <view class="mask-btn" style="margin: 120rpx auto 0 auto" catchtap="toCancelNoticeMe" wx:if="{{user.signNoticed}}">取消提醒</view>
+        </view>
+        <view wx:if="{{!user.signed}}" style="font-size: 24rpx;margin-top: 30rpx;line-height: 1;color: #999;text-align: center">签到领取幸运币，抽奖时兑换额外幸运码</view>
+        <view wx:else>
+            <view wx:if="{{user.signNoticed}}" style="font-size: 24rpx;margin-top: 30rpx;line-height: 1;color: #999;text-align: center">明天发送微信通知提醒我签到</view>
+            <view wx:else style="font-size: 24rpx;margin-top: 30rpx;line-height: 1;color: #999;text-align: center">明天{{user.signNotice || ''}}系统将发送微信通知提醒您签到</view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{showContactModal}}" bindtap="hideContactModal">
+    <view class="mask-card" style="width:590rpx;min-height:600rpx;border-radius: 10rpx;padding-bottom: 30rpx " catchtap="doNothing">
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" data-image="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" style="width: 590rpx;height: 784rpx;margin: 0 auto 0 auto;display: block;border-radius: 10rpx" bindtap="handlePreviewImg" bindlongpress="handlePreviewImg"></image>
+        <view class="mask-btn" style="margin: 20rpx auto 10rpx auto" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+    </view>
+</view>

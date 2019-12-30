@@ -1,0 +1,12 @@
+{
+    "navigationBarBackgroundColor": "#FFDB09",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "探店大师",
+    "backgroundColor": "#FFDB09",
+    "backgroundTextStyle": "light",
+    "usingComponents": {
+        "searchbox": "/pages/component/searchbox",
+        "serverinfo": "/pages/component/serverinfo",
+        "bowbox": "/pages/component/bowbox"
+    }
+}

@@ -1,0 +1,31 @@
+<view class="bowbox cardbox center-vertical {{(item.recommendToIndex) ? '' : 'opacity'}}"  bindtap="onBow" data-item="{{item}}" bindlongpress="onActions">
+    <view class="boxleft cardLeft" style="{{item.status==1 ? 'background: #f0f0f0' : ''}}">
+        <image wx:if="{{item.nice}}" src="/res/images/index_nice.png" class="tagicon" style="z-index: 10"></image>
+        <image wx:if="{{!item.nice && item.hot}}" src="/res/images/index_hot.png" class="tagicon"></image>
+
+        <image class="bowimg" src="{{item.shop.avatar ? (item.shop.avatar + '@avatar') : '/res/images/list_fuli.png'}}" mode="aspectFill"/>
+        
+        <view class="lefttext" style="margin-top: 10rpx;">
+            <view style="margin-top: 16rpx;">价值 ￥<text style="font-size: 28rpx;font-weight: bold">{{item.originPrice}}</text></view>
+            <view style="color: #999;margin-top: 12rpx;">{{item.name}}</view>
+        </view>
+    </view>
+    <view class="boxright cardRight">
+        <view class="name nowrap" style="max-width: 450rpx">{{item.shop.name}}</view>
+        <view class="center-vertical justify-SB righttext">
+            <view class="nowrap" style="max-width: 380rpx">{{item.shop.address || '成都'}}</view>
+            <view wx:if="{{query.location}}">{{item.disStr}}</view>
+        </view>
+        <view class="tagsbox" wx:if="{{item.shop.tag2 || item.shop.tag1}}" style="{{(item.shop.tag2 || item.shop.tag1) ? 'margin-top: 20rpx;' : ''}}">
+            <view wx:if="{{item.shop.tag1}}" class="tagitem center-vertical" style="color: #FE9E00;background: #FFF5E5;margin-right: 10rpx;margin-bottom:{{((item.shop.tag1.length + item.shop.tag2.length > 15) && item.shop.tag2) ? '10rpx' : '0'}}">
+                <image src="/res/images/index_tag.png" style="width: 20rpx;height: 22rpx;margin-right: 10rpx"></image>
+                <view class="nowrap" style="max-width: 320rpx;">{{item.shop.tag1}}</view>
+            </view>
+            <view wx:if="{{item.shop.tag2}}" class="tagitem center-vertical" style="color: #FF6D26;background: #FFF1EB">“<view class="nowrap" style="max-width: 320rpx;">{{item.shop.tag2}}</view>”</view>
+        </view>
+        <view class="justify-SB center-vertical" style="margin-top:{{(item.shop.tag2 && item.shop.tag1) ? (item.shop.tag2 && (item.shop.tag1.length + item.shop.tag2.length > 15)) ? '20rpx' : ' 40rpx;' : (item.shop.tag2 || item.shop.tag1) ? '40rpx' : '90rpx;'}}">
+            <view class="normaltext">{{item.startTimeStr}}开奖</view>
+            <slot name="cardbtn"></slot>
+        </view>
+    </view>
+</view>

@@ -1,0 +1,50 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<!-- <view style="box-sizing: border-box;padding: 20rpx 0;background-color: #fafafa;color:#fff;">
+    <view class="search">
+        <view class="search-bg">
+            <input value="{{query.keywords}}" style="padding: 0 20rpx;width:670rpx;" placeholder="输入关键字/用户昵称/核销员姓名搜索" bindinput="keywordsChanged" bindconfirm="doSearch"></input>
+        </view>
+    </view>
+</view> -->
+
+<view class="searchBox">
+    <view style="padding: 0 40rpx 40rpx;">
+        <view class="search-bg">
+            <input value="{{query.keywords}}" style="padding: 0 20rpx;flex: 1" placeholder="输入关键字/用户昵称" bindinput="keywordsChanged" bindconfirm="doSearch"></input>
+        </view>
+    </view>
+</view>
+<view class="users">
+    <view class="user" wx:for="{{visits}}" wx:key="index" bindtap="showActions" data-item="{{item}}">
+        <view class="boxlf">
+            <image src="{{item.user.headimgurl}}"></image>
+            <view class="">
+                <view class="nowrap" style="font-weight: bold;width: 500rpx">{{item.user.nickname}}</view>
+                <view style="font-size: 24rpx;">时间：{{item.createTimeStr}}</view>
+            </view>
+        </view>
+        <!-- <view class="boxrt">
+            <view style="font-size: 24rpx;color: #f65459">号码：{{item.codes[0]}}</view>
+            <view style="font-size: 24rpx;margin-top: 6rpx" wx:if="{{item.codes.length > 1}}" data-item="{{item}}" bindtap="showMoreCodes">更多号码</view>
+        </view> -->
+    </view>
+    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+    <view wx:if="{{nomore && visits.length >0 }}" class="bottomloader">已全部加载</view>
+    <view wx:if="{{nomore && visits.length ==0 }}" class="nodata">暂无数据</view>
+</view>
+<!-- <view class="mask-dark" wx:if="{{moreCodesModal}}" bindtap="hideMoreCodes">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:500rpx;min-height: 500rpx;border-radius: 8rpx;text-align: center;padding: 40rpx;">
+            <view style="font-size: 28rpx;text-align: center;">全部幸运码</view>
+            <view class="short-line"></view>
+            <view class="codes">
+                <view class="code" wx:for="{{currentItem.codes}}" wx:key="index">
+                    <view>{{item}}</view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view> -->

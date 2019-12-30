@@ -1,0 +1,22 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+
+<view class="comments">
+    <view wx:for="{{comments}}" wx:key="index">
+        <circle circle-data="{{item}}" circle-index="{{index}}" bindavatartap="showAvatar" bindcontentlongpress="showActions" bindtoShopPage="toShop" bindonReply="replyClicked"></circle>
+    </view>
+    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+    <view wx:if="{{nomore && comments.length >0 }}" class="bottomloader">已全部加载</view>
+    <view wx:if="{{nomore && comments.length ==0 }}" class="nodataBox">
+        <view wx:if="{{query.keywords}}" class="blankbox">
+            <image src="/res/images/data_none.png" />
+            <view style="color: #999;font-size: 28rpx;margin-top: 60rpx">非常抱歉，暂无数据</view>
+        </view>
+        <view wx:if="{{!query.keywords}}" class="defaultbox">
+            <image src="/res/images/nodata.png"></image>
+            <view style="color: #999;font-size: 28rpx;margin-top: 20rpx">探索10%的靠谱好店</view>
+        </view>
+    </view>
+</view>

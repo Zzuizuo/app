@@ -1,0 +1,26 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view wx:if="{{!bowData}}">
+    <image src="http://cdn.classx.cn/tandian/userapp/res/images/luckcoderule.png" style="width: 690rpx" mode="widthFix"></image>
+</view>
+<view class="textbox" wx:else>
+    <view class="title" style="margin-top: 0">计算公式：</view>
+    <view style="margin-top: 40rpx">最后10名参与用户的时间数值求和 / 幸运码总个数 = 余数 </view>
+    <view style="margin-top: 30rpx">余数 + 1000001 = 获奖幸运码 </view>
+    <view class="title">计算过程：</view>
+    <view style="margin-top: 40rpx">{{bowData.total}} <text style="color: #999;font-size: 20rpx">(求和)</text> % {{bowData.amount}} <text style="color: #999;font-size: 20rpx">(幸运码个数)</text> = {{bowData.rem}} (余数)</view>
+    <view style="margin-top: 30rpx">{{bowData.rem}}<text style="color: #999;font-size: 20rpx">(余数)</text> + 1000001 = <text style="color: #FF4925;font-size: 28rpx">{{bowData.luckyCode}}</text><text style="color: #999;font-size: 20rpx">(获奖幸运码)</text></view>
+    <view class="title">获奖总数：</view>
+    <view style="margin-top: 40rpx;color:#FF4925">{{bow.amount}}份</view>
+    <view class="title">获奖幸运码：</view>
+    <view style="margin-top: 40rpx;color:#FF4925">{{bowData.luckyCode}}</view>
+    <view class="title">最后10名参与用户记录：</view>
+    <view class="userbox" wx:for="{{userbows}}" wx:key="index">
+        <view class="userboxlf">
+            <image src="{{item.user.headimgurl}}"></image>
+            <view class="nowrap" style="width: 200rpx">{{item.user.nickname}}</view>
+        </view>
+        <view class="userboxrt">{{item.createTimeStr}}</view>
+    </view>
+</view>

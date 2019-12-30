@@ -1,0 +1,640 @@
+ page {
+     font-size: 28rpx;
+     padding-bottom: 120rpx;
+     box-sizing: border-box;
+     background: #fff;
+ }
+ /* top */
+ 
+ .pagetop {
+     padding: 380rpx 30rpx 0 30rpx;
+     box-sizing: border-box;
+     position: relative;
+ }
+ 
+ .coverimg {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 750rpx;
+     height: 380rpx;
+     display: block;
+ }
+ 
+ .pricebox {
+     display: flex;
+     align-items: flex-end;
+     color: #999;
+     font-size: 24rpx;
+     line-height: 1;
+ }
+ 
+ .targetPrice {
+     color: #FF4925;
+     font-weight: 500;
+ }
+ 
+ .originPrice {
+     text-decoration: line-through;
+     margin-left: 20rpx;
+     font-weight: 500;
+ }
+ 
+ .amountbox {
+     color: #999;
+     font-size: 24rpx;
+     color: #999;
+     font-size: 24rpx;
+     line-height: 1;
+ }
+ 
+ .time {
+     color: #999;
+     font-size: 24rpx;
+     line-height: 1;
+     margin-top: 30rpx;
+ }
+ 
+ .title {
+     font-size: 32rpx;
+     color: #242627;
+     margin-top: 30rpx;
+     line-height: 1.4;
+     font-weight: 500;
+ }
+ 
+ .props {
+     display: flex;
+     align-items: center;
+     font-size: 24rpx;
+     margin-top: 30rpx;
+ }
+ 
+ .prop {
+     margin-right: 40rpx;
+     display: flex;
+     align-items: center;
+ }
+ 
+ .pagemiddle {
+     padding: 0 30rpx;
+     margin-top: 36rpx;
+     box-sizing: border-box;
+ }
+ 
+ .kanjiabox {
+     width: 690rpx;
+     min-height: 616rpx;
+     box-shadow: 0 0 10rpx #e6e6e6;
+     padding: 30rpx;
+     box-sizing: border-box;
+     border-radius: 20rpx;
+ }
+ 
+ .kanjiabox-top {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     flex-direction: row-reverse;
+ }
+ 
+ .kanjiarulebtn {
+     width: 100rpx;
+     height: 36rpx;
+     text-align: center;
+     line-height: 36rpx;
+     font-size: 20rpx;
+     border: 1rpx solid #242627;
+     color: #242627;
+     border-radius: 4rpx;
+ }
+ 
+ .countdown {
+     display: flex;
+     align-items: center;
+     font-size: 24rpx;
+     color: #FF4925;
+     line-height: 1;
+ }
+ 
+ .countdowncell {
+     min-width: 36rpx;
+     height: 36rpx;
+     line-height: 36rpx;
+     padding: 0 7rpx;
+     box-sizing: border-box;
+     font-size: 22rpx;
+     background: #FF4925;
+     color: #fff;
+     border-radius: 4rpx;
+     text-align: center;
+ }
+ 
+ .bargain {
+     margin-top: 50rpx;
+     font-size: 28rpx;
+     line-height: 1;
+     text-align: center;
+ }
+ 
+ .processlinebox {
+     width: 630rpx;
+     height: 20rpx;
+     border-radius: 10rpx;
+     margin-top: 50rpx;
+     background: #f5f5f5;
+     position: relative;
+ }
+ 
+ .actvieline {
+     height: 20rpx;
+     border-radius: 10rpx;
+     background: #FFDB09;
+     position: absolute;
+     left: 0;
+     top: 0;
+ }
+ 
+ .btnbox {
+     width: 630rpx;
+     margin-top: 50rpx;
+ }
+ 
+ .pagebtn {
+     width: 100%;
+     height: 80rpx;
+     line-height: 80rpx;
+     text-align: center;
+     background: #FFDB09;
+     color: #242627;
+     font-size: 32rpx;
+     border-radius: 40rpx;
+ }
+ 
+ .joinedbox {
+     margin-top: 70rpx;
+ }
+ 
+ .joinimgs {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+ 
+ .joinimglist {
+     display: flex;
+     margin-left: 20rpx;
+     justify-content: center;
+ }
+ 
+ .joinimgcell {
+     width: 60rpx;
+     height: 60rpx;
+     border-radius: 100%;
+     margin-left: -20rpx;
+ }
+ 
+ .jointext {
+     margin-top: 30rpx;
+     color: #999;
+     font-size: 24rpx;
+     text-align: center;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     line-height: 1;
+ }
+ 
+ .recordbox {
+     margin-top: 70rpx;
+ }
+ 
+ .recordcell {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 30rpx;
+     color: #999;
+     font-size: 24rpx;
+ }
+ 
+ .recordcell:last-child {
+     margin-bottom: 0;
+ }
+ 
+ .recordcelllf {
+     display: flex;
+     align-items: center;
+ }
+ 
+ .recordcelllf image {
+     width: 60rpx;
+     height: 60rpx;
+     border-radius: 100%;
+ }
+ 
+ .userinfo {
+     display: flex;
+     flex-direction: column;
+     margin-left: 10rpx;
+ }
+ 
+ .pagebottom {
+     padding: 0 30rpx;
+     box-sizing: border-box;
+ }
+ 
+ .panel {
+     margin-top: 50rpx;
+ }
+ 
+ .paneltitle {
+     font-size: 32rpx;
+     color: #242627;
+     font-weight: bold;
+     line-height: 1;
+ }
+ 
+ .panelcontent {
+     margin-top: 40rpx;
+     font-size: 24rpx;
+ }
+ 
+ .shopname {
+     font-weight: bold;
+     font-size: 32rpx;
+     line-height: 1.2;
+     margin-bottom: 50rpx;
+     display: flex;
+     align-items: center;
+ }
+ 
+ .attestationbox {
+     display: flex;
+     align-items: center;
+     font-size: 20rpx;
+     color: #242627;
+     height: 36rpx;
+     line-height: 36rpx;
+     border: 1rpx solid #E8CB93;
+     border-radius: 18rpx;
+     margin-left: 20rpx;
+     padding: 0 10rpx;
+ }
+ 
+ .attestation {
+     width: 24rpx;
+     height: 24rpx;
+     margin-right: 10rpx;
+ }
+ 
+ .panelitem {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     min-height: 40rpx;
+     margin-bottom: 14rpx;
+ }
+ 
+ .panelitemtext {
+     font-size: 24rpx;
+     line-height: 1;
+     max-width: 560rpx;
+     color: #242627;
+ }
+ 
+ .panelicon {
+     width: 40rpx;
+     height: 40rpx;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background: #FFDB09;
+     border-radius: 100%;
+ }
+ 
+ .panelicon image {
+     width: 24rpx;
+     height: 24rpx;
+ }
+ 
+ .foot {
+     position: fixed;
+     left: 0;
+     bottom: 0;
+     width: 100vw;
+     height: 120rpx;
+     padding: 0 30rpx;
+     box-sizing: border-box;
+     z-index: 100;
+     display: flex;
+     align-items: center;
+     background: #fff;
+ }
+ 
+ .footiconcell {
+     flex: 1;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     width: 230rpx;
+     padding-right: 30rpx;
+     box-sizing: border-box;
+ }
+ 
+ .footiconbox {
+     width: 80rpx;
+     height: 80rpx;
+     display: flex;
+     align-items: center;
+     flex-direction: column;
+     justify-content: center;
+ }
+ 
+ .footiconbox image {
+     width: 36rpx;
+     height: 36rpx;
+ }
+ 
+ .footright {
+     width: 376rpx;
+ }
+ 
+ .onebtn {
+     width: 376rpx;
+     line-height: 80rpx;
+     font-size: 28rpx;
+     height: 80rpx;
+     text-align: center;
+     background: #FFDB09;
+     border-radius: 40rpx;
+ }
+ 
+ .twobtn {
+     display: flex;
+     align-items: center;
+     line-height: 80rpx;
+     font-size: 28rpx;
+     height: 80rpx;
+     text-align: center;
+ }
+ 
+ .twobtnleft {
+     width: 188rpx;
+     background: #FF4925;
+     border-top-left-radius: 40rpx;
+     border-bottom-left-radius: 40rpx;
+     color: #fff;
+ }
+ 
+ .twobtnright {
+     width: 188rpx;
+     height: 80rpx;
+     line-height: 80rpx;
+     text-align: center;
+     background: #FFDB09;
+     border-top-right-radius: 40rpx;
+     border-bottom-right-radius: 40rpx;
+     color: #242627;
+ }
+ 
+ .shoppingbox {
+     position: absolute;
+     left: 0;
+     bottom: 0;
+     width: 100vw;
+     background: #fff;
+ }
+ 
+ .paybtn {
+     height: 120rpx;
+     line-height: 120rpx;
+     text-align: center;
+     background: #FF4925;
+     color: #fff;
+     font-size: 32rpx;
+ }
+ 
+ .productinfo {
+     width: 100vw;
+     padding: 30rpx 30rpx 50rpx 30rpx;
+     box-sizing: border-box;
+ }
+ 
+ .productinfotop {
+     display: flex;
+ }
+ 
+ .productinfotop image {
+     width: 140rpx;
+     height: 140rpx;
+ }
+ 
+ .productinforight {
+     width: 440rpx;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+     margin-left: 30rpx;
+ }
+ 
+ .productname {
+     font-size: 32rpx;
+     color: #242627;
+     line-height: 1.2;
+ }
+ 
+ .productinfobottom {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     font-size: 32rpx;
+     margin-top: 30rpx;
+     line-height: 1;
+ }
+ 
+ .waitpaybox {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     height: 60rpx;
+     padding: 0 20rpx;
+     box-sizing: border-box;
+     background: #fff;
+     position: absolute;
+     top: -60rpx;
+     right: 100rpx;
+     font-size: 24rpx;
+     color: #242627;
+     z-index: 10;
+     border-radius: 4rpx;
+     z-index: 2;
+ }
+ 
+ .waitpaybox::after {
+     content: '';
+     width: 0;
+     height: 0;
+     border-right: 12rpx solid transparent;
+     border-left: 12rpx solid transparent;
+     border-top: 12rpx solid rgba(255, 219, 9, .3);
+     position: absolute;
+     bottom: -10rpx;
+     left: 50%;
+     transform: translate(-50%, 0);
+ }
+ 
+ .waitpayboxbg {
+     z-index: 8;
+     background: rgba(255, 219, 9, .3);
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     border-radius: 4rpx;
+     z-index: -1;
+ }
+ 
+ .paybox {
+     height: 40rpx;
+     line-height: 40rpx;
+     border-radius: 20rpx;
+     font-size: 24rpx;
+     padding: 0 20rpx;
+     box-sizing: border-box;
+     background: #FFDB09;
+     margin-left: 20rpx;
+     z-index: 2;
+ }
+ /* line-bottom */
+ 
+ .line-bottom {
+     display: flex;
+     align-items: flex-end;
+     justify-content: space-between;
+ }
+ 
+ .lineheight1 {
+     line-height: 1;
+     font-size: 24rpx;
+ }
+ 
+ .maskbtn {
+     width: 420rpx;
+     height: 80rpx;
+     line-height: 80rpx;
+     text-align: center;
+     font-size: 32rpx;
+     color: #242627;
+     background: #FFDB09;
+     border-radius: 40rpx;
+     margin: 0 auto;
+ }
+ 
+ .detailHTML img {
+     width: 500rpx;
+ }
+ 
+ .couponModalMask {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 750rpx;
+     height: 100vh;
+     background-color: rgba(0, 0, 0, 0.8);
+     display: flex;
+     align-content: center;
+     align-items: center;
+     justify-content: center;
+     z-index: 99;
+ }
+ 
+ .couponModal {
+     width: 630rpx;
+     height: 870rpx;
+     background-image: url('http://cdn.classx.cn/club/images/userapp/couponbg.png');
+     background-origin: center;
+     background-size: 630rpx 870rpx;
+     border-radius: 16rpx;
+     background-color: white;
+ }
+ 
+ .boxitem {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     line-height: 1;
+     color: #242627;
+ }
+ 
+ .signbox {
+     height: 100rpx;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 0 30rpx;
+     box-sizing: border-box;
+     position: relative;
+     background: rgba(255, 219, 9, .2);
+     border-radius: 10rpx;
+     margin-top: 50rpx;
+     line-height: 1;
+ }
+ 
+ .signbox_left {
+     display: flex;
+     align-items: center;
+ }
+ 
+ .signbox_left image {
+     width: 42rpx;
+     height: 36rpx;
+     margin-right: 14rpx;
+ }
+ 
+ .signbtn {
+     height: 52rpx;
+     padding: 0 20rpx;
+     box-sizing: border-box;
+     text-align: center;
+     line-height: 52rpx;
+     border-radius: 26rpx;
+     font-size: 24rpx;
+     background: #ffdb09;
+     color: #242627;
+     font-weight: 500;
+ }
+ /* mask */
+ 
+ .joinsuccessbox {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     line-height: 1;
+ }
+ 
+ .maskbtnbox {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     width: 510rpx;
+ }
+ 
+ .allbtn {
+     height: 80rpx;
+     line-height: 80rpx;
+     text-align: center;
+     font-size: 28rpx;
+     border-radius: 40rpx;
+ }
+ 
+ .tagitem {
+     height: 40rpx;
+     line-height: 40rpx;
+     padding: 0 20rpx;
+     font-size: 24rpx;
+     border-radius: 2rpx;
+     margin-left: 20rpx;
+ }

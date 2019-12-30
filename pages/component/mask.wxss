@@ -1,0 +1,69 @@
+.mask-dark {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1100;
+}
+.mask-dark .mask-card {
+  width: 590rpx;
+  height: auto;
+  background: #fff;
+  border-radius: 10rpx;
+  line-height: 1;
+  box-sizing: border-box;
+  padding: 70rpx 0;
+  margin-top: -80rpx;
+  position: relative;
+}
+.mask-dark .mask-card .hidemask {
+  position: absolute;
+  bottom: -80rpx;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-size: 50rpx;
+  color: #fff;
+}
+.mask-dark .mask-bottom {
+  width: 100vw;
+  height: auto;
+  color: #242627;
+  background: #fff;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+.mask-dark .mask-bottom .splitline {
+  width: 100vw;
+  height: 20rpx;
+  background: #fafafa;
+}
+.mask-dark .mask-bottom .maskcancel {
+  line-height: 1;
+  width: 100vw;
+  height: 120rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+}
+.mask-dark .mask-share {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+.mask-dark .mask-share .boxbottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  min-height: 160rpx;
+  background: #fff;
+}
+.mask-dark .mask-share .boxbottom .boxbtn {
+  min-height: 160rpx;
+}
+.mask-dark .mask-share .boxbottom .boxbtn image {
+  width: 90rpx;
+  height: 90rpx;
+}

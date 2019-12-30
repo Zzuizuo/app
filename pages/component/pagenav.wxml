@@ -1,0 +1,6 @@
+<view class='nav' style='height: {{status + navHeight}}px;'>
+    <view class='status' style='height: {{status}}px;'></view>
+    <view class='navbar' style='height:{{navHeight}}px;'>
+        <slot name="tab"></slot>
+    </view>
+</view>

@@ -1,0 +1,55 @@
+{
+    "root": true,
+    "env": {
+        "browser": false,
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "html"
+    ],
+    "rules": {
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "no-bitwise": 0,
+        "quote-props": 0,
+        "no-trailing-spaces": 2,
+        "no-mixed-spaces-and-tabs": [
+            2,
+            "smart-tabs"
+        ],
+        "no-unused-vars": [
+            1,
+            {
+                "vars": "all",
+                "args": "after-used"
+            }
+        ],
+        "no-undef": 2, //不允许未声明的变量
+        "no-undef-init": 2, //不允许初始化变量时给变量赋值undefined
+        "no-shadow": 2, //外部作用域中的变量不能与它所包含的作用域中的变量或参数同名
+        // "no-shadow-restricted-names": 2, //js关键字和保留字不能作为函数名或者变量名
+        "no-label-var": 2, //不允许标签和变量同名
+        "no-unused-expressions": 2, //不允许无用的表达式
+        "no-eq-null": 2, //不允许对null用==或者!=
+        "no-else-return": 0, //如果if语句有return，else里的return不用放在else里
+        "no-alert": 1, //不允许使用alert，confirm，prompt语句
+        "no-unreachable": 2, //在return，throw，continue，break语句后不允许出现不可能到达的语句
+        "no-sparse-arrays": 2, //数组中不允许出现空位置
+        "no-extra-semi": 2, //不允许出现不必要的分号
+        "no-extra-parens": 0, //不允许出现不必要的圆括号
+        "no-dupe-args": 2, //函数定义的时候不允许出现重复的参数
+        "no-cond-assign": 2 //条件语句的条件中不允许出现赋值运算符
+    }
+}

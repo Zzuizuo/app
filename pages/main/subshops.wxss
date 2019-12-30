@@ -1,0 +1,13 @@
+/* pages/main/subshops.wxss */
+
+page {
+    color: #333;
+    padding-bottom: 40rpx;
+    box-sizing: border-box;
+    background: #fafafa;
+}
+
+.panel-content {
+    background: #fff;
+    position: relative;
+}

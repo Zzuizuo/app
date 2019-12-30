@@ -1,0 +1,154 @@
+page {
+    background: #fff;
+    color: #333;
+}
+
+.page-top {
+    width: 100vw;
+    height: 420rpx;
+    position: relative;
+    padding: 0;
+}
+
+.imgBox {
+    width: 100vw;
+    height: 420rpx;
+}
+
+.imgBox image {
+    width: 100%;
+    height: 100%;
+}
+
+.userBox {
+    position: absolute;
+    display: flex;
+    top: 320rpx;
+    left: 0;
+    width: 100vw;
+    padding: 0 40rpx;
+    box-sizing: border-box;
+}
+
+.userBox image {
+    width: 140rpx;
+    height: 140rpx;
+    border-radius: 10rpx;
+    margin-left: 30rpx;
+}
+
+.searchBox {
+    margin-top: 80rpx;
+}
+
+.search {
+    width: 670rpx;
+    padding: 0 40rpx;
+    background-color: #fff;
+}
+
+.search-bg {
+    background-color: #fafafa;
+    border-radius: 20rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.search_deletebox {
+    width: 60rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search_deletebox image {
+    width: 30rpx;
+    height: 30rpx;
+}
+
+.search-result {
+    background-color: #fff;
+    padding: 20rpx;
+    margin: 30rpx;
+    border-radius: 8rpx;
+}
+
+.city {
+    padding-left: 30rpx;
+    padding-right: 10rpx;
+    border-right: 1rpx solid #f1f1f1;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.comments {}
+
+.comment {
+    display: flex;
+    padding: 40rpx;
+    border-bottom: 1rpx solid #f1f1f1;
+}
+
+.nodataBox {
+    width: 100vw;
+    text-align: center;
+}
+
+.action {
+    background-color: #f1f1f1;
+    font-weight: bolder;
+    color: #3cbd20;
+    text-align: center;
+    height: 40rpx;
+    width: 60rpx;
+    border-radius: 8rpx;
+}
+
+.replys {
+    background-color: #f1f1f1;
+}
+
+.reply {
+    padding: 4rpx 10rpx;
+    /* margin-top: 4rpx; */
+}
+
+.reply:first-of-type {
+    margin-top: none;
+}
+
+.comment-actions {
+    display: flex;
+    width: 360rpx;
+    background-color: #232323;
+    color: white;
+    position: absolute;
+    right: 120rpx;
+    border-radius: 4rpx;
+    margin-top: -52rpx;
+}
+
+.comment-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60rpx;
+    width: 180rpx;
+}
+
+.blankbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100rpx;
+}
+
+.blankbox image {
+    width: 420rpx;
+    height: 244rpx;
+}

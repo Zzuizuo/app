@@ -1,0 +1,43 @@
+<view class="mask-dark {{contentType=='bottom' ? '' : 'center-all'}}" catchtouchmove='ture'>
+    <view catchtap="_doNothing">
+        <view class="mask-card" wx:if="{{contentType=='center'}}" style="{{css}}">
+            <slot name="maskcard"></slot>
+            <view class="iconfont icon-wrong hidemask" bindtap="onCancel" style="{{iconcss}}"></view>
+        </view>
+
+        <view class="mask-bottom" wx:if="{{contentType=='bottom'}}" style="{{css}}">
+            <slot name="masklist"></slot>
+            <view class="splitline"></view>
+            <view class="maskcancel center-all" bindtap="onCancel">取消</view>
+        </view>
+
+        <view class="mask-bottom" wx:if="{{contentType=='buy'}}" style="{{css}}">
+            <slot name="maskbuy"></slot>
+        </view>
+
+        <view class="mask-share" wx:if="{{contentType=='share'}}" style="{{css}}">
+            <slot name="maskshare"></slot>
+            <view class="boxbottom">
+                <view class="sharetext" wx:if="{{tips}}">{{tips}}</view>
+                <view class="center-vertical">
+                    <button class="normal" open-type="share" style="flex: 1" wx:if="{{shareFriend}}">
+                        <view class="boxbtn center-all column">
+                            <image src="/res/images/share_wechart.png" />
+                            <view style="font-size: 24rpx;margin-top: 10rpx">分享好友</view>
+                        </view>
+                    </button>
+                    <view wx:if="{{!authPhoto}}" class="boxbtn center-all column" bindtap="handleSaveImg" style="flex: 1">
+                        <image src="/res/images/share_save.png" />
+                        <view style="font-size: 24rpx;margin-top: 10rpx">保存卡片</view>
+                    </view>
+                    <button wx:else class="normal" open-type="openSetting" style="flex: 1">
+                        <view class="boxbtn center-all column">
+                            <image src="/res/images/share_save.png" />
+                            <view style="font-size: 24rpx;margin-top: 10rpx">保存卡片</view>
+                        </view>
+                    </button>
+                </view>
+            </view>
+        </view>   
+    </view>
+</view>

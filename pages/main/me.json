@@ -1,0 +1,10 @@
+{
+    "navigationBarBackgroundColor": "#FFDB09",
+    "navigationBarTitleText": "探店大师",
+    "navigationBarTextStyle": "black",
+    "backgroundTextStyle": "dark",
+    "backgroundColor": "#FFDB09",
+    "usingComponents": {
+        "mask": "/pages/component/mask"
+    }
+}

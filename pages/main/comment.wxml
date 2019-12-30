@@ -1,0 +1,72 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+
+<view wx:if="{{success}}" class="successbox">
+    <view class="page-top">
+        <view class="iconbox" style="font-size: 32rpx;">感谢您的点评！</view>
+        <view class="center-all" style="margin-top: 100rpx">
+            <view class="topbtn" bindtap="toIndex">回到首页</view>
+            <button class="simple" open-type="share">
+                <view class="topbtn" style="margin-left: 30rpx">分享探店大师</view>
+            </button>
+        </view>
+    </view>
+    <view class="signbox" data-content="ss317903133" bindtap="handleCopy" bindlongpress="handleCopy" style="background: #FFF8CE;padding: 0 20rpx">
+        <view class="signbox_left">
+            <image src="http://cdn.classx.cn/tandian/2455e313f229ac53acc80136f32cc3f.jpg@avatar" style="border-radius: 60rpx;height: 60rpx;width:60rpx;"></image>
+            <view>
+                <view style="font-size: 24rpx;font-weight: bold;margin-bottom: 8rpx;">小师妹</view>
+                <view style="font-size: 20rpx;color: #666;">加客服微信，<text style="color: #111;font-weight: bold;"></text>领福利进群，找到组织！</view>
+            </view>
+        </view>
+        <view class="signbtn center-all" style="font-size: 20rpx" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+    </view>
+</view>
+
+<!-- todo -->
+<view wx:else>
+    <view class="commentbox">
+        <view class="commentbox-lf">
+            <!-- <image src="{{user.headimgurl}}"></image> -->
+            <view style="font-size: 36rpx;font-weight: 500">
+                <view class="nowrap">感谢光临本店，写个点评支持一下吧</view>
+            </view>
+        </view>
+    </view>
+    <textarea placeholder="分享一下你的感受，让其他用户更了解商家" focus bindinput="valueChanged" data-field="content" style="padding:20rpx 40rpx;height: 240rpx;width:670rpx;" maxlength="500"></textarea>
+    <view style="padding: 20rpx 40rpx;">
+        <view class="papers">
+            <image class="paper" wx:for="{{form.images}}" wx:key="index" src="{{item.url + '@avatar'}}" mode="aspectFill" bindtap="showPaperActions" data-i="{{index}}"></image>
+            <view wx:if="{{form.images.length<9}}" class="addbtn" bindtap="uploadPapers">
+                <image src="/res/images/addbtnicon.png" style="width: 54rpx;height: 44rpx;margin-bottom: 20rpx"></image>
+                <view>添加图片</view>
+            </view>
+        </view>
+        <view wx:if="{{form.images.length>=9}}" style="text-align: center;color: #aaa;padding-top: 20rpx;">当前只支持上传最多9张图片</view>
+    </view>
+
+    
+    <view wx:if="{{user.super || user.tester}}" class="seletebox" style="border-top: 1rpx solid  #f0f0f0;">
+        <view>用户昵称</view>
+        <input type="text" value="{{form.nickname}}" data-field="nickname" bindinput="handleInputChange" style="width: 500rpx;text-align: right" wx:if="{{!timeSelector}}"></input>
+    </view>
+    <view wx:if="{{user.super || user.tester}}" class="seletebox">
+        <view>用户头像</view>
+        <view class="plusbox" bindtap="handleSeleteHeadImg" top="{{false}}">
+            <image wx:if="{{form.headimgurl}}" src="{{form.headimgurl}}" mode="aspectFill" style="width:100rpx;height:100rpx;border-radius: 6rpx;"></image>
+            <image wx:else src="/res/images/icon_plus.png"></image>
+        </view>
+    </view>
+    <view wx:if="{{user.super || user.tester}}" class="seletebox" bindtap="handleSeleteTime">
+        <view>点评时间</view>
+        <view>
+            <view>{{form.createTimeStr ? form.createTimeStr : '请选择'}}</view>
+        </view>
+    </view>
+    <button class="submitbtn" style="{{form.content.length?'':'opacity: 0.2;'}}border-radius: 60rpx;" bindtap="submit">发布</button>
+</view>
+
+<view class="pickbox" wx:if="{{timeSelector}}">
+    <datapicker bindcancel="onCancelDate" bindgettime="onGetTime"></datapicker>
+</view>

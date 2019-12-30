@@ -1,0 +1,265 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view class="page">
+    <view class="pagetop">
+        <image src="https://cdn.classx.cn/tandian/dakabg.png"></image>
+    </view>
+    <view class="processbox">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="normal" formType="submit">
+                <view class="processContent">
+                    <view class="processTitle">
+                        <image src="/res/images/dakatitle.png" class="processTitlebg"></image>
+                        <view style="z-index: 10">集人气换奖励</view>
+                    </view>
+                    <view wx:if="{{userdaka.bonus}}" style="text-align: center;font-size: 40rpx;margin-top: -100rpx;margin-bottom: 100rpx;">
+                        <view>已兑换{{userdaka.bonus.name}}</view>
+                        <view wx:if="{{userdaka.refreshTimeStr}}" style="font-size: 24rpx;color:#aaa;margin-top: 8rpx;">{{userdaka.refreshTimeStr}}后可以再次扫码，发起新的打卡</view>
+                        <view wx:else style="font-size: 24rpx;color:#aaa;margin-top: 8rpx;">欢迎再次到店打卡</view>
+                    </view>
+                    <view class="proccessline" wx:if="{{!userdaka.used}}">
+                        <view wx:if="{{!userdaka}}">
+                            <view class="activeLine" style="width: 0"></view>
+                        </view>
+                        <view wx:else>
+                            <view class="activeLine" wx:if="{{(userdaka.data.uv >= 0 && targets[0].value) >= userdaka.data.uv}}" style="width: {{((560 - (targets.length + 1) * 30) / targets.length + 30) * (userdaka.data.uv / targets[0].value) + 10}}rpx"></view>
+                            <view class="activeLine" wx:elif="{{(userdaka.data.uv > targets[0].value) && (targets[1].value >= userdaka.data.uv)}}" style="width: {{((560 - (targets.length + 1) * 30) / targets.length + 30) * (1 + (userdaka.data.uv - targets[0].value) / (targets[1].value - targets[0].value)) + 10}}rpx"></view>
+                            <view class="activeLine" wx:elif="{{(userdaka.data.uv > targets[1].value) && (targets[2].value > userdaka.data.uv)}}" style="width: {{((560 - (targets.length + 1) * 30) / targets.length + 30) * (2 + (userdaka.data.uv - targets[1].value) / (targets[2].value - targets[1].value)) + 10}}rpx"></view>
+                            <view class="activeLine" wx:else style="width: 560rpx"></view>
+                        </view>
+                        <view class="activebox">
+                            <view class="giftbox" wx:if="{{user.authed && !userdaka.bonus}}">
+                                <image src="{{userdaka ? '/res/images/bubble-dakaactiveicon.png' : '/res/images/bubble-dakaicon.png'}}" bindtap="toJoin"></image>
+                            </view>
+                            <button wx:if="{{!user.authed}}" class="normal" open-type="getUserInfo" bindgetuserinfo="authThenJoin" wx:if="{{!user.authed}}">
+                                <view class="giftbox">
+                                    <image src="{{userdaka ? '/res/images/bubble-dakaactiveicon.png' : '/res/images/bubble-dakaicon.png'}}"></image>
+                                </view>
+                            </button>
+                            <view class="circle" style="{{userdaka ? 'background: #FFD60A' : ''}}"></view>
+                            <view class="popname nowrap">打卡</view>
+                        </view>
+                        <view class="activebox" wx:for="{{targets}}" wx:key="index" style="margin-left: {{((560 - (targets.length + 1) * 30) / targets.length) + 2}}rpx">
+                            <view wx:if="{{!userdaka.bonus}}" class="giftbox" bindtap="toUse" data-item="{{item}}">
+                                <image src="{{userdaka.data.uv>=item.value ? '/res/images/bubble-activeicon.png' : '/res/images/bubble-whiteicon.png'}}" data-item="{{item}}"></image>
+                                <view wx:if="{{userdaka.data.uv>=item.value}}" class="exchange">已达成</view>
+                                <view wx:else class="popnum">
+                                    <view style="font-weight: bold;font-size: 36rpx">{{item.value}}</view>
+                                    <view style="font-size: 20rpx">人气</view>
+                                </view>
+                            </view>
+                            <view class="circle" style="{{userdaka.data.uv>=item.value ? 'background: #FFD60A' : ''}}"></view>
+                            <view class="popname nowrap" style="{{userdaka.data.uv>=item.value ? 'color: #333' : 'color: #aaa'}}">
+                                <view class="nowrap" style="max-width: 150rpx;color: #333">{{item.type == 'coupon' ? item.coupon.name : item.wheel.name}}</view>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="nogift" wx:else>
+                        <image style="width: 190rpx;height: 140rpx;" src="http://cdn.classx.cn/tandian/userapp/res/images/nogift.png"></image>
+                    </view>
+                    <view class="btnbox" style="margin: {{userdaka.data.uv < targets[0].value ? '150rpx auto 0 auto' : ''}}">
+                        <view wx:if="{{userdaka}}">
+                            <view class="dakabtn" wx:if="{{userdaka.data.uv < targets[0].value}}" bindtap="toJoin">收集人气</view>
+                            <view wx:else>
+                                <view class="dakabtn" bindtap="toUse" wx:if="{{!userdaka.bonus}}">请选择一个奖励</view>
+                                <view class="dakabtn" bindtap="toBonus" wx:if="{{userdaka.bonus}}">查看奖励</view>
+                            </view>
+                            <view class="gifttext" wx:if="{{userdaka.data.uv < targets[0].value}}">还差{{targets[0].value - userdaka.data.uv}}人气即可兑换奖励</view>
+                        </view>
+                        <view wx:else>
+                            <button class="simple toJoin" bindtap="toJoin" wx:if="{{user.authed}}">
+                                <view class="dakabtn">立即打卡</view>
+                            </button>
+                            <button class="simple toJoin" open-type="getUserInfo" bindgetuserinfo="authThenJoin" wx:if="{{!user.authed}}">
+                                <view class="dakabtn">立即打卡</view>
+                            </button>
+                        </view>
+                    </view>
+                    <view style="margin-top: 30rpx" wx:if="{{shop.data.dakauv && !userdaka}}" class="headimgListdata">已有<text style="color: #FF4925;font-weight: bold;"> {{shop.data.dakauv}} </text>人参与</view>
+                    <view class="headimgListbox" wx:if="{{userdaka.data.uv}}" bindtap="toVisits">
+                        <view class="headimgListdata">
+                            <view style="color: #302627">已获得<text style="color: #FF4925;font-weight: bold;font-size: 60rpx;"> {{userdaka.data.uv||0}} </text>人气</view>
+                        </view>
+                        <view class="headimgs" bindtap="toUserbows" style="width: {{visits.length >= 4 ? 4*45 : visits.length*45}}rpx">
+                            <image class="headimg" wx:for="{{visits}}" wx:key="index" src="{{item.user.headimgurl}}" style="left: {{index*35}}rpx;z-index: {{index+1}};"></image>
+                            <view class="headimg" style="z-index: 10;background: #fafafa;right: -25rpx;border: 0;top: 2rpx;" wx:if="{{visits.length>=4}}">
+                                <image style="width: 60rpx;height: 60rpx;border-radius: 100%" src="/res/images/icon_headimgmore.png"></image>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+    <view class="rankbox" wx:if="{{ranks.length >= 3}}">
+        <view class="rankcontent">
+            <view class="ranktitle">本店人气王</view>
+            <view class="ranklist">
+                <view class="rankcell" wx:for="{{ranks}}" wx:key="index">
+                    <view class="celltop">
+                        <image src="{{item.user.headimgurl}}" class="rankheadimg"></image>
+                        <image class="rankicon" wx:if="{{index == 1}}" src="/res/images/rank1.png"></image>
+                        <image class="rankicon" wx:if="{{index == 0}}" src="/res/images/rank2.png"></image>
+                        <image class="rankicon" wx:if="{{index == 2}}" src="/res/images/rank3.png"></image>
+                    </view>
+                    <view class="cellmiddle nowrap" style="max-width: 200rpx">{{item.user.nickname}}</view>
+                    <view class="cellbottom"><text style="color: #FF4925;font-weight: bold">{{item.data.uv || 0}}</text>人气</view>
+                </view>
+            </view>
+            <view class="myrank" wx:if="{{userdaka}}">我的排名: <text style="color: #FF4925">{{myrank}}</text>名</view>
+        </view>
+    </view>
+    <view class="introbox">
+        <view class="introtitle">玩法介绍</view>
+        <view class="stepbox">
+            <view class="stepcell">
+                <view class="circle_w"></view>
+                <view class="circle_y">1</view>
+                <view class="steptext">
+                    <view style="font-weight: bold;margin-bottom: 20rpx;">到店打卡</view>
+                    <!-- <view style="text-align: center;">获得专属打卡海报</view> -->
+                </view>
+            </view>
+            <view class="stepcell">
+                <view class="circle_w"></view>
+                <view class="circle_y">2</view>
+                <view class="steptext">
+                    <view style="font-weight: bold;margin-bottom: 20rpx;">获得人气</view>
+                    <!-- <view style="text-align: center;">每当好友识别海报二维码，你获得1人气</view> -->
+                </view>
+            </view>
+            <view class="stepcell">
+                <view class="circle_w"></view>
+                <view class="circle_y">3</view>
+                <view class="steptext">
+                    <view style="font-weight: bold;margin-bottom: 20rpx;">兑换奖励</view>
+                    <!-- <view style="text-align: center;">人气满足要求可找商家兑换奖励</view> -->
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="rulebox" wx:if="{{shop.functions.daka.rule}}">
+        <view class="ruletitle" style="margin-bottom: 50rpx">注意事项</view>
+        <text decode="{{true}}" style="font-size: 28rpx;">{{shop.functions.daka.rule}}</text>
+    </view>
+    <view class="qrcodebox" wx:if="{{shop.wechatCode}}">
+        <image src="{{shop.wechatCode}}" bindtap="handlePreviewImage" data-img="{{shop.wechatCode}}"></image>
+        <view style="margin-top: 30rpx">{{shop.wechatCodeTips}}</view>
+    </view>
+</view>
+
+
+<view class="mask-dark" wx:if="{{userdakaModal}}" bindtap="hideUserdakaModal" catchtouchmove='ture'>
+    <view catchtap="doNothing">
+        <image src="{{userdaka.sharecode}}" class="coverimg" catchtap="openImage" data-image="{{userdaka.sharecode}}"></image>
+        <canvas canvas-id="canvas" wx:if="{{!showImage}}" id="canvas"  catchtap="handleDrawimg"  class="canvasbox" style="width: 750rpx;height: 1334rpx;position:fixed;top: 200%"></canvas>
+        <view class="savebox" style="height: calc(100vh - 750rpx);background: #fafafa">
+            <view wx:if="{{userdaka.sharecode}}" style="text-align: center;">
+                <view wx:if="{{saved}}">
+                    <view class="sharetext">
+                        <text style="font-size: 80rpx;color: #e5e5e5">“</text>
+                        <view class="ellipsis" style="width: 480rpx;line-height: 1.4">{{userdaka.config.shareTitle}}</view>
+                        <text style="font-size: 80rpx;color: #e5e5e5">”</text>
+                    </view>
+                    <view wx:if="{{!copyed}}" class="saveimgbtn" bindtap="handleCopyShareTitle" data-share="{{userdaka.config.shareTitle}}">复制分享语</view>
+                    <view wx:else class="saveimgbtn" style="background-color: #fff;color: #F8662F;font-weight: bold;">文案已复制，去分享吧</view>
+                </view>
+                <view wx:else>
+                    <view class="savetext" style="text-align: center;">
+                        <view style="color: #FF4925;font-size: 36rpx;font-weight: bold;">保存此图并分享，请朋友帮你打榜</view>
+                        <view style="margin-top: 20rpx;font-size: 24rpx;">朋友长按图片前往小程序可免费抽奖，同时你的人气+1</view>
+                    </view>
+                    <view class="saveimgbtn" wx:if="{{!saving}}" bindtap="saveImage">保存到手机相册</view>
+                    <view class="saveimgbtn" wx:else style="opacity: 0.5">正在保存</view>
+                </view>
+            </view>
+            <view wx:else style="text-align:center">
+                <view class="center-all column" style="margin-top: 100rpx">
+                    <progress percent="{{percent}}" style="width: 400rpx" stroke-width="6" border-radius="3" activeColor="#D24D39"/>
+                    <view style="font-size: 24rpx;color: #242627;margin-top: 20rpx">海报生成中{{percent || 0}}%</view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{qrcodeModal}}" bindtap="hideQrcodeModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:500rpx;min-height: 500rpx;border-radius: 8rpx;text-align: center;padding: 40rpx;">
+            <view wx:if="{{!userdaka.qrcode}}" style="margin-top: 40rpx;width:500rpx;height:400rpx;display: flex;justify-content: center;align-items: center;text-align: center;">
+                <image src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+            </view>
+            <image wx:else src="{{userdaka.qrcode}}" style="margin-top: 4   0rpx;width:400rpx;height:400rpx;"></image>
+            <view style="color: #232323;margin-top:20rpx;font-weight: bold;">请向商家出示此码兑换奖励</view>
+            <view style="color: #232323;margin-top:20rpx;">该打卡活动只能兑换一次</view>
+            <view style="color: #F8662F;margin-top:20rpx;font-weight: bold;" bindtap="toJoin">继续收集人气</view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{giftModal}}" bindtap="hideGiftModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:400rpx;min-height: 400rpx;border-radius: 8rpx;text-align: center;padding: 40rpx;">
+            <image src="/res/images/dakagifticon.png" style="margin-top: 80rpx;width:140rpx;height:140rpx;"></image>
+            <view style="color: #F8662F;margin-top:10rpx;font-weight: bold;font-size: 36rpx">{{giftData.type == 'coupon' ? giftData.coupon.name : giftData.wheel.name}}</view>
+            <view wx:if="{{userdaka.data.uv < giftData.value}}">
+                <view style="color: #333;margin-top:40rpx;font-weight: bold;font-size: 30rpx">{{giftData.value}}人气可获得，当前已有{{userdaka.data.uv||0}}</view>
+                <view bindtap="toJoin" class="mask-btn" style="margin:60rpx auto 40rpx auto;">收集人气</view>
+            </view>
+            <view wx:else>
+                <view bindtap="toUse" class="mask-btn" style="margin:60rpx auto 40rpx auto;">兑换奖励</view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{useModal}}" bindtap="hideUseModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;min-height: 400rpx;border-radius: 10rpx;padding: 70rpx 40rpx;box-sizing: border-box">
+            <view wx:for="{{targets}}" wx:key="index" bindtap="useIndexChanged" data-index="{{index}}" style="position: relative;width: 520rpx">
+                <view class="listcell" style="margin-top: {{index == 0 ? '0' : '30rpx'}};" wx:if="{{item.type == 'coupon'}}">
+                    <view class="cellleft" style="{{userdaka.data.uv >= item.value ? '' : 'background: #E6E6E6'}}">
+                        <view class="sale" style="font-size: 24rpx">
+                            <view wx:if="{{!item.coupon.type || item.coupon.type == 'jiangjia'}}">
+                                <view wx:if="{{item.coupon.price}}"><text style="font-size: 36rpx;font-weight: bold">{{item.coupon.price || 0}}</text>元</view>
+                                <view style="{{item.coupon.price ? 'margin-top: 24rpx' : 'font-size: 28rpx'}}">代金券</view>
+                            </view>
+                            <view wx:if="{{item.coupon.type == 'dazhe'}}">
+                                <view wx:if="{{item.coupon.price}}">{{item.coupon.price / 10 + '折'}}</view>
+                                <view style="{{item.coupon.price ? 'margin-top: 24rpx' : 'font-size: 28rpx'}}">打折券</view>
+                            </view>
+                            <view wx:if="{{item.coupon.type == 'duihuan'}}" style="font-size: 28rpx">
+                                兑换券
+                            </view>
+                        </view>
+                    </view>
+                    <view class="cellright" style="{{userdaka.data.uv >= item.value ? '' : 'background: #fafafa'}}">
+                        <view class="cellrightname nowrap" wx:if="{{item.type=='coupon'}}">{{item.coupon.name}}</view>
+                        <view wx:if="{{userdaka.data.uv >= item.value}}" style="font-size: 24rpx;color: #FF4925;line-height: 1;margin-top: 24rpx">可兑换</view>
+                        <view wx:if="{{userdaka.data.uv < item.value}}" style="font-size: 24rpx;color: #999;line-height: 1;margin-top: 24rpx">还差<text style="color: #242627">{{item.value - userdaka.data.uv}}</text>人气可兑换</view>
+                    </view>
+                    <view wx:if="{{item.type == 'coupon'}}" class="circlecover" />
+                    <view wx:if="{{item.type == 'coupon'}}" class="circlecover1" />
+                </view>
+                <view wx:else class="wheelbox" style="margin-top: {{index == 0 ? '0' : '30rpx'}};">
+                    <view class="sharetext" style="width: 152rpx;height: 152rpx;background: {{userdaka.data.uv >= item.value ? '#FFE033' : '#E6E6E6'}}">
+                        <image src="{{userdaka.data.uv >= item.value ? '/res/images//mask_daka_wheel_active.png': '/res/images/mask_daka_wheel.png'}}" style="width: 90rpx;height: 90rpx"></image>
+                    </view>
+                    <view class="cellright" style="{{userdaka.data.uv >= item.value ? '' : 'background: #fafafa'}}">
+                        <view class="cellrightname nowrap" wx:if="{{item.type=='wheel'}}">{{item.wheel.name}}</view>
+                        <view wx:if="{{userdaka.data.uv >= item.value}}" style="font-size: 24rpx;color: #FF4925;line-height: 1;margin-top: 24rpx">可兑换</view>
+                        <view wx:if="{{userdaka.data.uv < item.value}}" style="font-size: 24rpx;color: #999;line-height: 1;margin-top: 24rpx">还差<text style="color: #242627">{{item.value - userdaka.data.uv}}</text>人气可兑换</view>
+                    </view>
+                </view>
+                <image wx:if="{{userdaka.data.uv >= item.value && useIndex == index}}" src="/res/images/mask_daka_gou.png" class="seleteimg"></image>
+                <image wx:if="{{userdaka.data.uv >= item.value && useIndex != index}}" src="/res/images/mask_daka_gou1.png" class="seleteimg"></image>
+            </view>
+            
+            <view style="display: flex;justify-content: space-between;margin-top: 40rpx;">
+                <view bindtap="continue" class="mask-btn" style="width:200rpx;background-color: #fff;border:1rpx solid #f1f1f1;">继续收集</view>
+                <view bindtap="use" class="mask-btn" style="width:290rpx;{{useIndex == null ? 'opacity:0.4' : ''}}">{{userdaka.data.uv >= targets[0].value && useIndex == null?  '请选择一个奖励' : '兑换奖励'}}</view>
+            </view>
+        </view>
+    </view>
+</view>

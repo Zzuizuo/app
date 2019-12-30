@@ -1,0 +1,18 @@
+<view class="contain">
+    <view class="containtop allcenter">
+        <image src="/res/images/logo1.png"></image>
+        <view>
+            <view>探店大师提供技术支持</view>
+            <view style="margin-top: 16rpx">合作电话：183-8045-9072</view>
+        </view>
+        <button bindtap="onShowContact" class="normal">
+            <view class="btn">联系客服</view>
+        </button>
+    </view>
+    <view class="listbox">
+        <view class="cell" bindtap="toLicense" data-license="http://cdn.classx.cn/comlicense.jpg">营业执照</view>
+        <view class="cell" bindtap="toLicense" data-license="https://cdn.classx.cn/icp.jpg">ICP许可证</view>
+        <view class="cell" bindtap="toWeb" data-url="https://app.classx.cn/tandian/web/agreement.html">服务协议</view>
+        <view class="cell" bindtap="toWeb" data-url="https://app.classx.cn/tandian/web/private.html">隐私政策</view>
+    </view>
+</view>

@@ -1,0 +1,52 @@
+<view wx:if="{{!session}}" class="loading">
+	<image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+<view class="content">
+	<view class="pagetop">
+		<searchbox placeholder="请输入关键字" bindinputing="handleSearchInputChange" bindsearching="handleSearch" />
+	</view>
+	<view class="pagemiddle">
+		<navbar navs="{{navs}}" active="{{activeIndex}}" bindChangeNav="handleChangeNav" />
+	</view>
+	<view wx:if="{{!changeNavConfirm}}" class="nodatabox">
+		<image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;opacity: 0.6;" />
+	</view>
+	<view class="nodatabox" wx:if="{{!userbows.length}}">
+		<image src="/res/images/bow_none.png" />
+		<view class="nodatatips" wx:if="{{query.keywords}}">暂无搜索结果</view>
+		<view class="nodatatips" wx:else>
+			<view wx:if="{{tab == 3}}">暂无已兑换霸王餐哦~</view>
+			<view wx:elif="{{tab == 2}}">暂无已中奖霸王餐哦~</view>
+			<view wx:elif="{{tab == 1}}">暂无进行中的霸王餐哦~</view>
+			<view wx:else>暂时还未参与霸王餐哦~</view>
+		</view>
+	</view>
+	<view class="listbox" wx:else>
+		<view
+		 class="listcell"
+		 wx:for="{{userbows}}"
+		 wx:key="index"
+		 bindtap="toDetail"
+		 data-item="{{item}}"
+		>
+			<view class="cellleft">
+				<view class="imagebox">
+					<image src="{{item.bow.cover ? (item.bow.cover + '@avatar') : '/res/images/list_bow.png'}}" mode="aspectFill" />
+				</view>
+				<view class="infobox">
+					<view class="name nowrap" style="color: {{(item.status == 0 || item.success) ?  '#242627' : '#666'}}">{{item.bow.name}}</view>
+					<view class="shop nowrap">{{item.bow.shop.name}}</view>
+					<view wx:if="{{item.status == 0}}" class="time" style="color: #FF4925">{{item.bow.startTimeStr}}开奖</view>
+					<view wx:if="{{item.status == 1}}" class="time" style="color: #999">{{item.bow.startTimeStr}}开奖</view>
+				</view>
+			</view>
+			<view class="cellright">
+				<view wx:if="{{item.used}}" style="color: #999">已兑换</view>
+				<view wx:elif="{{item.success}}" class="statusbtn">立即兑换</view>
+				<view wx:elif="{{item.status==0}}" style="color: #FF4925">进行中</view>
+				<view wx:else style="color: #999">未中奖</view>
+			</view>
+		</view>
+	</view>
+</view>
+

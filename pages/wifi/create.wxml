@@ -1,0 +1,101 @@
+<view wx:if="{{!session}}" class="loading" style="background-color: #fff;">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+
+<view class="body">
+    <view class="step">
+        <view class="title">请选择样式</view>
+    </view>
+    <view class="content">
+        <view class="codestyles">
+            <image class="codestyle" src="http://cdn.classx.cn/tandian/userapp/res/images/codestyle1.png" style="width: 200rpx;height: 266rpx;{{form.style==1?'':'opacity:0.3'}}" bindtap="styleChanged" data-value="1"></image>
+            <image class="codestyle" src="http://cdn.classx.cn/tandian/userapp/res/images/codestyle2.png" style="width: 240rpx;height: 300rpx;{{form.style==2?'':'opacity:0.3'}}" bindtap="styleChanged" data-value="2"></image>
+            <image class="codestyle" src="http://cdn.classx.cn/tandian/userapp/res/images/codestyle0.png" style="width: 160rpx;height: 160rpx;{{form.style==0?'':'opacity:0.3'}}" bindtap="styleChanged" data-value="0"></image>
+        </view>
+    </view>
+    <view class="tips">
+        <view style="text-align: center;" wx:if="{{form.style==0}}">35cm x 35cm，可用于自由设计</view>
+        <view style="text-align: center;" wx:if="{{form.style==1}}">6cm x 8cm ，适合大多数场景</view>
+        <view style="text-align: center;" wx:if="{{form.style==2}}">8cm x 10cm ，适合用于店铺内</view>
+    </view>
+    <view class="step">
+        <view>
+            <button class="primary" bindtap="create" style="margin-top: 40rpx;">创建WiFi码</button>
+            <button wx:if="{{user.super}}" class="primary" bindtap="batchCreate" style="background-color: #33a14a;margin-top: 40rpx;">批量创建</button>
+        </view>
+    </view>
+</view>
+
+<!-- <view class="more">Wifi码管理</view> -->
+
+<view class="mask-dark" bindtap="hidePayModal" wx:if="{{payModal}}" style="color:#333;">
+    <view class="payModal" catchtap="doNothing">
+        <view style="padding: 0 30rpx;">
+            <view class="title">购买说明</view>
+            <view style="color: #aaa">本商品为独特工艺贴纸，防水防刮，在正常环境下可使用1年以上，1套10张，表示同一张码的10份复制，用户扫同一张码连入的是同一Wifi。</view>
+            <view class="title" style="margin-top: 20rpx;">Wifi码样式</view>
+            <view class="styles">
+                <view class="style" style="{{form.style==1?'':'opacity: 0.5;'}}" bindtap="styleChanged" data-value="1">
+                    <view>免费wifi</view>
+                    <view class="intro">6cm x 8cm</view>
+                </view>
+                <view class="style" style="{{form.style==2?'':'opacity: 0.5;'}}" bindtap="styleChanged" data-value="2">
+                    <view>本店wifi</view>
+                    <view class="intro">8cm x 10cm</view>
+                </view>
+            </view>
+            <view class="title" style="margin-top: 20rpx;">购买数量</view>
+            <view class="styles">
+                <view class="style" wx:for="{{skus}}" wx:key="index" style="{{form.skuId==item._id?'':'opacity: 0.5;'}}" bindtap="skuChanged" data-value="{{item._id}}">
+                    <view>{{item.name}}</view>
+                    <view class="intro">{{item.intro}}</view>
+                </view>
+            </view>
+            <view class="title" style="margin-top: 20rpx;">寄送地址</view>
+            <view wx:if="{{!form.address }}" class="addressButton" bindtap="choooseAddress" style="color:#307a4b;">点击选择收货地址</view>
+            <view wx:if="{{form.address }}" class="addressInfo" bindtap="choooseAddress" style="color:#307a4b;">
+                <view style="max-width: 550rpx;">{{form.address}}</view>
+                <view class="addressButton">修改地址</view>
+            </view>
+        </view>
+        <view class="buy">
+            <view class="xieyi">
+                <checkbox-group bindchange="licenseChanged">
+                    <checkbox checked="{{true}}" color="#307a4b" value="agree" />
+                    我已阅读并同意
+                    <text style="color:#307a4b" bindtap="showLicenseModal">《用户协议》</text>
+                </checkbox-group>
+            </view>
+            <view>
+                <view class="confirm" bindtap="pay">支付{{form.priceStr}}元</view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark-long" bindtap="hideLicenseModal" wx:if="{{licenseModal}}" style="color:#333;">
+    <view>
+        <view class="jiecard-loading" wx:if="{{loading}}">
+            <image src="/res/images/logo.png" style="width:400rpx;height:400rpx;opacity:0.3"></image>
+        </view>
+        <view class="mask-card" wx:if="{{!loading}}" style="padding-bottom:60rpx;width:660rpx;">
+            <view class="card-head">inwifi用户协议</view>
+            <view class="card-body">
+                <view>尊敬的inwifi用户您好，使用本服务代表您同意本服务所附带的用户协议各项条款。</view>
+                <view>您购买的产品是一定数量的纸质小程序码，本公司产品通过该小程序码提供服务。</view>
+                <view>订单描述中“1套20张”，表示同一个码的20份复制，可供一个Wifi使用。</view>
+                <view>未经用户许可公司不会向任何第三方公开、透露用户信息。并对相关信息采用专业加密存储与传输方式，以保障用户信息的安全。</view>
+                <view>本产品所展示的付费服务，由于会消耗有限资源，一经购买不能退款，请谅解。</view>
+                <view>所由于系统原因导致付款后未能正常使用的，可联系客服处理。</view>
+                <view>用户在使用本软件及服务时，须自行承担如下来自本公司不可掌控的风险内容，包括但不限于</view>
+                <view>· 由于不可抗拒因素可能引起的用户信息丢失、泄漏等风险</view>
+                <view>· 用户必须选择与所安装终端设备相匹配的软件版本，否则，由于软件与终端设备型号不相匹配所导致的任何问题或损害，均由用户自行承担</view>
+                <view>· 用户将本软件产生的内容向他人转发、分享，因此等传播可能带来的风险和责任</view>
+                <view>· 由于网络信号不稳定、网络带宽小等网络原因，所引起的登录失败、资料同步不完整、页面打开速度慢等风险</view>
+                <view>· 由于政府政策、法律法规导致服务不能正常提供的</view>
+                <view>· 由于第三方平台出现异常导致服务不能正常提供的</view>
+            </view>
+            <view class="card-body"></view>
+        </view>
+    </view>
+</view>

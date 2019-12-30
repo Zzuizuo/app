@@ -1,0 +1,42 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view class="content">
+    <view class="pagetop">
+        <searchbox placeholder="请输入关键字" bindinputing="handleSearchInputChange" bindsearching="handleSearch" />
+    </view>
+    <view class="pagemiddle">
+        <navbar navs="{{navs}}" active="{{activeIndex}}" bindChangeNav="handleChangeNav" />
+    </view>
+    <view>
+        <view wx:if="{{!comments.length && loading}}" style="width:100vw;text-align: center;">
+            <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;margin-top: 100rpx;"></image>
+        </view>
+        <view wx:else class="comments" style="min-height: calc(100vh - 290rpx)">
+            <view wx:for="{{comments}}" wx:key="index">
+                <view wx:if="{{tab==4}}" class="cardbox center-vertical justify-SB" bindtap="toComment" data-item="{{item}}">
+                    <view class="cardcontent center-vertical">
+                        <image src="{{item.coupon.shop.avatar}}"></image>
+                        <view class="column justify-SB" style="height: 120rpx">
+                            <view class="text1 nowrap" style="max-width: 400rpx">{{item.coupon.shop.name}}</view>
+                            <view class="text2">{{item.coupon.shop.feature}}</view>
+                            <view class="text2">{{item.useTimeStr}}</view>
+                        </view>
+                    </view>
+                    <view class="boxbtn center-all">写点评</view>
+                </view>
+                <circle wx:else circle-data="{{item}}" circle-index="{{index}}" bindaction="showActions" bindtoShopPage="toShop" bindonReply="replyClicked"></circle>
+            </view>
+            <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+            <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+            <view wx:if="{{nomore && comments.length >0 }}" class="bottomloader">已全部加载</view>
+            <view wx:if="{{nomore && comments.length ==0 }}" class="nodata">暂无数据</view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" style="background-color: rgba(0, 0, 0, 0.5);align-items: flex-end;" wx:if="{{replyModal}}" bindtap="hideReplyModal">
+    <view catchtap="doNothing">
+        <input value="{{form.content}}" type="text" style="padding:20rpx 30rpx;border-top:1rpx solid #ddd;background-color: #fcfcfc;width:690rpx;border-bottom: 1rpx solid #f1f1f1;" focus confirm-type="send" bindinput="replyChanged" bindconfirm="replySubmit" cursor-spacing="20rpx" placeholder="请输入" />
+    </view>
+</view>

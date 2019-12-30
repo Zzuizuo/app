@@ -1,0 +1,579 @@
+<view wx:if="{{!session || androidHTMLLoading}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+<view class="contentbox">
+    <view class="pagetop">
+        <image wx:if="{{kanjia.cover}}" class="coverimg" src="{{kanjia.cover ? (kanjia.cover+'@cover7') : '/res/images/kanjia_defalut.png'}}" mode="aspectFill" />
+        <view class="line-bottom" style="margin-top: 40rpx">
+            <view class="pricebox">
+                <view class="targetPrice">
+                    <text style="font-size: 36rpx">{{kanjia.targetPriceStr}}</text> 元
+                </view>
+                <view class="originPrice">{{kanjia.originPriceStr}}元</view>
+            </view>
+            <view class="amountbox" wx:if="{{kanjia.amount}}">剩余{{kanjia.amount-(kanjia.data.paid || 0)}}份/已售{{kanjia.data.paid || 0}}份</view>
+            <view class="amountbox" wx:if="{{!kanjia.amount}}">已售{{kanjia.data.paid || 0}}份</view>
+        </view>
+        <view class="time" wx:if="{{kanjia.online}}">
+            <view wx:if="{{kanjia.status==0}}" style="color: #FF4925;">{{kanjia.startTimeStr}} 开始</view>
+            <view wx:if="{{kanjia.status==2}}">{{kanjia.endTimeStr}} 结束</view>
+            <view wx:if="{{kanjia.status==1}}">
+                <view wx:if="{{kanjia.endTimeStr}}">{{kanjia.endTimeStr}} 结束</view>
+            </view>
+        </view>
+        <view wx:else style="color:#999;">活动未开启</view>
+        <view class="title">{{kanjia.name}}</view>
+        <view class="props">
+            <view class="prop" wx:if="{{!kanjia.allowRefund}}">
+                <image src="/res/images/cross_b.png" style="width: 24rpx;height: 24rpx;margin-right: 6rpx" /> 可转赠
+            </view>
+            <!-- <view class="prop">
+                <image src="/res/images/cross_b.png" style="width: 24rpx;height: 24rpx;margin-right: 6rpx" /> 限购1份
+            </view> -->
+            <view class="prop" wx:if="{{!kanjia.allowRefund}}">
+                <image src="/res/images/cross_b.png" style="width: 24rpx;height: 24rpx;margin-right: 6rpx" /> 不支持退款
+            </view>
+            <view class="prop" wx:else>
+                <image src="/res/images/cross_b.png" style="width: 24rpx;height: 24rpx;margin-right: 6rpx" /> 无忧退
+            </view>
+        </view>
+    </view>
+    <view class="pagemiddle">
+        <view class="kanjiabox">
+            <view class="kanjiabox-top">
+                <view class="kanjiarulebtn" bindtap="toRule">砍价规则</view>
+                <view class="countdown" style="font-family: Courier;color:{{(kanjia.status==1 && userkanjia.expired) ? '#ccc' : '#FF4925'}}" wx:if="{{userkanjia && kanjia.status == 1 && !userkanjia.success && kanjia.amount}}">
+                    <view style="color: #242627;margin-right: 10rpx;">剩余时间</view>
+                    <view class="countdowncell" style="background: {{(kanjia.status==1 && userkanjia.expired) ? '#ccc' : '#FF4925'}}">{{clock.hour||0}}</view>
+                    <view>:</view>
+                    <view class="countdowncell" style="background: {{(kanjia.status==1 && userkanjia.expired) ? '#ccc' : '#FF4925'}}">{{clock.min||0}}</view>
+                    <view>:</view>
+                    <view class="countdowncell" style="background: {{(kanjia.status==1 && userkanjia.expired) ? '#ccc' : '#FF4925'}}">{{clock.sec||0}}</view>
+                </view>
+            </view>
+            <view class="bargain">
+                <view wx:if="{{!userkanjia}}">
+                    <view wx:if="{{!kanjia.online}}" style="color:#666">活动未开启</view>
+                    <view wx:else>
+                        <view wx:if="{{kanjia.status==2}}" style="color:#666">活动已结束</view>
+                        <view wx:else>
+                            <view style="color:#666" wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}">已抢光</view>
+                            <view wx:else>原价<text style="color:#FF4925">{{kanjia.originPrice || 0}}</text>元，可砍至<text style="color:#FF4925">{{kanjia.targetPrice || 0}}</text>元</view>
+                        </view>
+                    </view>
+                </view>
+                <view wx:if="{{userkanjia}}">
+                    <view wx:if="{{!userkanjia.success}}">
+                        <view wx:if="{{kanjia.online}}">
+                            <view wx:if="{{kanjia.status==2}}" style="color: #f0f0f0;color:#666">活动已结束,已砍至<text style="color: #242627">{{userkanjia.leftPriceStr}}</text>元</view>
+                            <view wx:if="{{kanjia.status==1 && userkanjia.expired}}" style="color: #f0f0f0;color:#666">砍价已超时,已砍至<text style="color: #242627">{{userkanjia.leftPriceStr}}</text> 元</view>
+                            <view wx:if="{{kanjia.status==1 && !userkanjia.expired}}">
+                                <!-- <view style="color:#666" wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}">已抢光</view> -->
+                                <view>已砍<text style="color:#FF4925">{{userkanjia.kanPriceStr}}</text>元，现价<text style="color:#FF4925">{{userkanjia.leftPriceStr}}</text>元</view>
+                            </view>
+                        </view>
+                        <view wx:else>
+                            <view style="color: #f0f0f0;color:#666">活动未开启</view>
+                        </view>
+                    </view>
+                    <view wx:else style="color: #F8662F;font-weight: bold;">
+                        <view wx:if="{{userkanjia.user._id==user._id}}">
+                            <view wx:if="{{userkanjia.used}}">奖励已兑换</view>
+                            <view wx:else>
+                                <view wx:if="{{userkanjia.paid}}" style="color:#FF4925">已完成砍价</view>
+                                <view wx:else>
+                                    <view style="color:#666" wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}">已抢光</view>
+                                    <view wx:else>恭喜你，已砍至最低价</view>
+                                </view>
+                            </view>
+                        </view>
+                        <view wx:else>
+                            <view>恭喜朋友，已砍至最低价</view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="processlinebox">
+                <view class="actvieline" style="width:{{userkanjia.kanPrice/(userkanjia.kanjia.originPrice-userkanjia.kanjia.targetPrice) * 630}}rpx;background: {{(kanjia.status==1 && userkanjia.expired) || (kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid) ? '#ccc' : '#FFDB09'}}" />
+            </view>
+            <view class="line-bottom lineheight1" style="color: #999;margin-top: 30rpx;">
+                <view>原价 {{kanjia.originPriceStr}}</view>
+                <view>最低价 {{kanjia.targetPriceStr}}</view>
+            </view>
+            <!-- btn -->
+            <view class="btnbox" wx:if="{{!userkanjia}}">
+                <view wx:if="{{!kanjia.online}}">活动未开启</view>
+                <view wx:else>
+                    <view wx:if="{{kanjia.status==0}}" class="pagebtn" style="background: #f0f0f0;color: #666;font-size: 24rpx">{{kanjia.startTimeStr}} 开始</view>
+                    <view wx:elif="{{kanjia.status==2}}" class="pagebtn" style="background: #f0f0f0;color:#666">活动已结束</view>
+                    <view wx:else>
+                        <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="pagebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                        <view wx:else>
+                            <view class="pagebtn" bindtap="toCreate" wx:if="{{user.authed}}">我要砍价</view>
+                            <button class="normal" open-type="getUserInfo" bindgetuserinfo="authThenJoin" wx:else>
+                                <view class="pagebtn">我要砍价</view>
+                            </button>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="btnbox" wx:if="{{userkanjia}}">
+                <view wx:if="{{!userkanjia.success}}">
+                    <view wx:if="{{kanjia.online}}">
+                        <view wx:if="{{kanjia.status==2}}" class="pagebtn" style="background: #f0f0f0;color:#666">活动已结束</view>
+                        <view wx:if="{{kanjia.status==1 && !userkanjia.expired}}">
+                            <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="pagebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                            <view wx:else>
+                                <button class="normal" open-type="share" wx:if="{{userkanjia.user._id==user._id}}">
+                                    <view class="pagebtn">邀请朋友帮忙砍</view>
+                                </button>
+                                <view wx:else>
+                                    <view wx:if="{{done}}">
+                                        <view class="pagebtn" bindtap="toCreateToo">我也要砍价</view>
+                                    </view>
+                                    <view wx:else>
+                                        <view class="pagebtn" bindtap="toHelp" wx:if="{{user.authed}}">帮他砍一刀</view>
+                                        <button class="normal" wx:else open-type="getUserInfo" bindgetuserinfo="authThenHelp">
+                                            <view class="pagebtn">帮他砍一刀</view>
+                                        </button>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <view wx:if="{{kanjia.status==1 && userkanjia.expired}}">
+                            <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="pagebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                            <view>
+                                <view wx:if="{{userkanjia.user._id==user._id}}" class="pagebtn" bindtap="toCreateToo">再次砍价</view>
+                                <view wx:else class="pagebtn">活动已超时</view>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:else>
+                        <view class="pagebtn" style="background: #f0f0f0;color:#666">活动未开启</view>
+                    </view>
+                </view>
+                <view wx:else>
+                    <view wx:if="{{userkanjia.user._id==user._id}}">
+                        <view wx:if="{{userkanjia.used}}" class="pagebtn" style="color:#666;background: #fff;">奖励已兑换</view>
+                        <view wx:else>
+                            <view bindtap="toUse" wx:if="{{userkanjia.usercoupon}}" data-usercoupon="{{userkanjia.usercoupon}}" class="pagebtn" style="background: #FF4925;color: #fff;">查看凭据</view>
+                            <view wx:else>
+                                <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="pagebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                                <view class="pagebtn" wx:else bindtap="toBuy">立即购买</view>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:else>
+                        <view wx:if="{{kanjia.status==2}}" class="pagebtn" style="background: #f0f0f0;color:#666">活动已结束</view>
+                        <view wx:else>
+                            <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="pagebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                            <view wx:else class="pagebtn" bindtap="toCreateToo">我也要砍价</view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <!-- log -->
+            <view class="recordbox" wx:if="{{userkanjia}}">
+                <view class="recordcell" wx:for="{{userkanjia.records}}" wx:key="index" wx:if="{{index<3}}">
+                    <view class="recordcelllf">
+                        <image src="{{item.user.headimgurl}}" />
+                        <view class="userinfo">
+                            <view>{{item.user.nickname}}</view>
+                            <view>{{item.createTimeStr}}</view>
+                        </view>
+                    </view>
+                    <view>砍掉{{item.valueStr}}元</view>
+                </view>
+            </view>
+            <!-- join -->
+            <view class="joinedbox" wx:if="{{userkanjia}}" style="margin-top: 50rpx">
+                <view class="jointext">
+                    <view>{{userkanjia.records.length}}人已参与</view>
+                    <!-- <text style="color: #FF4925;margin-left: 30rpx;">查看更多</text> -->
+                    <!-- <image src="/res/images/icon_righto.png" style="width: 10rpx;height: 20rpx;margin-left: 10rpx;" /> -->
+                </view>
+            </view>
+            <view class="joinedbox" wx:else>
+                <view class="joinimglist">
+                    <view class="joinimgs">
+                        <image class="joinimgcell" wx:for="{{actions}}" wx:key="index" src="{{item.user.headimgurl}}" style="z-index: {{index+1}}" />
+                        <image class="joinimgcell" wx:if="{{actions.length>=4}}" style="z-index: 6;background: #fff" src="/res/images/icon_headimgmore.png" />
+                    </view>
+                </view>
+                <view class="jointext">{{(kanjia.data.join || 0 ) * 1 + (kanjia.initJoin || 0) * 1}}人参与</view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="pagebottom">
+    <view class="panel" wx:if="{{kanjia.rule}}">
+        <view class="paneltitle">活动规则</view>
+        <view class="panelcontent">
+            <text decode style="white-space: pre-wrap;">{{kanjia.rule}}</text>
+        </view>
+    </view>
+    <view class="panel">
+        <view class="paneltitle">商家信息</view>
+        <view class="panelcontent">
+            <view class="shopname">
+                <view class="nowrap" bindtap="toShop" style="max-width: 500rpx">{{shop.name}}</view>
+                <view class="attestationbox" wx:if="{{shop.pass}}">
+                    <image src="/res/images/icon_attestation.png" class="attestation"></image>
+                    <view>已认证</view>
+                </view>
+                <view class="attestationbox" style="border: 1rpx solid #f0f0f0" wx:else bindtap="handleShopPass">
+                    <image src="/res/images/icon_unattestation.png" class="attestation"></image>
+                    <view style="color: #999">未认证</view>
+                </view>
+            </view>
+            <view class="panelitem" wx:if="{{shop.openTime}}">
+                <view class="panelitemtext">营业时间：{{shop.openTime}}</view>
+            </view>
+            <view class="panelitem" wx:if="{{shop.contact}}" bindtap="callShop">
+                <view class="panelitemtext">客服电话：{{shop.contact}}</view>
+                <view class="panelicon">
+                    <image src="/res/images/icon_phone.png" />
+                </view>
+            </view>
+            <view class="panelitem" bindtap="openLocation">
+                <view class="panelitemtext" style="line-height: 1.2">{{shop.address}}</view>
+                <view class="panelicon">
+                    <image src="/res/images/icon_address.png" />
+                </view>
+            </view>
+            <view class="panelitem" wx:if="{{shop.license}}" bindtap="toLicense" data-license="{{shop.license}}">
+                <view class="panelitemtext">营业资质许可</view>
+                <view class="panelicon">
+                    <image src="/res/images/icon_zizhi.png" />
+                </view>
+            </view>
+            <view class="panelitem" wx:if="{{shop.subshops && shop.subshops.length >= 5}}" bindtap="toSubshops">
+                <view class="panelitemtext">其余分店</view>
+                <view class="panelicon">
+                    <image src="/res/images/icon_shop.png" />
+                </view>
+            </view>
+        </view>
+        <view class="panelcontent" wx:if="{{shop.subshops && shop.subshops.length < 5}}" wx:for="{{shop.subshops}}" wx:key="index">
+            <view class="shopname">
+                <view class="nowrap" bindtap="toShop" style="max-width: 500rpx">{{item.name}}</view>
+                <!-- <view class="attestationbox" wx:if="{{shop.pass}}">
+                    <image src="/res/images/icon_attestation.png" class="attestation"></image>
+                    <view>已认证</view>
+                </view>
+                <view class="attestationbox" style="border: 1rpx solid #f0f0f0" wx:else bindtap="handleShopPass">
+                    <image src="/res/images/icon_unattestation.png" class="attestation"></image>
+                    <view style="color: #999">未认证</view>
+                </view> -->
+            </view>
+            <view class="panelitem" wx:if="{{item.openTime}}">
+                <view class="panelitemtext">营业时间：{{item.openTime}}</view>
+            </view>
+            <view class="panelitem" wx:if="{{item.contact}}" bindtap="callShop">
+                <view class="panelitemtext">客服电话：{{item.contact}}</view>
+                <view class="panelicon">
+                    <image src="/res/images/icon_phone.png" />
+                </view>
+            </view>
+            <view class="panelitem" bindtap="openLocation">
+                <view class="panelitemtext" style="line-height: 1.2">{{item.address}}</view>
+                <view class="panelicon">
+                    <image src="/res/images/icon_address.png" />
+                </view>
+            </view>
+            <!-- <view class="panelitem" wx:if="{{shop.license}}" bindtap="toLicense" data-license="{{shop.license}}">
+                <view class="panelitemtext">营业资质许可</view>
+                <view class="panelicon">
+                    <image src="/res/images/icon_zizhi.png" />
+                </view>
+            </view> -->
+        </view>
+    </view>
+    <view class="signbox" bindtap="copyWechatCodeName" wx:if="{{shop.wechatCodeOn && shop.wechatCodeName}}">
+        <view class="signbox_left">
+            <image src="/res/images/icon_wechart.png" />
+            <view>
+                <view class="nowrap" style="font-weight: bold;max-width: 420rpx">{{shop.wechatCodeName}}</view>
+                <view style="font-size: 24rpx;color: #666;margin-top: 8rpx;max-width: 420rpx">{{shop.wechatCodeTips}}</view>
+            </view>
+        </view>
+        <view class="signbtn" wx:if="{{!copied}}">复制名称</view>
+        <view class="signbtn" wx:if="{{copied}}">复制成功</view>
+    </view>
+    <view class="panel" wx:if="{{kanjia.detailHTML || kanjia.detailImage}}">
+        <view class="paneltitle">活动详情</view>
+        <view class="panel-content">
+            <view wx:if="{{kanjia.detailHTML}}">
+                <view style="width: 690rpx;">
+                    <rich-text nodes="{{kanjia.detailHTML}}" style="max-width:690rpx" />
+                </view>
+            </view>
+            <image wx:if="{{kanjia.detailImage}}" src="{{kanjia.detailImage}}" style="width:690rpx;" mode="widthFix" />
+        </view>
+    </view>
+    <view class="panel" wx:if="{{comments.length}}">
+        <view style="display: flex;justify-content: space-between;align-items: center;">
+            <view class="paneltitle">他们去过</view>
+            <view wx:if="{{comments.length==5}}" bindtap="toShop">查看更多</view>
+        </view>
+        <view class="comments" style="margin-top: 20rpx">
+            <view wx:for="{{comments}}" wx:key="index">
+                <circle circle-data="{{item}}" circle-index="{{index}}" full="{{true}}" shop="{{false}}" />
+            </view>
+            <view wx:if="{{comments.length==5}}" bindtap="toShop" style="padding: 20rpx 0;color:#aaa;">查看更多人的评价</view>
+        </view>
+    </view>
+    <view class="combox" style="margin-top: {{(kanjia.detailHTML || kanjia.detailImage) ? '0' : '60rpx'}}">
+        <serverinfo bindoncontact="handleShowContact"></serverinfo>
+    </view>
+</view>
+<view class="foot">
+    <view class="footiconcell">
+        <view class="footiconbox" bindtap="toIndex">
+            <image src="/res/images/buttonicon_shop.png" />
+            <view style="font-size: 20rpx;margin-top: 10rpx">首页</view>
+        </view>
+        <button class="simple footiconbox" open-type="share">
+            <image src="/res/images/buttonicon_share.png" />
+            <view style="font-size: 20rpx;margin-top: 10rpx">分享</view>
+        </button>
+        <view class="footiconbox" bindtap="callShop">
+            <image src="/res/images/buttonicon_phone.png" />
+            <view style="font-size: 20rpx;margin-top: 10rpx">咨询</view>
+        </view>
+    </view>
+    <view class="footright">
+        <view wx:if="{{!userkanjia}}">
+            <view wx:if="{{!kanjia.online}}" class="onebtn" style="background: #f0f0f0;color: #666">活动未开启</view>
+            <view wx:else>
+                <view wx:if="{{kanjia.status==0}}" class="onebtn" style="background: #f0f0f0;color: #666;font-size: 24rpx">{{kanjia.startTimeStr}} 开始</view>
+                <view wx:if="{{kanjia.status==1}}">
+                    <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="onebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                    <view class="twobtn" wx:else>
+                        <view class="twobtnleft" bindtap="toBuy">立即购买</view>
+                        <view class="twobtnright" bindtap="toCreate">我要砍价</view>
+                    </view>
+                </view>
+                <view wx:if="{{kanjia.status==2}}" class="onebtn" style="background: #f0f0f0;color: #666">活动已结束</view>
+            </view>
+        </view>
+        <view wx:if="{{userkanjia}}">
+            <view wx:if="{{userkanjia.success}}">
+                <view wx:if="{{userkanjia.user._id==user._id}}">
+                    <view wx:if="{{userkanjia.used}}" class="twobtn">
+                        <view class="twobtnleft" style="background: #f0f0f0;color: #666">奖励已兑换</view>
+                        <view class="twobtnright" wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" style="background: #f0f0f0;color:#666">已抢光</view>
+                        <view class="twobtnright" wx:else bindtap="toCreateToo">再次砍价</view>
+                    </view>
+                    <view wx:else>
+                        <view wx:if="{{userkanjia.usercoupon}}" class="twobtn">
+                            <view class="twobtnleft" bindtap="toUse" data-usercoupon="{{userkanjia.usercoupon}}">查看凭据</view>
+                            <view class="twobtnright" wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" style="background: #f0f0f0;color:#666">已抢光</view>
+                            <view class="twobtnright" wx:else bindtap="toCreateToo">再次砍价</view>
+                        </view>
+                        <view wx:else>
+                            <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="onebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                            <view class="onebtn" wx:else bindtap="toBuy" style="background: #FF4925;color: #fff">立即购买</view>
+                        </view>
+                    </view>
+                </view>
+                <view wx:else>
+                    <view wx:if="{{kanjia.status==2}}" class="onebtn" style="background: #f0f0f0;color:#666">活动已结束</view>
+                    <view wx:else>
+                        <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="onebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                        <view wx:else class="onebtn" bindtap="toCreateToo">我也要砍价</view>
+                    </view>
+                </view>
+            </view>
+            <view wx:else class="foot-right-box">
+                <view wx:if="{{kanjia.online}}">
+                    <view wx:if="{{kanjia.status==2}}" class="onebtn" style="background: #f0f0f0;color: #666">活动已结束</view>
+                    <view wx:if="{{kanjia.status==1 && !userkanjia.expired}}">
+                        <view wx:if="{{userkanjia.user._id==user._id}}">
+                            <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="onebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                            <view wx:else class="twobtn">
+                                <view class="twobtnleft" bindtap="toBuy">立即购买</view>
+                                <button class="normal" open-type="share">
+                                    <view class="twobtnright">继续砍价</view>
+                                </button>
+                            </view>
+                        </view>
+                        <view wx:else>
+                            <view wx:if="{{done}}">
+                                <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="onebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                                <view wx:else class="onebtn" bindtap="toCreateToo">我也要砍价</view>
+                            </view>
+                            <view wx:else>
+                                <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="onebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                                <view wx:else>
+                                    <view class="onebtn" wx:if="{{user.authed}}" bindtap="toHelp">帮他砍一刀</view>
+                                    <button class="normal" wx:if="{{!user.authed}}" open-type="getUserInfo" bindgetuserinfo="authThenHelp">
+                                        <view class="onebtn">帮他砍一刀</view>
+                                    </button>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:if="{{kanjia.status==1 && userkanjia.expired}}">
+                        <view wx:if="{{userkanjia.user._id==user._id}}">
+                            <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="onebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                            <view wx:else class="twobtn">
+                                <view class="twobtnleft" bindtap="toBuy">立即购买</view>
+                                <view class="twobtnright" bindtap="toCreateToo">再次砍价</view>
+                            </view>
+                        </view>
+                        <view wx:else>
+                            <view wx:if="{{kanjia.amount && kanjia.data.paid && kanjia.amount <= kanjia.data.paid}}" class="onebtn" style="background: #f0f0f0;color:#666">已抢光</view>
+                            <view wx:else class="twobtn">
+                                <view class="twobtnleft" bindtap="toBuy">立即购买</view>
+                                <view class="twobtnright" bindtap="toCreateToo">我也要砍价</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view wx:else class="onebtn" style="background: #f0f0f0;color: #666">活动未开启</view>
+            </view>
+        </view>
+    </view>
+    <view class="waitpaybox" wx:if="{{userkanjia && userkanjia.paying && kanjia.amount && kanjia.data.paid && kanjia.amount > kanjia.data.paid}}" bindtap="pay">
+        <view class="waitpayboxbg" wx:if="{{userkanjia && userkanjia.paying}}" />
+        <view style="z-index: 2;">你有一笔订单尚未支付</view>
+        <view class="paybox">立即支付</view>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{bonusModal}}" bindtap="hideBonusModal">
+    <view catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="simple" formType="submit">
+                <view wx:if="{{kanjia.helpTo && userkanjia.user._id && userkanjia.user._id!=user._id}}">
+                    <view wx:if="{{kanjia.helpTo == 'coupon'}}" class="couponModalMask" bindtap="hideBonusModal">
+                        <view class="couponModal" catchtap="toCouponDetail">
+                            <view style="min-height: 640rpx;text-align: center;margin-top: 80rpx;">
+                                <image src="{{shop.avatar?(shop.avatar +'@avatar'):'/res/images/logo2.png'}}" mode="aspectFill" style="border: 6rpx solid #e8cb93;border-radius:8rpx;width:100rpx;height:100rpx;" />
+                                <view style="color:#e8cb93;font-size: 32rpx;margin-top: 10rpx;font-weight: bold;">{{shop.name}}</view>
+                                <view style="color:#e8cb93;font-size: 24rpx;margin-top: 10rpx;">店铺专享红包</view>
+                                <view style="color:#e8cb93;font-size: 44rpx;margin-top: 70rpx;">恭喜发财，大吉大利</view>
+                            </view>
+                            <view style="color:#e8cb93;text-align: center;margin-top: 40rpx;font-size: 24rpx;">获得一个红包，点击领取</view>
+                        </view>
+                    </view>
+                    <view wx:if="{{kanjia.helpTo == 'bow'}}" class="mask-card" style="width: 590rpx;padding:70rpx 0 70rpx 0" catchtap="doNothing">
+                        <image src="/res/images/icon_userkanjia.png" style="width:476rpx;height: 211rpx;display: block;margin: 0 auto 70rpx;" />
+                        <view class="card-body" style="text-align:center;padding-bottom:70rpx;">
+                            <view style="color:#242627;font-size: 32rpx">少侠好刀法！一刀砍掉<text style="color: #f65459">{{record.valueStr}}</text>元</view>
+                            <view wx:if="{{bowId}}" style="color:#666;font-size: 28rpx;margin-top: 20rpx">商家的免费霸王餐抽奖正在进行中</view>
+                        </view>
+                        <view wx:if="{{bowId}}" class="maskbtn" bindtap="toBow">立即参与</view>
+                        <view wx:else class="maskbtn" bindtap="toCreateToo">我也要砍价</view>
+                    </view>
+                </view>
+                <view wx:else>
+                    <view class="mask-card" style="width: 590rpx;padding:70rpx 0 70rpx 0" catchtap="doNothing">
+                        <image src="/res/images/icon_userkanjia.png" style="width:476rpx;height: 211rpx;display: block;margin: 0 auto 70rpx;" />
+                        <view class="card-body" style="text-align:center;padding-bottom:70rpx;">
+                            <view style="color:#242627;font-size: 32rpx">少侠好刀法！一刀砍掉<text style="color: #f65459">{{record.valueStr}}</text>元</view>
+                        </view>
+                        <button wx:if="{{userkanjia.user._id==user._id}}" class="normal" open-type="share">
+                            <view class="maskbtn">邀请朋友继续砍</view>
+                        </button>
+                        <view wx:else class="maskbtn" bindtap="toCreateToo">我也要砍价</view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{buyModal}}" bindtap="hideBuyModal">
+    <view catchtap="doNothing">
+        <view class="shoppingbox">
+            <form bindsubmit="saveToken" report-submit>
+                <button class="normal" formType="submit">
+                    <view class="productinfo">
+                        <view class="productinfotop">
+                            <image src="{{kanjia.cover ? (kanjia.cover+'@cover7') : '/res/images/kanjia_defalut.png'}}" mode="aspectFill" />
+                            <view class="productinforight">
+                                <view class="productname ellipsis">{{kanjia.name}}</view>
+                                <view class="pricebox" wx:if="{{userkanjia}}">
+                                    <view class="targetPrice">
+                                        <text style="font-size: 36rpx">{{userkanjia?userkanjia.priceStr:kanjia.originPriceStr}}</text>
+                                        元
+                                    </view>
+                                    <view class="originPrice">{{kanjia.originPriceStr}}元</view>
+                                </view>
+                                <view class="pricebox" wx:else>
+                                    <view class="targetPrice">
+                                        <text style="font-size: 36rpx">{{kanjia.originPriceStr}}</text>
+                                        元
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="productinfobottom">
+                            <view class="signbox_left">
+                                <view>实付金额</view>
+                                <view class="tagitem" style="border: 1rpx solid #FF764C;background: #FFEBE5;color:#FF764C" wx:if="{{!kanjia.allowRefund}}">不支持退款</view>
+                            </view>
+                            <view class="targetPrice">
+                                <text style="font-size: 36rpx">{{userkanjia?userkanjia.priceStr:kanjia.originPriceStr}}</text>
+                                元
+                            </view>
+                        </view>
+                    </view>
+                    <view bindtap="buy" class="paybtn">立即支付</view>
+                </button>
+            </form>
+        </view>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{paidModal}}" bindtap="hidePaidModal">
+    <view catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="simple" formType="submit">
+                <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding: 70rpx 0;box-sizing: border-box">
+                    <view class="boxitem">
+                        <image src="/res/images/icon_paysuccess.png" style="width: 180rpx;height: 180rpx" />
+                        <view style="font-size: 48rpx;margin-top: 50rpx">支付成功</view>
+                        <view style="font-size: 24rpx;margin-top: 30rpx;color: #999">相应的券已加入您的券包</view>
+                        <view class="maskbtn" style="margin-top: 40rpx" bindtap="toUse" data-usercoupon="{{userkanjia.usercoupon}}">查看凭据</view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+
+
+<view class="mask-dark" wx:if="{{passModal}}" bindtap="hidePassModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding: 70rpx 0;box-sizing: border-box">
+            <view class="joinsuccessbox" style="padding: 0 40rpx;line-height: 1">
+                <image src="/res/images/icon_tixianfail.png" style="width: 178rpx;height: 178rpx" />
+                <view style="margin-top: 60rpx;font-size: 32rpx;color: #242627;font-weight: 500;text-align: center;width: 400rpx;line-height: 1">该商家信息未经平台官方认</view>
+                <view style="margin-top: 20rpx;font-size: 32rpx;color: #242627;font-weight: 500;text-align: center;width: 400rpx;line-height: 1">请自行识别风险</view>
+                <view class="maskbtnbox" style="margin-top: 80rpx">
+                    <view class="allbtn" style="width: 160rpx;border: 1rpx solid #f0f0f0;border-box: box-sizing" bindtap="handleReport">举报</view>
+                    <view class="allbtn" style="width: 300rpx;background: #FFDB09" bindtap="hidePassModal">继续砍价</view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{fullModal}}" bindtap="hideFullModal">
+    <view catchtap="doNothing">
+        <view class="mask-card" style="width: 590rpx;padding:70rpx 0 " catchtap="doNothing">
+            <image src="/res/images/mask_nomore.png" style="width:225rpx;height: 170rpx;display: block;margin: 0 auto 70rpx;" />
+            <view class="card-body" style="text-align:center;padding-bottom:70rpx;">
+                <view style="color:#242627;font-size: 32rpx;font-weight: bold;">手慢了，商品已经被抢光啦</view>
+                <view style="margin-top:30rpx;color: #aaa;">支付的款项稍后将原路退回</view>
+            </view>
+            <view class="maskbtn" bindtap="hideFullModal">我知道了</view>
+        </view>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{showContactModal}}" bindtap="hideContactModal">
+    <view class="mask-card" style="width:590rpx;min-height:600rpx;border-radius: 10rpx;padding-bottom: 30rpx " catchtap="doNothing">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" data-image="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" style="width: 590rpx;height: 784rpx;margin: 0 auto 0 auto;display: block;border-radius: 10rpx" bindtap="handlePreviewImg" bindlongpress="handlePreviewImg" ></image>
+        <view class="mask-btn" style="margin: 20rpx auto 10rpx auto" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+    </view>
+</view>

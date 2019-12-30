@@ -1,0 +1,92 @@
+{
+    "pages": [
+        "pages/main/index",
+        "pages/main/me",
+        "pages/main/gous",
+        "pages/main/chats",
+        "pages/main/coupons",
+        "pages/main/comments",
+        "pages/main/dakas",
+        "pages/main/kanjias",
+        "pages/main/bows",
+        "pages/main/subshops",
+        "pages/main/shopapp",
+        "pages/main/web",
+        "pages/kanjia/rule",
+        "pages/main/oldindex",
+        "pages/main/comment",
+        "pages/main/tasks",
+        "pages/main/daka",
+        "pages/main/wallet",
+        "pages/main/license",
+        "pages/main/examine",
+        "pages/shop/detail",
+        "pages/kanjia/detail",
+        "pages/tuan/detail",
+        "pages/miao/detail",
+        "pages/gou/detail",
+        "pages/bow/detail",
+        "pages/bow/userbows",
+        "pages/bow/rule",
+        "pages/coupon/detail",
+        "pages/contact/usersessions",
+        "pages/contact/messages",
+        "pages/admin/setting",
+        "pages/admin/accounts",
+        "pages/admin/users",
+        "pages/wheel/detail",
+        "pages/wifi/create",
+        "pages/wifi/qrcode",
+        "pages/wifi/detail",
+        "pages/wifi/index",
+        "pages/wifi/connects",
+        "pages/wifi/qrcodes",
+        "pages/wifi/subscribers",
+        "pages/main/master",
+        "pages/main/fuli",
+        "pages/main/material",
+        "pages/main/commentlist"
+    ],
+    "window": {
+        "usingComponents": {},
+        "backgroundTextStyle": "dark",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true,
+        "backgroundColor": "#fff"
+    },
+    "tabBar": {
+        "selectedColor": "#333333",
+        "backgroundColor": "#ffffff",
+        "color": "#aaaaaa",
+        "list": [{
+                "pagePath": "pages/main/index",
+                "iconPath": "res/images/tabicon-index.png",
+                "selectedIconPath": "res/images/tabicon-index_active.png",
+                "text": "福利"
+            },
+            {
+                "pagePath": "pages/main/chats",
+                "iconPath": "res/images/icon_shop_blank.png",
+                "selectedIconPath": "res/images/icon_shop_actived.png",
+                "text": "探店"
+            },
+            {
+                "pagePath": "pages/main/me",
+                "iconPath": "res/images/tabicon-me.png",
+                "selectedIconPath": "res/images/tabicon-me_active.png",
+                "text": "我的"
+            }
+        ]
+    },
+    "permission": {
+        "scope.userLocation": {
+            "desc": "提供附近信息"
+        }
+    },
+    "navigateToMiniProgramAppIdList": [
+        "wx8bcf2758c6249d28"
+    ],
+    "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,37 @@
+<view class="page">
+    <view class="pagetop">
+        <view class="title">推广素材</view>
+        <view class="text1">所有素材仅二维码均为个人定制</view>
+        <view class="text1">平台会不断更新推广素材</view>
+    </view>
+    <view class="itembox">
+        <view class="text2">推广粉丝</view>
+        <view class="center-vertical justify-SB" style="margin-top: 40rpx">
+            <view class="text3">种草很久的店铺竟然在这里藏着这么大的福利，快看一看有没有你喜欢的。<text style="color: #FF4925" data-content="很多种草已久的店铺竟然在这里有这么大的福利，快看一看有没有你喜欢的。" bindtap="handleCopy">复制文案</text></view>
+        </view>
+        <view class="center-vertical justify-SB" bindtap="previewImage" data-url="/userapp/main/getSharecode/user" data-img="{{fansImg}}" style="margin-top: 30rpx;position: relative">
+            <image src="/res/images/modal-guide.png" class="shareImg" mode="widthFix"></image>
+            <view class="itembtn center-all">获取海报</view>
+        </view>
+    </view>
+    <view class="itembox">
+        <view class="text2">推广团队</view>
+        <view class="center-vertical justify-SB" style="margin-top: 40rpx">
+            <view class="text3">最近超火，探店大师，超多好吃的福利。不仅自己省钱吃大餐，介绍给朋友就能赚钱，朋友免费就能用，不用拉人头，真正的分享经济，输入我的邀请码免费领黑卡会员哦。<text style="color: #FF4925" data-content="最近超火，探店大师，超多好吃的福利。不仅自己省钱吃大餐，介绍给朋友就能赚钱，朋友免费就能用，不用拉人头，真正的分享经济，输入我的邀请码免费领黑卡会员哦。" bindtap="handleCopy">复制文案</text></view>
+        </view>
+        <view class="center-vertical justify-SB" bindtap="previewImage" data-url="/userapp/main/getSharecode/team" data-img="{{teamImg}}" style="margin-top: 30rpx;position: relative">
+            <image src="/res/images/modal-guide.png" class="shareImg" mode="widthFix"></image>
+            <view class="itembtn center-all">获取海报</view>
+        </view>
+    </view>
+    <view class="itembox">
+        <view class="text2">推广商家</view>
+        <view class="center-vertical justify-SB" style="margin-top: 40rpx">
+            <view class="text3">这个推广模式超棒，不仅免费，效果还好，餐饮商家不可错过。<text data-content="这个推广模式超棒，不仅免费，效果还好，餐饮商家不可错过。" style="color: #FF4925" bindtap="handleCopy">复制文案</text></view>
+        </view>
+        <view class="center-vertical justify-SB" bindtap="previewImage" data-url="/userapp/main/getSharecode/shop" data-img="{{shopImg}}" style="margin-top: 30rpx;position: relative">
+            <image src="/res/images/modal-guide.png" class="shareImg" mode="widthFix"></image>
+            <view class="itembtn center-all">获取海报</view>
+        </view>
+    </view>
+</view>

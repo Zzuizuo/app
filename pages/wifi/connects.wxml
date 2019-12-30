@@ -1,0 +1,39 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view class="items">
+    <view class="item" wx:for="{{connects}}" wx:key="index">
+        <view>
+            <view style="display: flex;align-items: center;">
+                <image class="icon" src="{{item.user.headimgurl+'@avatar'}}" style="width:40rpx;height: 40rpx;border-radius: 40rpx;display: block;margin-right: 10rpx;"></image>
+                <view style="color: #ea8844;max-width: 200rpx;" class="nowrap">{{item.user.nickname}}</view>
+            </view>
+            <view style="color: #42a766;line-height: 62rpx;display: flex; align-items: center;">
+                <view style="font-size: 22rpx;width:240rpx;" class="nowrap" wx:if="{{item.qrcode}}">{{item.qrcode.name}}</view>
+                <!-- <view class="locked" wx:if="{{item.locked}}">已锁定</view> -->
+            </view>
+        </view>
+        <view class="datas">
+            <!-- <view class="data" style="width:140rpx;">
+                <view class="name"></view>
+                <view class="value">{{item.data.connectToday}}</view>
+            </view> -->
+            <!-- <view class="data" style="width:140rpx;">
+                <view class="name">创建时间</view>
+                <view class="value" style="font-size: 22rpx;line-height: 64rpx;">{{item.createTimeStr}}</view>
+            </view> -->
+            <view class="data" style="width:140rpx;">
+                <view class="value" style="font-size: 22rpx;line-height: 64rpx;">{{item.createTimeStr}}</view>
+            </view>
+        </view>
+
+    </view>
+    <view>
+        <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+        <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+        <view wx:if="{{nomore && connects.length >0 }}" class="bottomloader">已全部加载</view>
+    </view>
+    <view wx:if="{{nomore && connects.length ==0}}" class="nodata">
+        <view style="margin-top: 100rpx;">暂无数据</view>
+    </view>
+</view>

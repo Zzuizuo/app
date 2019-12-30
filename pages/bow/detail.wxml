@@ -1,0 +1,895 @@
+<view wx:if="{{!session || androidHTMLLoading}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+<view class="contentbox">
+    <!-- <view class="swiperimg" wx:if="{{images.length > 4}}">
+        <image src="{{images[currentImgIndex] ? images[currentImgIndex].url+'@cover7' : ''}}" mode="aspectFill"></image>
+    </view> -->
+    <view style="position: relative;width: 100vw;height: 375rpx">
+        <swiper class="swiper" duration="{{100}}" easing-function="linear" bindchange="handleSwiperCurrent" current="{{swiperCurrent}}" circular autoplay display-multiple-items="{{1}}">
+            <block wx:for="{{images}}" wx:key="index">
+                <swiper-item bindtap="handle" style="width: 100vw !important;height: 375rpx !important;">
+                    <image src="{{item.url + '@cover7'}}" mode="aspectFill"></image>
+                    <!-- <view class="imgbottom">环境</view> -->
+                </swiper-item>
+            </block>
+        </swiper>
+        <view wx:if="{{images.length > 1}}" class="listnum center-vertical">
+            <view class="listnumcell" wx:if="{{publicPics.length}}" bindtap="handleShowSwiperImg" data-type="pub" style="margin-right: 10rpx">环境 {{ (swiperIndex - 1 && swiperIndex <= publicPics.length + 1) ? (swiperIndex - 1) + ' /' : ''}} {{publicPics.length}}</view>
+            <view class="listnumcell" wx:if="{{caiPics.length}}" bindtap="handleShowSwiperImg" data-type="cai">菜品 {{(swiperIndex && swiperIndex > publicPics.length + 1) ? (swiperIndex - publicPics.length - 1) + ' /' : ''}} {{caiPics.length}}</view>
+        </view>
+    </view>
+
+    <!-- todo -->
+    <!-- <view class="scrollbox" wx:if="{{images.length > 4}}">
+        <scroll-view class="scroll-view" scroll-x="{{true}}" scroll-with-animation="{{true}}" bindscroll="handleScrollImg" enable-flex="{{true}}">
+            <view wx:for="{{images}}" wx:key="index" class="scrollitem center-all {{index == currentImgIndex ? 'imgborder' : '' }}">
+                <image class="scrollimg" src="{{item.url}}" bindtap="handleShowImg" data-index="{{index}}" mode="aspectFill"></image>
+            </view>
+        </scroll-view>
+    </view> -->
+    <view class="pagetop">
+        <!-- <image wx:if="{{bow.cover}}" class="coverimg" src="{{bow.cover ? (bow.cover+'@cover7') : '/res/images/kanjia_defalut.png'}}" mode="aspectFill">
+            <view class="noteicebox" wx:if="{{bow.repeat=='day'}}">每天开奖</view>
+            <view class="noteicebox" wx:if="{{bow.repeat=='week'}}">每周开奖</view>
+        </image> -->
+        <view class="line-bottom" style="margin-top: 40rpx;line-height: 1">
+            <view class="pricebox" style="color: #FF4925;font-size: 32rpx;font-weight: bold">{{bow.name}}</view>
+            <view style="color: #999;font-size: 24rpx">共{{bow.amount}}份奖品</view>
+        </view>
+        <view class="title" bindtap="toShop" style="font-size: 28rpx;line-height: 1;margin-top: 40rpx;font-weight: bold">{{bow.shop.name}}</view>
+        <view class="line-bottom" style="font-size: 24rpx;color: #999;line-height: 1;margin-top: 20rpx" bindtap="openLocation">
+            <view class="nowrap" style="max-width: 580rpx">{{bow.shop.address}}</view>
+            <view class="" wx:if="{{location}}">{{disStr}}</view>
+        </view>
+        <view class="amountbox">
+            <view class="originPrice" style="margin-top: 0">
+                <view>价值：<text style="font-size: 36rpx">{{bow.originPriceStr}}</text>元</view>
+            </view>
+            <view wx:if="{{bow.online}}">
+                <view wx:if="{{bow.status==0}}">{{bow.startTimeStr}} 开奖</view>
+                <view wx:if="{{bow.status==1}}">已开奖</view>
+            </view>
+            <view wx:else style="color:#999;">活动未开启</view>
+        </view>
+    </view>
+    <view class="pagemiddle">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="normal" formType="submit">
+                <view class="bowbox">
+                    <view wx:if="{{bow.online}}">
+                        <view class="bowbox-top" wx:if="{{bow.status!=1}}">
+                            <view class="bowrulebtn" bindtap="toBowRule">开奖规则</view>
+                            <view class="countdown" style="font-family: Courier;color:{{(bow.status==1) ? '#ccc' : '#FF4925'}}">
+                                <view style="color: #242627;margin-right: 10rpx;">开奖倒计时</view>
+                                <view class="countdowncell" style="background: {{(bow.status==1) ? '#ccc' : '#FF4925'}}">{{clock.hour||0}}</view>
+                                <text>:</text>
+                                <view class="countdowncell" style="background: {{(bow.status==1) ? '#ccc' : '#FF4925'}}">{{clock.min||0}}</view>
+                                <text>:</text>
+                                <view class="countdowncell" style="background: {{(bow.status==1) ? '#ccc' : '#FF4925'}}">{{clock.sec||0}}</view>
+                            </view>
+                        </view>
+                        <view wx:if="{{bow.status==0}}">
+                            <view wx:if="{{userbow && userbow.codes.length}}">
+                                <view class="circlebox1" style="color: rgba(255,255,255,.7)">等待开奖</view>
+                                <view class="luckcoinbox" bindtap="toUseCoin" wx:if="{{user.coin && (userbow.coin||0) < 5}}">
+                                    <view>本场活动你还可以使用{{5 - (userbow.coin || 0)}}个幸运币</view>
+                                    <view class="coinbtn">使用</view>
+                                </view>
+                                <view class="luckcoinbox" bindtap="showVideo" wx:if="{{(!user.coin || (userbow.coin||0) >=5 ) && showAd && !userbow.videoBonus}}">
+                                    <view>观看广告，获取1个额外幸运码</view>
+                                    <view class="coinbtn" style="{{ading?'opacity: 0.3;':''}}">好的</view>
+                                </view>
+                                <view class="luckcode">我的幸运码 共{{userbow.codes.length}}个</view>
+                                <view class="codes" style="{{userbow.codes.length < 3 ? 'text-align: center;justify-content: center;' : ''}}">
+                                    <view class="code" wx:for="{{userbow.codes}}" wx:key="index">{{item}}</view>
+                                </view>
+                                <button class="normal" open-type="share">
+                                    <view class="pagebtn">获取更多幸运码</view>
+                                </button>
+                            </view>
+                            <view wx:else>
+                                <view class="circlebox" bindtap="join" style="{{bow.cd ? 'font-size: 24rpx' : ''}}" wx:if="{{user.authed}}">{{bow.cd ? bow.cd+'秒后抽奖' : '参与抽奖'}}</view>
+                                <button class="normal" open-type="getUserInfo" bindgetuserinfo="authThenJoin" wx:else>
+                                    <view class="circlebox" style="{{bow.cd ? 'font-size: 24rpx' : ''}}">{{bow.cd ? bow.cd+'秒后抽奖' : '参与抽奖'}}</view>
+                                </button>
+                            </view>
+                        </view>
+                        <view wx:if="{{bow.status==1}}">
+                            <view wx:if="{{bow.code=='1000001'}}" style="margin-top: 100rpx;">
+                                <view class="statusbox">
+                                    <image style="width: 190rpx;height: 140rpx;" src="http://cdn.classx.cn/tandian/userapp/res/images/nogift.png" />
+                                    <view style="margin-top: 30rpx;color: #aaa">没有人参与抽奖</view>
+                                </view>
+                            </view>
+                            <view wx:else>
+                                <view wx:if="{{userbow && userbow.used}}">
+                                    <view class="statusbox">
+                                        <image style="width: 190rpx;height: 140rpx;" src="/res/images/mask_award.png" />
+                                        <view class="pagebtn" style="background: #f0f0f0;color: #666">您已兑换奖励</view>
+                                    </view>
+                                </view>
+                                <view wx:else>
+                                    <view wx:if="{{userbow && userbow.success}}">
+                                        <view class="statusbox">
+                                            <image style="width: 324rpx;height: 180rpx;" src="/res/images/mask_award.png" />
+                                            <view class="statusboxtext">恭喜您中奖啦！</view>
+                                            <view class="pagebtn" bindtap="toUse" data-usercoupon="{{userbow.usercoupon}}">兑换奖励</view>
+                                        </view>
+                                    </view>
+                                    <view wx:else>
+                                        <view wx:if="{{userbow}}" class="statusbox">
+                                            <image style="width: 215rpx;height: 190rpx" src="/res/images/mask_unluck.png" />
+                                            <view class="statusboxtext">很遗憾，你未中奖</view>
+                                            <view class="pagebtn" bindtap="getCoupon" wx:if="{{bow.coupon}}">参与有礼</view>
+                                        </view>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="winnerbox" wx:if="{{bow.status==1}}">
+                            <view wx:if="{{bow.code=='1000001'}}" />
+                            <view wx:else>
+                                <view class="winnertitle">中奖者名单</view>
+                                <view class="winnerlist">
+                                    <view class="winnercell" wx:for="{{winners}}" wx:key="index">
+                                        <image src="{{item.user.headimgurl}}" />
+                                        <view class="nowrap" style="max-width: 100rpx;margin-top: 16rpx">{{item.user.nickname}}</view>
+                                        <view style="color: #f65459;margin-top: 16rpx">{{item.bonusCode}}</view>
+                                    </view>
+                                </view>
+                                <view class="pagebtn2" bindtap="toBowRule">获奖幸运码计算过程</view>
+                                <view class="winnertitle" style="margin-top: 40rpx" wx:if="{{userbow.codes.length}}">
+                                    我的幸运码
+                                </view>
+                                <view class="codes" style="{{userbow.codes.length < 3 ? 'text-align: center;justify-content: center;' : ''}}">
+                                    <view class="code" wx:for="{{userbow.codes}}" wx:key="index">{{item}}</view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:else>
+                        <view class="circlebox" style="background: #f0f0f0;color: #666">未开启</view>
+                    </view>
+
+                    <view class="joinedbox">
+                        <view class="joinedbox">
+                            <view class="joinimgs">
+                                <view class="joinimglist" wx:if="{{actions.length}}" bindtap="toUserbows">
+                                    <image class="joinimgcell" wx:for="{{actions}}" wx:key="index" src="{{item.user.headimgurl}}" style="z-index: {{index+1}}" />
+                                    <image class="joinimgcell" wx:if="{{actions.length>=4}}" style="z-index: 6" src="/res/images/icon_headimgmore.png" />
+                                </view>
+                                <view class="joinimglist" wx:else>
+                                    <image class="joinimgcell" wx:for="{{4}}" wx:key="index" src="/res/images/icon_joinuser.png" style="z-index: {{index+1}}" />
+                                    <image class="joinimgcell" style="z-index: 6" src="/res/images/icon_headimgmore.png" />
+                                </view>
+                            </view>
+                            <view class="jointext" bindtap="toUserbows">
+                                <view>{{bow.data.join || 0 }}人参与</view>
+                                <view wx:if="{{bow.data.join}}" style="margin-left:30rpx;color: #FF4925">查看全部</view>
+                                <image wx:if="{{bow.data.join}}" src="/res/images/icon_righto.png" style="margin-left:10rpx;" />
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+
+    <view style="background-color: #fff;margin-top: 40rpx;display: flex;align-items: center;justify-content: space-between;width: 100vw;padding:0 30rpx;box-sizing: border-box">
+        <view style="display: flex;align-items: center;">
+            <image src="http://cdn.classx.cn/tandian/userapp/res/images/group.png" style="width:100rpx;height:100rpx;border-radius: 10rpx;display: block;margin-right: 10rpx;"></image>
+            <view>
+                <view style="font-weight: bold;">探店大师福利群</view>
+                <view style="color: #aaa;font-size: 20rpx;">福利不断，惊喜不断</view>
+            </view>
+        </view>
+        <button class="simple" open-type="contact" style="margin-right: 10rpx">
+            <view class="greenbtn">回复111加入</view>
+        </button>
+    </view>
+
+    <view class="pagebottom">
+        <view class="panel" wx:if="{{bow.rule}}">
+            <view class="paneltitle">活动规则</view>
+            <view class="panelcontent">
+                <text decode style="white-space: pre-wrap;">{{bow.rule}}</text>
+            </view>
+        </view>
+        <view class="panel">
+            <view class="paneltitle">卡券使用条件</view>
+            <view class="ruleitem" style="margin-top: 50rpx">
+                <view class="rulecircle"></view>
+                <view wx:if="{{(bow.bonus.expiryType=='day' && bow.bonus.expiryDay==7) || !bow.bonus.expiryType}}">领取后7天内有效</view>
+                <view wx:if="{{bow.bonus.expiryType=='never'}}">永久有效</view>
+                <view wx:if="{{bow.bonus.expiryType=='time'}}">{{bow.bonus.expiryTimeStr}}到期</view>
+                <view wx:if="{{bow.bonus.expiryType=='day' && bow.bonus.expiryDay!=7}}">领取后{{bow.bonus.expiryDay}}天内有效</view>
+            </view>
+            <view class="ruleitem" wx:if="{{(bow.bonus.dayLimit == 'custom' && bow.bonus.dayLimitCustom) || bow.bonus.dayLimit != 'custom'}}">
+                <view class="rulecircle"></view>
+                <view>{{bow.bonus.dayLimit == 'custom' ? bow.bonus.dayLimitCustom : '节假日通用'}}</view>
+            </view>
+            <view class="ruleitem" wx:if="{{(bow.bonus.timeLimit == 'custom' && bow.bonus.timeLimitCustom) || bow.bonus.timeLimit != 'custom'}}">
+                <view class="rulecircle"></view>
+                <view>{{bow.bonus.timeLimit == 'custom' ? bow.bonus.timeLimitCustom : '全天可用'}}</view>
+            </view>
+            <!-- <view class="ruleitem" wx:if="{{(bow.bonus.scope == 'custom' && bow.bonus.scopeCustom) || bow.bonus.scope != 'custom'}}">
+                <view class="rulecircle"></view>
+                <view wx:if="{{bow.bonus.scope == 'custom'}}">{{bow.bonus.scopeCustom}}</view>
+                <view wx:if="{{bow.bonus.scope == 'all' || !bow.bonus.scope}}">全场通用</view>
+                <view  wx:if="{{bow.bonus.scope == 'cai'}}">仅限菜品与堂食</view>
+            </view> -->
+            <view class="ruleitem" wx:if="{{(bow.bonus.appointment == 'custom' && bow.bonus.appointmentCustom) || bow.bonus.appointment != 'custom'}}">
+                <view class="rulecircle"></view>
+                <view>{{bow.bonus.appointment == 'custom' ? bow.bonus.appointmentCustom : '无需预约，消费高峰期可能需要等位'}}</view>
+            </view>
+            <!-- <view class="ruleitem" wx:if="{{(bow.bonus.person == 'custom' && bow.bonus.personCustom) || bow.bonus.person != 'custom'}}">
+                <view class="rulecircle"></view>
+                <view >{{bow.bonus.person == 'custom' ? bow.bonus.personCustom : '2人及以上'}}</view>
+            </view> -->
+            <view class="ruleitem" wx:if="{{bow.bonus.rule}}">
+                <view class="rulecircle"></view>
+                <text wx:if="{{bow.bonus.rule}}" decode style="white-space:pre-wrap;color: #242627;felx: 1">{{bow.bonus.rule}}</text>
+            </view>
+        </view>
+        <view class="panel" wx:if="{{bow.bonus.type == 'duihuan' && bow.bonus.includes.length}}">
+            <view class="paneltitle">兑换内容</view>
+            <view class="panelcontent">
+                <view wx:for="{{bow.bonus.includes}}" wx:key="index" class="ruleitem">
+                    <view class="rulecircle"></view>
+                    <view style="flex: 1">
+                        <view wx:if="{{item.title}}" style="font-weight: bold;font-size: 28rpx;margin-bottom: 30rpx;">{{item.title}}</view>
+                        <view wx:for="{{item.cais}}" wx:for-item="cell" wx:key="index" class="justify-SB center-vertical" style="flex: 1;margin-bottom: 30rpx;line-height: 1">
+                            <view style="font-size: 28rpx;color: #242627">{{cell.name}} <text style="font-size: 24rpx;color: #999">({{cell.amount}}份)</text></view>
+                            <view wx:if="{{cell.price}}">￥<text style="font-weight: bold">{{cell.price}}</text></view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="panel">
+            <view class="paneltitle">商家信息</view>
+            <view class="panelcontent">
+                <view class="shopname" style="{{shop.tag2 || shop.tag1 ? 'margin-bottom: 30rpx':'' }}">
+                    <view class="nowrap" bindtap="toShop" style="max-width: 500rpx">{{shop.name}}</view>
+                    <view class="attestationbox" wx:if="{{shop.pass}}" bindtap="toLicense" data-license="{{shop.license}}">
+                        <image src="/res/images/icon_attestation.png" class="attestation"></image>
+                        <view>已认证</view>
+                    </view>
+                    <view class="attestationbox" style="border: 1rpx solid #f0f0f0" wx:else bindtap="handleShopPass">
+                        <image src="/res/images/icon_unattestation.png" class="attestation"></image>
+                        <view style="color: #999">未认证</view>
+                    </view>
+                </view>
+                <view class="tagsbox center-vertical" style="margin-bottom: 40rpx;" wx:if="{{shop.tag2 || shop.tag1}}">
+                    <view wx:if="{{shop.tag1}}" class="tagitem center-vertical" style="color: #FE9E00;background: #FFF5E5;margin-right: 10rpx;margin-bottom:{{((shop.tag1.length + shop.tag2.length > 25) && shop.tag2) ? '10rpx' : '0'}}">
+                        <image src="/res/images/index_tag.png" style="width: 20rpx;height: 22rpx;margin-right: 10rpx"></image>
+                        <view class="nowrap" style="max-width: 320rpx;">{{shop.tag1}}</view>
+                    </view>
+                    <view wx:if="{{shop.tag2}}" class="tagitem center-vertical" style="color: #FF6D26;background: #FFF1EB">“<view class="nowrap" style="max-width: 320rpx;">{{shop.tag2}}</view>”</view>
+                </view>
+                <view class="panelitem" wx:if="{{shop.openTime}}">
+                    <view class="panelitemtext">营业时间：{{shop.openTime}}</view>
+                </view>
+                <view class="panelitem" wx:if="{{shop.contact}}" bindtap="callShop">
+                    <view class="panelitemtext">客服电话：{{shop.contact}}</view>
+                    <view class="panelicon">
+                        <image src="/res/images/icon_phone.png" />
+                    </view>
+                </view>
+                <view class="panelitem" bindtap="openLocation">
+                    <view class="panelitemtext" style="line-height: 1.2">{{shop.address}}</view>
+                    <view class="panelicon">
+                        <image src="/res/images/icon_address.png" />
+                    </view>
+                </view>
+                <!-- <view class="panelitem" wx:if="{{shop.license}}" bindtap="toLicense" data-license="{{shop.license}}">
+                    <view class="panelitemtext">营业资质许可</view>
+                    <view class="panelicon">
+                        <image src="/res/images/icon_zizhi.png" />
+                    </view>
+                </view> -->
+                <view class="panelitem" wx:if="{{shop.subshops && shop.subshops.length >= 5}}" bindtap="toSubshops">
+                    <view class="panelitemtext">其余分店</view>
+                    <view class="panelicon">
+                        <image src="/res/images/icon_shop.png" />
+                    </view>
+                </view>
+            </view>
+
+            <view class="panelcontent" wx:if="{{shop.subshops && shop.subshops.length < 5}}" wx:for="{{shop.subshops}}" wx:key="index">
+                <view class="shopname">
+                    <view class="nowrap" bindtap="toShop" style="max-width: 500rpx">{{item.name}}</view>
+                    <!-- <view class="attestationbox" wx:if="{{shop.pass}}">
+                        <image src="/res/images/icon_attestation.png" class="attestation"></image>
+                        <view>已认证</view>
+                    </view>
+                    <view class="attestationbox" style="border: 1rpx solid #f0f0f0" wx:else bindtap="handleShopPass">
+                        <image src="/res/images/icon_unattestation.png" class="attestation"></image>
+                        <view style="color: #999">未认证</view>
+                    </view> -->
+                </view>
+                <view class="panelitem" wx:if="{{item.openTime}}">
+                    <view class="panelitemtext">营业时间：{{item.openTime}}</view>
+                </view>
+                <view class="panelitem" wx:if="{{item.contact}}" bindtap="callShop" data-item="{{item}}">
+                    <view class="panelitemtext">客服电话：{{item.contact}}</view>
+                    <view class=" panelicon">
+                        <image src="/res/images/icon_phone.png" />
+                    </view>
+                </view>
+                <view class="panelitem" bindtap="openLocation" data-item="{{item}}">
+                    <view class="panelitemtext" style="line-height: 1.2">{{item.address}}</view>
+                    <view class="panelicon">
+                        <image src="/res/images/icon_address.png" />
+                    </view>
+                </view>
+                <!-- <view class="panelitem" wx:if="{{shop.license}}" bindtap="toLicense" data-license="{{shop.license}}">
+                    <view class="panelitemtext">营业资质许可</view>
+                    <view class="panelicon">
+                        <image src="/res/images/icon_zizhi.png" />
+                    </view>
+                </view> -->
+            </view>
+        </view>
+        <view class="panel" wx:if="{{shop.subCais.length}}">
+            <view class="paneltitle">店长推荐 <text style="color: #999;font-weight: 400">({{shop.subCais.length}})</text></view>
+            <view class="panelcontent">
+                <swiper style="width: 690rpx;height: 260rpx" duration="{{100}}" easing-function="linear" next-margin="280rpx" circular>
+                    <block wx:for="{{shop.subCais}}" wx:key="index">
+                        <swiper-item>
+                            <view>
+                                <image src="{{item.imgurl + '@cover7'}}" style="width: 400rpx;height: 200rpx;border-radius: 10rpx" mode="aspectFill"></image>
+                                <view class="center-all" style="font-size: 28rpx;line-height: 1;margin-top: 20rpx">
+                                    <view>{{item.name}}</view>
+                                    <view style="margin-left: 20rpx">￥{{item.price}}</view>
+                                </view>
+                            </view>
+                        </swiper-item>
+                    </block>
+                </swiper>
+            </view>
+        </view>
+        <view class="signbox" bindtap="copyWechatCodeName" wx:if="{{shop.wechatCodeOn}}">
+            <view class="signbox_left">
+                <image src="/res/images/icon_wechart.png" />
+                <view>
+                    <view style="font-weight: bold;max-width: 420rpx">{{shop.wechatCodeName}}</view>
+                    <view style="font-size: 22rpx;color: #666;margin-top: 8rpx;max-width: 420rpx">{{shop.wechatCodeTips}}</view>
+                </view>
+            </view>
+            <view class="signbtn" wx:if="{{!copied}}">复制名称</view>
+            <view class="signbtn" wx:if="{{copied}}">复制成功</view>
+        </view>
+
+        <view class="panel" wx:if="{{shop.detailHTML || shop.detailImage}}">
+            <view class="paneltitle">活动详情</view>
+            <view class="panel-content">
+                <view wx:if="{{shop.detailHTML}}">
+                    <view style="width: 690rpx;">
+                        <rich-text nodes="{{shop.detailHTML}}" style="max-width:690rpx" />
+                    </view>
+                </view>
+                <image wx:if="{{shop.detailImage}}" src="{{shop.detailImage}}" style="width:690rpx;" mode="widthFix" />
+            </view>
+        </view>
+        <view class="panel" wx:if="{{comments.length}}">
+            <view style="display: flex;justify-content: space-between;align-items: center;">
+                <view class="paneltitle">他们去过</view>
+                <view wx:if="{{comments.length==5}}" bindtap="toShop">查看更多</view>
+            </view>
+            <view class="comments" style="margin-top: 20rpx">
+                <view wx:for="{{comments}}" wx:key="index">
+                    <circle circle-data="{{item}}" circle-index="{{index}}" full="{{true}}" shop="{{false}}" />
+                </view>
+                <view wx:if="{{comments.length==5}}" bindtap="toShop" style="padding: 20rpx 0;color:#aaa;">查看更多人的评价</view>
+            </view>
+        </view>
+
+        <!-- <ad unit-id="adunit-20a5486f0ce5477f"></ad> -->
+        <view class="combox" style="margin-top: {{(bow.detailHTML || bow.detailImage) ? '0' : '60rpx'}}">
+            <view wx:if="{{showAd}}" style="position: relative;margin-bottom: 50rpx">
+                <image src="http://cdn.classx.cn/tandian/ad_image.png" style="width: 690rpx;height: 140rpx;border-radius: 10rpx;display:  block"></image>
+                <view class="activebox" bindtap="handleToIndex">更多活动</view>
+            </view>
+            <serverinfo wx:else bindoncontact="handleShowContact"></serverinfo>
+        </view>
+    </view>
+</view>
+
+<form bindsubmit="saveToken" report-submit>
+    <button class="normal" formType="submit">
+        <view class="waitpaybox" wx:if="{{newBow}}" bindtap="toNewBow">
+            <view>本店新一轮抽奖已经开始</view>
+            <view class="paybox">立即参加</view>
+        </view>
+        <view class="foot">
+            <view class="footiconcell">
+                <view class="footiconbox" bindtap="toIndex">
+                    <image src="/res/images/buttonicon_shop.png" />
+                    <view style="font-size: 20rpx;margin-top: 10rpx">首页</view>
+                </view>
+                <view class="footiconbox" bindtap="onSelectPhone">
+                    <image src="/res/images/buttonicon_phone.png" />
+                    <view style="font-size: 20rpx;margin-top: 10rpx">咨询</view>
+                </view>
+                <view class="footiconbox" bindtap="handleGetShareCard">
+                    <image src="/res/images/share_img.png" />
+                    <view style="font-size: 20rpx;margin-top: 10rpx">海报</view>
+                </view>
+            </view>
+            <view class="footright">
+                <view wx:if="{{bow.online}}" class="foot-button-box">
+                    <view wx:if="{{bow.status==0}}">
+                        <view wx:if="{{userbow && userbow.codes.length}}">
+                            <view class="twobtn" wx:if="{{bow.buy}}">
+                                <view class="twobtnleft" bindtap="toBuy">直接买</view>
+                                <button class="normal" open-type="share">
+                                    <view class="twobtnright">继续抽</view>
+                                </button>
+                            </view>
+                            <view wx:else>
+                                <button class="normal" open-type="share">
+                                    <view class="onebtn">获取更多幸运码</view>
+                                </button>
+                            </view>
+                        </view>
+                        <view wx:else>
+                            <view class="twobtn" wx:if="{{bow.buy && false}}">
+                                <view class="twobtnleft" bindtap="toBuy" wx:if="{{user.authed}}">直接买</view>
+                                <button wx:else class="normal" open-type="getUserInfo" bindgetuserinfo="authThenToBuy" wx:else>
+                                    <view class="twobtnleft" bindtap="toBuy">直接买</view>
+                                </button>
+                                <!-- <button class="normal" open-type="share" > -->
+                                <view class="twobtnright" wx:if="{{user.authed}}" bindtap="join">免费抽</view>
+                                <!-- </button> -->
+                                <button class="normal" open-type="getUserInfo" bindgetuserinfo="authThenJoin" wx:else>
+                                    <view class="twobtnright">免费抽</view>
+                                </button>
+                            </view>
+                            <view wx:else>
+                                <view wx:if="{{user.authed}}" class="onebtn" bindtap="join">{{bow.cd ? bow.cd+'秒后抽奖' : '立即抽奖'}}</view>
+                                <button class="normal" open-type="getUserInfo" bindgetuserinfo="authThenJoin" wx:if="{{!user.authed}}">
+                                    <view class="onebtn">{{bow.cd ? bow.cd+'秒后抽奖' : '立即抽奖'}}</view>
+                                </button>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:if="{{bow.status==1}}">
+                        <view wx:if="{{userbow && userbow.used}}" style="background: #f0f0f0;color: #666">已兑换</view>
+                        <view wx:else>
+                            <view class="onebtn" wx:if="{{userbow && userbow.success}}" bindtap="toUse" data-usercoupon="{{userbow.usercoupon}}">兑换奖励
+                            </view>
+                            <view class="onebtn" wx:else style="background: #f0f0f0;color: #666">已开奖</view>
+                        </view>
+                    </view>
+                </view>
+                <view wx:else class="onebtn" style="background: #f0f0f0;color: #666">未启用</view>
+            </view>
+        </view>
+    </button>
+</form>
+<view class="mask-dark" wx:if="{{bonusModal}}" bindtap="hideBonusModal">
+    <view catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="simple" formType="submit">
+                <view class="couponModalMask" bindtap="hideBonusModal">
+                    <view class="couponModal" catchtap="toCouponDetail">
+                        <view style="min-height: 640rpx;text-align: center;margin-top: 80rpx;">
+                            <image src="{{shop.avatar?(shop.avatar +'@avatar'):'/res/images/logo2.png'}}" mode="aspectFill" style="border: 6rpx solid #e8cb93;border-radius:8rpx;width:100rpx;height:100rpx;" />
+                            <view style="color:#e8cb93;font-size: 32rpx;margin-top: 10rpx;font-weight: bold;">{{shop.name}}</view>
+                            <view style="color:#e8cb93;font-size: 24rpx;margin-top: 10rpx;">店铺专享红包</view>
+                            <view style="color:#e8cb93;font-size: 44rpx;margin-top: 70rpx;">恭喜发财，大吉大利</view>
+                        </view>
+                        <view style="color:#e8cb93;text-align: center;margin-top: 40rpx;font-size: 24rpx;">获得一个红包，点击领取</view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{unluckyModal}}" bindtap="hideUnluckyModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding: 70rpx 0;box-sizing: border-box;">
+            <view class="joinsuccessbox">
+                <image src="/res/images/mask_unluck.png" style="width: 215rpx;height: 190rpx;" />
+                <view style="margin-top: 70rpx;font-size: 36rpx;color:#242627">很遗憾，你未中奖</view>
+                <view wx:if="{{!bow.coupon}}" style="margin-top: 40rpx;font-size: 24rpx;color:#666">本期幸运码</view>
+                <view wx:if="{{!bow.coupon}}" style="font-size: 36rpx;color: #FF4925;margin-top: 20rpx">{{bow.bonusCode}}</view>
+                <view wx:if="{{bow.coupon}}" style="margin-top: 40rpx;font-size: 24rpx;color:#666">本期幸运码：
+                    <text style="color: #FF4925">{{bow.bonusCode}}</text>
+                </view>
+                <view style="font-size: 24rpx;color:#242627;margin-top: 50rpx;" wx:if="{{bow.coupon}}">获得参与奖</view>
+                <view class="listcell" wx:if="{{bow.coupon}}" style="margin-top: 40rpx;">
+                    <view class="cellleft">
+                        <view class="sale" style="font-size: 24rpx">
+                            <view wx:if="{{!bow.coupon.type || bow.coupon.type == 'jiangjia'}}">
+                                <view wx:if="{{bow.coupon.price}}"><text style="font-size: 36rpx;font-weight: bold">{{bow.coupon.price}}</text>元</view>
+                                <view style="{{bow.coupon.price ? 'margin-top: 24rpx' : 'font-size: 28rpx'}}">代金券</view>
+                            </view>
+                            <view wx:if="{{bow.coupon.type == 'dazhe'}}">
+                                <view wx:if="{{bow.coupon.price}}">{{bow.coupon.price / 10 + '折'}}</view>
+                                <view style="{{bow.coupon.price ? 'margin-top: 24rpx' : 'font-size: 28rpx'}}">打折券</view>
+                            </view>
+                            <view wx:if="{{bow.coupon.type == 'duihuan'}}" style="font-size: 28rpx">兑换券</view>
+                        </view>
+                    </view>
+                    <view class="cellright">
+                        <view class="name nowrap">{{bow.coupon.name}}</view>
+                        <view class="shop nowrap">店铺：{{bow.coupon.shop.name}}</view>
+                    </view>
+                    <view class="circlecover" />
+                    <view class="circlecover1" />
+                </view>
+                <view class="maskbtn" wx:if="{{bow.coupon}}" bindtap="getCoupon" style="margin-top: 70rpx;">立即领取</view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<!-- test -->
+<view class="mask-dark" wx:if="{{luckyModal}}" bindtap="hideLuckyModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;box-sizing: border-box;border-radius: 8rpx;padding: 70rpx 0;">
+            <view class="joinsuccessbox">
+                <image src="/res/images/mask_award.png" style="width: 324rpx;height: 180rpx;" />
+                <view style="margin-top: 30rpx;font-size: 36rpx;color:#242627">恭喜您中奖!</view>
+                <view style="margin-top: 40rpx;font-size: 24rpx;color:#666">本期幸运码</view>
+                <view style="font-size: 36rpx;color: #FF4925;margin-top: 20rpx">{{bow.bonusCode}}</view>
+                <view class="maskbtn" style="margin-top:50rpx" bindtap="toUse" data-usercoupon="{{userbow.usercoupon}}">兑换奖励
+                </view>
+                <view style="margin-top: 50rpx;font-size: 24rpx;color:#999">中奖者名单</view>
+                <view class="winners">
+                    <view class="winner" style="width: 150rpx" wx:for="{{winners}}" wx:key="index">
+                        <image style="width: 60rpx;height: 60rpx;border-radius: 100%;margin-top: 40rpx" src="{{item.user.headimgurl}}" />
+                        <view class="nowrap" style="width:150rpx;margin: 10rpx 0;font-size: 24rpx;color:#242627;text-align: center;">{{item.user.nickname}}</view>
+                        <view style="color: #FF4925;font-size: 24rpx">{{item.bonusCode}}</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="mask-dark" bindtap="hideSuccessModal" wx:if="{{successModal}}">
+    <view class="mask-card" style="background: #fff;width: 590rpx;padding-bottom:70rpx;box-sizing: border-box;border-radius: 10rpx;" catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="normal" formType="submit">
+                <view class="joinsuccessbox">
+                    <image src="/res/images/mask_circlebg.png" style="width: 590rpx;height: 220rpx;position: relative">
+                        <view style="font-size: 40rpx;color: #E8CB93;font-weight: 500;position: absolute;left: 50%;transform: translate(-50%,0);top: 90rpx">参与成功</view>
+                    </image>
+                    <view style="color:#666;font-size: 24rpx;margin-top: 90rpx">我的幸运码</view>
+                    <view style="font-size: 36rpx;color: #FF4925;margin-top: 20rpx">{{code}}</view>
+                    <view class="funintro">
+                        <view class="introcell" style="margin-right: 50rpx">
+                            <image src="/res/images/icon_award1.png"></image>
+                            <view>抽奖</view>
+                            <view class="introtext" style="width: 110rpx">
+                                <view>一键抽取</view>
+                                <view>获得幸运码</view>
+                            </view>
+                        </view>
+                        <image class="nextimg" style="margin-right: 50rpx;margin-top: 16rpx" src="/res/images/icon_next.png"></image>
+                        <view class="introcell" style="margin-right: 50rpx">
+                            <image src="/res/images/icon_award2.png"></image>
+                            <view>开奖</view>
+                            <view class="introtext" style="width: 170rpx">
+                                <view>随机选取中奖号码</view>
+                                <view>微信通知中奖</view>
+                            </view>
+                        </view>
+                        <image class="nextimg" style="margin-right: 50rpx;margin-top: 16rpx" src="/res/images/icon_next.png"></image>
+                        <view class="introcell">
+                            <image src="/res/images/icon_award3.png"></image>
+                            <view>兑奖</view>
+                            <view class="introtext" style="width: 130rpx">
+                                <view>凭中奖二维码</view>
+                                <view>到店兑奖</view>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:if="{{showAd}}">
+                        <button class="normal" bindtap="showVideo" style="{{ading?'opacity: 0.3;':''}}">
+                            <view class="maskbtn" style="margin-top: 140rpx;background: #D24D39;color: #fff">
+                                获取更多幸运码
+                            </view>
+                        </button>
+                        <view style="color: #999;font-size: 24rpx;margin-top: 20rpx;text-align: center;">
+                            观看广告，获取1个额外幸运码
+                        </view>
+                    </view>
+                    <view wx:else>
+                        <button class="normal" open-type="share">
+                            <view class="maskbtn" style="margin-top: 140rpx;background: #D24D39;color: #fff">
+                                邀请好友抽奖
+                            </view>
+                        </button>
+                        <view style="color: #999;font-size: 24rpx;margin-top: 20rpx;text-align: center;">
+                            好友参与抽奖，你也可以获得额外幸运码
+                        </view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{coinSuccessModal}}" bindtap="hideCoinSuccessModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding: 70rpx 0;box-sizing: border-box;">
+            <view class="joinsuccessbox" style="padding: 40rpx;">
+                <image src="/res/images/mask_otherluckcode.png" style="width: 224rpx;height: 156rpx;margin-top: 20rpx;" />
+                <view style="margin-top: 70rpx;font-size: 36rpx;color: #242627">恭喜获得额外幸运码</view>
+                <view style="font-size: 36rpx;margin-top: 50rpx;color:#FF4925;font-weight: 500">{{code}}</view>
+            </view>
+            <view wx:if="{{extraInfoType}}" style="margin-top: 40rpx;">
+                <view style="display: flex;align-items: center;justify-content: space-between;width:590rpx;" wx:if="{{(extraInfoType==1 && wxserviceLoad) || extraInfoType==2 || extraInfoType==3}}">
+                    <view style="height: 2rpx;width:120rpx;background-color: #f8f8f8;"></view>
+                    <view style="color: #aaa;" wx:if="{{extraInfoType==1 || extraInfoType==2}}">更多福利请关注</view>
+                    <view style="color: #aaa;" wx:if="{{extraInfoType==3}}">加入粉丝群获取更多福利</view>
+                    <view style="height: 2rpx;width:120rpx;background-color: #f8f8f8;"></view>
+                </view>
+                <view wx:else style="color: #aaa;text-align: center;"> ··· </view>
+                <!-- <view wx:if="{{extraInfoType==1 && !wxserviceError}}" style="margin-top: 40rpx;">
+                    <official-account bindload="wxserviceLoad" binderror="wxserviceError"></official-account>
+                </view> -->
+                <view wx:if="{{(extraInfoType==1 && wxserviceError)||extraInfoType==2}}" style="padding: 40rpx 20rpx;">
+                    <view style="background-color: #fafafa;display: flex;align-items: center;justify-content: space-between;">
+                        <view style="display: flex;align-items: center;">
+                            <image src="http://cdn.classx.cn/tandian/userapp/res/images/wechaticon.png" style="width:100rpx;height:100rpx;border-radius: 10rpx;display: block;margin-right: 10rpx;"></image>
+                            <view>
+                                <view style="font-weight: bold;">探店大师</view>
+                                <view style="color: #aaa;font-size: 20rpx;">让更多人体验更多好店</view>
+                            </view>
+                        </view>
+                        <button class="simple" open-type="contact" style="margin-right: 10rpx;">
+                            <view class="greenbtn">回复666关注</view>
+                        </button>
+                    </view>
+                </view>
+                <view wx:if="{{extraInfoType==3}}" style="padding: 40rpx 20rpx;">
+                    <view style="background-color: #fafafa;display: flex;align-items: center;justify-content: space-between;">
+                        <view style="display: flex;align-items: center;">
+                            <image src="http://cdn.classx.cn/tandian/userapp/res/images/group.png" style="width:100rpx;height:100rpx;border-radius: 10rpx;display: block;margin-right: 10rpx;"></image>
+                            <view>
+                                <view style="font-weight: bold;">探店大师福利群</view>
+                                <view style="color: #aaa;font-size: 20rpx;">福利不断，惊喜不断</view>
+                            </view>
+                        </view>
+                        <button class="simple" open-type="contact" style="margin-right: 10rpx;">
+                            <view class="greenbtn">回复111加入</view>
+                        </button>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{passModal}}" bindtap="hidePassModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding: 70rpx 0;box-sizing: border-box">
+            <view class="joinsuccessbox" style="padding: 0 40rpx;line-height: 1">
+                <image src="/res/images/icon_tixianfail.png" style="width: 178rpx;height: 178rpx" />
+                <view style="margin-top: 60rpx;font-size: 32rpx;color: #242627;font-weight: 500;text-align: center;width: 400rpx;line-height: 1">该商家信息未经平台官方认</view>
+                <view style="margin-top: 20rpx;font-size: 32rpx;color: #242627;font-weight: 500;text-align: center;width: 400rpx;line-height: 1">请自行识别风险</view>
+                <view class="maskbtnbox" style="margin-top: 80rpx">
+                    <view class="allbtn" style="width: 160rpx;border: 1rpx solid #f0f0f0;border-box: box-sizing" bindtap="handleReport">举报</view>
+                    <view class="allbtn" style="width: 300rpx;background: #FFDB09" bindtap="hidePassModal">继续抽奖</view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" bindtap="hideBindPhoneModal" wx:if="{{bindPhoneModal}}">
+    <view class="mask-card" style="background: #fff;width: 590rpx;padding:70rpx 0;box-sizing: border-box;border-radius: 8rpx;" catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="normal" formType="submit">
+                <view class="joinsuccessbox">
+                    <image src="/res/images/mask_otherluckcode.png" style="width: 224rpx;height: 156rpx;margin-top: 20rpx;" />
+                    <view style="padding: 50rpx;font-size: 32rpx;line-height: 1.2">绑定手机号码，保护您的权益</view>
+                    <button class="normal" open-type="getPhoneNumber" bindgetphonenumber="setPhoneThenJoin">
+                        <view class="maskbtn" style="margin-top: 50rpx;background-color: #FFDB09;color: #242627;">好的</view>
+                    </button>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{buyModal}}" bindtap="hideBuyModal">
+    <view catchtap="doNothing">
+        <view class="shoppingbox">
+            <form bindsubmit="saveToken" report-submit>
+                <button class="normal" formType="submit">
+                    <view class="productinfo">
+                        <view class="productinfotop">
+                            <image src="{{bow.cover ? (bow.cover+'@cover7') : '/res/images/kanjia_defalut.png'}}" mode="aspectFill" />
+                            <view class="productinforight">
+                                <view class="productname ellipsis">{{bow.name}}</view>
+                                <view class="pricebox">
+                                    <view class="originPrice" style="color: #aaa;font-weight: normal;">
+                                        直接购买不会影响抽奖进行
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="productinfobottom">
+                            <view>购买内容</view>
+                            <view class="targetPrice">
+                                <text style="font-size: 36rpx">{{bow.bonus.name}} x 1</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:if="{{kanjia}}" style="display: flex;">
+                        <view bindtap="buy" class="paybtn" style="width:40%;height:120rpx;display: flex;justify-content: center;align-items: center;">
+                            <view>
+                                <view style="line-height: 1.2;">放弃优惠</view>
+                                <view style="font-size: 20rpx;line-height: 1">支付<text style="font-weight: bold;">{{bow.originPriceStr}}</text>元</view>
+                            </view>
+                        </view>
+                        <view bindtap="toKanjia" class="paybtn" style="width:60%;height:120rpx;display: flex;justify-content: center;align-items: center;background-color: #ffdb09;color: #333;">
+                            <view>
+                                <view style="line-height: 1;">砍价再买</view>
+                                <view style="font-size: 20rpx;line-height: 1.2">可砍至<text style="font-weight: bold;">{{kanjia.targetPriceStr}}</text>元</view>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:else>
+                        <view bindtap="buy" class="paybtn" style="width:100%;height:120rpx;display: flex;justify-content: center;align-items: center;">
+                            <view>
+                                <view style="line-height: 1.2;">立即购买</view>
+                                <view style="font-size: 20rpx;line-height: 1">支付<text style="font-weight: bold;">{{bow.originPriceStr}}</text>元</view>
+                            </view>
+                        </view>
+                        <!-- <view bindtap="buy" class="paybtn">立即支付</view> -->
+                    </view>
+                </button>
+            </form>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{paidModal}}" bindtap="hidePaidModal">
+    <view catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="simple" formType="submit">
+                <view class="paidbox">
+                    <image src="/res/images/bg_paid.png" class="paidbg"></image>
+                    <view class="paidboxcontent column">
+                        <view class="paidtxt1">支付成功</view>
+                        <view class="paidtxt2">此券已加入您的券包</view>
+                        <view class="paidtxt3">{{bow.name}}</view>
+                        <view class="paidtxt4">{{shop.name}}</view>
+                        <view class="paidtxt4" style="color: #999">{{couponExpiry ? couponExpiry + '过期' : ''}}</view>
+                        <view class="paidBtn" bindtap="toUse" data-usercoupon="{{usergou.usercoupon}}">查看凭证</view>
+                        <view class="paidtips">到店出示凭证即可使用</view>
+                    </view>
+                    <view class="signbox" data-content="ss317903133" bindtap="handleCopy" bindlongpress="handleCopy" style="background: #FFF8CE;padding: 0 20rpx">
+                        <view class="signbox_left">
+                            <image src="http://cdn.classx.cn/tandian/2455e313f229ac53acc80136f32cc3f.jpg@avatar" style="border-radius: 48rpx;height: 48rpx;width:48rpx;"></image>
+                            <view>
+                                <view style="font-size: 24rpx;font-weight: bold;margin-bottom: 8rpx;">小师妹</view>
+                                <view style="font-size: 20rpx;color: #666;">加客服微信，<text style="color: #111;font-weight: bold;"></text>领福利进群，找到组织！</view>
+                            </view>
+                        </view>
+                        <view class="signbtn center-all" style="font-size: 20rpx" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{shareModal}}" catchtouchmove='ture'>
+    <view catchtap="doNothing">
+        <view class="masktop" style="height: calc(100% - 280rpx)" bindtap="hideShareModal">
+            <view class="center-all column" style="margin-top: 500rpx">
+                <progress percent="{{percent}}" style="width: 400rpx" stroke-width="6" border-radius="3" activeColor="#D24D39" />
+                <view style="font-size: 24rpx;color: #fff;margin-top: 20rpx">海报生成中{{percent || 0}}%</view>
+            </view>
+            <image src="{{imgs[0]}}" class="canvasbox" style="width: 450rpx;height: 800rpx" catchtap="handlePreviewImg" data-image="{{imgs[0]}}"></image>
+            <canvas canvas-id="canvas" wx:if="{{!showImage}}" id="canvas" catchtap="handleDrawimg" class="canvasbox" style="width: 750rpx;height: 1334rpx;position:fixed;top: 200%"></canvas>
+        </view>
+        <view class="maskbottom">
+            <view class="sharetext center-all column">
+                <view wx:if="{{userbow}}">好友参与抽奖，你也可以获得1个额外幸运码</view>
+                <view wx:else>分享给朋友，和朋友一起试试手气吧</view>
+            </view>
+            <view class="center-all">
+                <button class="normal" open-type="share" style="flex: 1">
+                    <view class="maskbottombtn">
+                        <image src="/res/images/share_wechart.png" />
+                        <view style="font-size: 24rpx;margin-top: 6rpx">分享好友</view>
+                    </view>
+                </button>
+                <view wx:if="{{authPhoto}}" class="maskbottombtn" bindtap="handleSaveImg">
+                    <image src="/res/images/share_save.png" />
+                    <view style="font-size: 24rpx;margin-top: 6rpx">保存卡片</view>
+                </view>
+                <button wx:else class="normal" open-type="openSetting" style="flex: 1">
+                    <view class="maskbottombtn">
+                        <image src="/res/images/share_save.png" />
+                        <view style="font-size: 24rpx;margin-top: 6rpx">分享好友</view>
+                    </view>
+                </button>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{newChanceModal}}" bindtap="hideNewChanceModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding-bottom: 70rpx;box-sizing: border-box;line-height: 1;font-width: 500">
+            <view class="joinsuccessbox">
+                <image src="/res/images/http://cdn.classx.cn/tandian/userapp/res/images/mask_getchance.png" style="width: 590rpx;height: 279rpx;" />
+                <view style="margin-top: 50rpx;font-size: 32rpx;color: #242627">今日抽奖机会已用完</view>
+                <view style="margin-top: 30rpx;font-size: 28rpx;color: #999">做任务可提升每日机会上限</view>
+                <view class="maskbtn" style="margin-top: 50rpx" bindtap="toTasks">获取更多机会</view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{showContactModal}}" bindtap="hideContactModal">
+    <view class="mask-card" style="width:590rpx;min-height:600rpx;border-radius: 10rpx;padding-bottom: 30rpx " catchtap="doNothing">
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" data-image="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" style="width: 590rpx;height: 784rpx;margin: 0 auto 0 auto;display: block;border-radius: 10rpx" bindtap="handlePreviewImg" bindlongpress="handlePreviewImg"></image>
+        <view class="mask-btn" style="margin: 20rpx auto 10rpx auto" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{callModal}}" bindtap="onHideCallModal" catchtouchmove='ture'>
+    <view catchtap="doNothing">
+        <view class="maskcontent-bottom">
+            <view class="content-cell center-vertical justify-SB" style="height: 140rpx">
+                <view class="maskcellleft">
+                    <view class="maskcelllefttitle">联系商家</view>
+                    <view class="maskcelltips">欢迎致电预约或咨询</view>
+                </view>
+                <view class="maskcellbtn" bindtap="callShop">拨打电话</view>
+            </view>
+            <view class="maskline center-all" style="height: 1rpx"></view>
+            <view class="content-cell center-vertical justify-SB" style="height: 140rpx">
+                <view class="maskcellleft">
+                    <view class="maskcelllefttitle">联系服务商</view>
+                    <view class="maskcelltips">遇到问题可咨询客服</view>
+                </view>
+                <view class="maskcellbtn" bindtap="oncall" data-phoneNumber="18380459072">拨打电话</view>
+            </view>
+            <view class="maskline center-all" style="height: 20rpx;width: 100vw"></view>
+            <view class="content-cell center-all" style="height: 120rpx" bindtap="onHideCallModal">取消</view>
+        </view>
+    </view>
+</view>
+
+<mask contentType="bottom" wx:if="{{showAddrListModal}}" bindtap="hideAddrListModal" bindcancel="hideAddrListModal">
+    <view slot="masklist" class="masklist">
+        <view class="itemtitle">当前店铺</view>
+        <view class="maskitem center-vertical justify-SB" bindtap="openLocation">
+            <view>
+                <view>{{shop.name}}</view>
+                <view class="center-vertical" style="font-size: 24rpx;color: #999;margin-top: 30rpx">
+                    <view style="margin-right: 10rpx">{{disStr}} | </view>
+                    <view class="nowrap" style="max-width: 450rpx">{{shop.address}}</view>
+                </view>
+            </view>
+            <view class="panelicon">
+                <image src="/res/images/icon_address.png" />
+            </view>
+        </view>
+        <view class="splitline" wx:if="{{shop.subshops.length > 0}}"></view>
+        <view class="itemtitle" wx:if="{{shop.subshops.length > 0}}">其他店铺</view>
+        <view class="maskitem center-vertical justify-SB" wx:if="{{shop.subshops.length > 0}}" wx:for="{{shop.subshops}}" wx:key="index"  bindtap="openLocation" data-item="{{item}}">
+            <view>
+                <view>{{item.name}}</view>
+                <view class="center-vertical" style="font-size: 24rpx;color: #999;margin-top: 30rpx">
+                    <view style="margin-right: 10rpx">{{item.distance}} | </view>
+                    <view class="nowrap" style="max-width: 450rpx">{{item.address}}</view>
+                </view>
+            </view>
+            <view class="panelicon">
+                <image src="/res/images/icon_address.png" />
+            </view>
+        </view>
+    </view>
+</mask>

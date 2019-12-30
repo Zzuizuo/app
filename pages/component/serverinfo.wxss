@@ -1,0 +1,57 @@
+.allcenter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.contain .containtop {
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  line-height: 1;
+  font-size: 26rpx;
+}
+.contain .containtop image {
+  width: 80rpx;
+  height: 80rpx;
+}
+.contain .containtop .btn {
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 24rpx;
+  color: #242627;
+  padding: 0 30rpx;
+  background: #FFDB09;
+  border-radius: 30rpx;
+}
+.contain .listbox {
+  height: 80rpx;
+  color: #666;
+  font-size: 24rpx;
+  padding: 0 30rpx;
+  line-height: 80rpx;
+  box-sizing: border-box;
+  margin-top: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+button.normal {
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  line-height: 1;
+  font-size: 28rpx;
+  background: none;
+  text-align: left;
+  overflow: visible;
+  position: unset;
+}
+button.normal::after {
+  display: none;
+}
+button.normal:hover {
+  color: unset;
+  background-color: unset;
+}

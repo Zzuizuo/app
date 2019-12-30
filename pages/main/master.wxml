@@ -1,0 +1,7 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+
+<!-- <button wx:if="{{!user.master}}" bindtap="pay">成为大使</button>
+<button wx:if="{{user.master}}" open-type="share">邀请好友</button> -->
+<view>即将开放，敬请期待，联系客服获取最新进展</view>

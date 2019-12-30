@@ -1,0 +1,23 @@
+.bowbox {
+  width: 690rpx;
+  position: relative;
+}
+.bowbox .boxleft {
+  line-height: 1;
+  background: #fff8f5;
+  text-align: center;
+}
+.bowbox .boxleft .bowimg {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 10rpx;
+  display: block;
+}
+.bowbox .boxleft .lefttext {
+  font-size: 20rpx;
+  color: #ff4925;
+}
+.bowbox .boxright {
+  padding-top: 20rpx;
+  box-sizing: border-box;
+}

@@ -1,0 +1,10 @@
+{
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "商家点评",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "dark",
+    "usingComponents": {
+        "circle": "/pages/component/circle"
+    }
+}

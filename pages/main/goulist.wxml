@@ -1,0 +1,31 @@
+<view wx:if="{{!session}}" class="loading">
+	<image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+
+<view class="content">
+	<view class="pagetop">
+		<searchbox placeholder="请输入关键字" bindinputing="handleSearchInputChange" bindsearching="handleSearch" />
+	</view>
+	<view class="nodatabox" wx:if="{{!usergous.length}}">
+		<image src="/res/images/daka_none.png" />
+		<view class="nodatatips" wx:if="{{query.keywords}}">暂无搜索结果</view>
+		<view class="nodatatips" wx:else>
+			
+		</view>
+	</view>
+	<view wx:else>
+		<view class="listbox" style="{{usergous.length?'min-height: calc(100vh - 108rpx)':''}}">
+            <view wx:for="{{usergous}}" wx:key="index" data-item="{{item}}" class="listitem">
+                <goubox item="{{item.gou}}" query="{{query}}" isuserlist="{{true}}" bindongou="toDetail">
+                    <view slot="cardbtn" class="cardbtn center-vertical justify-SB">
+						<view class="btntext">{{item.createTimeStr}} 砍了一刀</view>
+                        <view class="joinbtn">立即抢购</view>
+                    </view>
+                </goubox>
+            </view>
+        </view>
+        <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+        <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+	</view>
+</view>
+

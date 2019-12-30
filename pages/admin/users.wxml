@@ -1,0 +1,26 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view style="box-sizing: border-box;padding: 20rpx 0;background-color: #1a171a;color:#fff;">
+    <view class="search">
+        <view class="search-bg">
+            <input value="{{query.keywords}}" style="padding: 0 20rpx;width:670rpx;" placeholder="输入关键字/用户昵称/核销员姓名搜索" bindinput="keywordsChanged" bindconfirm="doSearch"></input>
+        </view>
+    </view>
+</view>
+<view class="users">
+    <view class="user" wx:for="{{users}}" wx:key="index" bindtap="showActions" data-item="{{item}}">
+        <view style="display: flex;align-items: center;">
+            <image src="{{item.headimgurl}}" style="width:60rpx;height:60rpx;border-radius:60rpx;display: block;margin-right: 20rpx;"></image>
+            <view>
+                <view class="nowrap" style="font-weight: bold;width: 500rpx">{{item.nickname}}</view>
+                <view style="font-size: 24rpx;opacity: 0.5;" bindlongtap="copy" data-content="{{item._id}}">id:{{item._id}}</view>
+                <view style="font-size: 24rpx;">注册时间：{{item.createTimeStr}}</view>
+                <view style="font-size: 24rpx;">最后登录：{{item.lastLoginTimeStr}}</view>
+            </view>
+        </view>
+        <view style="color: #33a140;font-weight: bold;" wx:if="{{selection}}">
+            选择
+        </view>
+    </view>
+</view>

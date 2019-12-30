@@ -1,0 +1,71 @@
+.page {
+    color: #242627;
+    line-height: 1;
+
+    .pagetop {
+        padding: 40rpx 30rpx;
+        box-sizing: border-box;
+        border-bottom: 2rpx solid #f0f0f0;
+
+        .title {
+            font-size: 48rpx;
+            font-weight: 500;
+        }
+
+        .text1 {
+            color: #999;
+            font-size: 24rpx;
+            margin-top: 20rpx;
+        }
+    }
+
+    .itembox {
+        padding: 40rpx 30rpx;
+        box-sizing: border-box;
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 30rpx;
+            right: 30rpx;
+            bottom: 0;
+            border-bottom: 2rpx solid #f0f0f0;
+        }
+
+        &:nth-last-child(1) {
+            content: '';
+            position: absolute;
+            border-bottom: 0;
+        }
+
+        .text2 {
+            font-size: 32rpx;
+            font-weight: 500;
+        }
+
+        .text3 {
+            line-height: 1.4;
+            width: 100%;
+            font-weight: 500;
+            font-size: 24rpx;
+        }
+
+        .itembtn {
+            position: absolute;
+            left: 20rpx;
+            top: 50%;
+            transform: translate(0, -50%);
+            width: 160rpx;
+            height: 60rpx;
+            font-size: 24rpx;
+            border-radius: 30rpx;
+            background: #ffdb09;
+        }
+    }
+
+    .shareImg {
+        width: 200rpx;
+        min-height: 355rpx;
+    }
+}

@@ -1,0 +1,8 @@
+<view class="navbox" style="padding: {{ispadding ? '0 20rpx' : 0}}">
+    <view class="navitem" wx:for="{{navs}}" wx:key="index">
+        <view class="navcontent" style="color: {{activeIndex == index ? '#242627' : '#666'}}" bindtap="onChangeNavTap" data-item="{{item}}" data-index="{{index}}">
+            {{item.name}}
+            <view class="navline" wx:if="{{activeIndex == index}}"></view>
+        </view>
+    </view>
+</view>

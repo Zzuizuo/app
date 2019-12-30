@@ -1,0 +1,163 @@
+page {
+    background-color: #fff;
+}
+
+.head {
+    background-color: #fff;
+}
+
+.step {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100rpx;
+}
+
+.content {
+    background-color: #f1f1f1;
+    min-height: 200rpx;
+}
+
+.codestyles {
+    display: flex;
+    justify-content: space-between;
+    padding: 45rpx;
+    align-items: center;
+    height: 360rpx;
+}
+
+.codestyle {
+    box-shadow: 0 0 4rpx 0 #ccc
+}
+
+.dot {
+    background-color: #2ba246;
+    border-radius: 60rpx;
+    width: 60rpx;
+    height: 60rpx;
+    font-size: 30rpx;
+    text-align: center;
+    line-height: 60rpx;
+    margin-right: 20rpx;
+}
+
+.step .title {
+    color: #333;
+    font-size: 48rpx;
+}
+
+.action {
+    background-color: #36ca58;
+    width: 320rpx;
+    color: white;
+    font-size: 32rpx;
+    border-radius: 60rpx;
+    border: 2rpx solid #333;
+    margin-top: 60rpx;
+}
+
+.action::after {
+    display: none;
+}
+
+.tips {
+    padding: 30rpx;
+    color: #aaa;
+    background-color: #fff;
+    border-bottom: 1rpx solid #f1f1f1;
+}
+
+.primary {
+    border-radius: 60rpx;
+    width: 400rpx;
+}
+
+.payModal {
+    position: fixed;
+    bottom: -2rpx;
+    left: 0;
+    width: 750rpx;
+    padding-top: 30rpx;
+    background-color: white;
+}
+
+.pay {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30rpx 0;
+    border-bottom: 1rpx solid #f1f1f1;
+}
+
+
+.pay .intro {
+    color: #aaa;
+    width: 420rpx;
+}
+
+.styles {
+    display: flex;
+    margin-top: 10rpx;
+}
+
+.style {
+    background-color: #2ba246;
+    color: #fff;
+    padding: 10rpx 20rpx;
+    border-radius: 8rpx;
+    margin-right: 20rpx;
+}
+
+.style .intro {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 22rpx;
+}
+
+.payModal .title {
+    color: #aaa;
+    font-size: 22rpx;
+}
+
+.addressButton {
+    color: #307a4b;
+    line-height: 100rpx;
+}
+
+.addressInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buy {
+    margin-top: 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.xieyi {
+    text-align: left;
+    padding: 30rpx;
+    background-color: #f8f8f8;
+    width: 430rpx;
+    font-size: 24rpx;
+}
+
+.confirm {
+    padding: 30rpx;
+    background-color: #2ba246;
+    color: #fff;
+    min-width: 200rpx;
+    text-align: center;
+}
+
+.more {
+    position: absolute;
+    padding: 30rpx;
+    text-align: center;
+    bottom: 0;
+    color: #aaa;
+    width: 690rpx;
+}

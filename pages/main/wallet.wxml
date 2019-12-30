@@ -1,0 +1,663 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view wx:else>
+    <view wx:if="{{!user.xvip && !user.channel || showCodeModel}}" class="invitebox">
+        <view class="text">请输入6位邀请码</view>
+
+        <!-- <view class="query_num_block">
+            <input class="num_item_block" focus cursor-spacing="90" wx:for="{{6}}" wx:key="index" disabled style="border-bottom: {{((code.length >= index + 1)  && code[index] != '') ? '4rpx solid #FFDB09' : '4rpx solid #f0f0f0'}}" bindtap='onFocus' value="{{code.length >= index+1 ? code[index] : ''}}" />
+        </view> -->
+        <input cursor-spacing="90" class='hidden_ipt' value="{{code}}" maxlength="6" focus bindinput="codeChanged" bindfocus="handleInputFocus" bindblur="handleInputBlur"
+            style="border-bottom: {{inputSet ? '2rpx solid #ffdb09' : '2rpx solid #242627'}}"
+        ></input>
+
+        <view wx:if="{{code}}">
+            <view class="invitebtn center-all" bindtap="checkcode" wx:if="{{user.authed}}">校验</view>
+            <button wx:else class="simple" open-type="getUserInfo" bindgetuserinfo="authThenCheckcode">
+                <view class="invitebtn center-all">校验</view>
+            </button>
+        </view>
+        
+
+        <view class="sharerbox" wx:if="{{shareby}}">
+            <view class="text1">可能是你的推荐人</view>
+            <view class="center-vertical justify-SB">
+                <view class="center-vertical" style="margin-top: 30rpx">
+                    <image src="{{shareby.headimgurl}}"></image>
+                    <view class="column" style="margin-left: 10rpx">
+                        <view>{{shareby.nickname}}</view>
+                        <view class="text1" style="margin-top: 10rpx">邀请码：{{shareby.icode}}</view>
+                    </view>
+                </view>
+                <view class="center-vertical">
+                    <view class="boxbtn center-all" bindtap="hideShareby" style="border: 1rpx solid #242627">不是</view>
+                    <view class="boxbtn center-all" bindtap="handleCheckIcode" style="background: #ffdb09;margin-left: 20rpx">是的</view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view wx:else class="content">
+        <!-- <view style="margin-top: 74rpx;"></view>
+        <view class="sharebox" wx:if="{{user.sharePercent || user.sharePercent2||user.sharePercent3}}">
+            <view class="center-vertical">
+                <view class="shareboxtitle">推广用户</view>
+            </view>
+            <view class="center-vertical" style="margin-top: 30rpx">
+                <view>
+                    <view style="font-size: 24rpx;color: #242627;font-weight: bold" wx:if="{{user.sharePercent}}">你推广的新用户下单，永久返佣{{(user.sharePercent || 0) * 100}}%</view>
+                    <view style="font-size: 20rpx;color: #FD9F16;margin-top: 10rpx" wx:if="{{user.sharePercent2}}">你可以邀请朋友一起推广，为你返佣{{(user.sharePercent2 || 0) * 100}}%</view>
+                    <view style="font-size: 20rpx;color: #FD9F16;margin-top: 10rpx" wx:if="{{user.sharePercent3}}">鉴于战略合作，平台额外分红{{(user.sharePercent3 || 0) * 100}}%</view>
+                    <view style="font-size: 20rpx;color: #FD9F16;margin-top: 10rpx">分享代金券或霸王餐页面，也可以实现推广</view>
+                    <view style="font-size: 20rpx;color: #FD9F16;margin-top: 10rpx">普通用户裂变带来新用户，也视为你的推广</view>
+                    <view style="font-size: 20rpx;color: rgb(253, 114, 22);margin-top: 10rpx">用户通过你的分享链接下单，额外返20%</view>
+                </view>
+                <view class="center-vertical">
+                    <view class="sharebox-btn" style="background: #FFD50C" bindtap="getUsershare">推广用户</view>
+                    <button open-type="share" class="normal">
+                    <button bindtap="getTeamshare" class="normal" style="margin-left: 20rpx;" wx:if="{{user.sharePercent2}}">
+                        <view class="sharebox-btn" style="background: #FD9F16;color: #fff;width:140rpx;">邀请朋友</view>
+                    </button>
+                </view>
+                <view style="font-size: 24rpx;color: #242627">您已推广{{user.shared || 0}}位用户</view>
+            </view>
+        </view> -->
+
+        <!-- <view class="sharebox" wx:if="{{user.servicePercent || user.servicePercent2||user.servicePercent3}}">
+            <view class="center-vertical">
+                <view class="shareboxtitle">推广商家</view>
+            </view>
+            <view class="center-vertical" style="margin-top: 30rpx">
+                <view>
+                    <view style="font-size: 24rpx;color: #242627;font-weight: bold">你推广的商家获得订单，可分成{{(user.servicePercent || 0) * 100}}%</view>
+                    <view style="font-size: 20rpx;color: #FD9F16;margin-top: 10rpx" wx:if="{{user.servicePercent2}}">你可以委托服务商推广，获得分成{{(user.servicePercent2 || 0) * 100}}%</view>
+                    <view style="font-size: 20rpx;color: #FD9F16;margin-top: 10rpx" wx:if="{{user.servicePercent3}}">鉴于战略合作，服务商额外分红{{(user.servicePercent3 || 0) * 100}}%</view>
+                    <view style="font-size: 20rpx;color: #FD9F16;margin-top: 10rpx" wx:if="{{user.sharePercent||user.sharePercent2||user.sharePercent3}}">商家发布活动带来新用户，也视为你的推广</view>
+                </view>
+                <view class="center-vertical">
+                    <view class="sharebox-btn" style="background: #FFD50C" bindtap="getShopshare">推广商家</view>
+                    <view wx:if="{{user.servicePercent2}}" class="sharebox-btn" style="background: #FD9F16;color: #fff;width:140rpx;margin-left: 20rpx;" bindtap="getServiceshare">邀请服务商</view>
+                </view> -->
+        <!-- <view style="font-size: 24rpx;color: #242627">
+            您已推广{{user.sharedshop || 0}}家商家
+        </view> -->
+        <!-- </view>
+        </view> -->
+
+
+        <view class="pagetop">
+            <view class="boxitem column" style="background: #ffdb09">
+                <view class="boxtitle">可提现收益</view>
+                <view class="center-vertical justify-SB">
+                    <view class="boxname" style="color: #FF4925;font-size: 48rpx">{{user.moneyStr}}</view>
+                    <view class="boxbtn center-all" bindtap="getMoney" style="background: #242627;color: #FFD08A">提现</view>
+                </view>
+                <view class="boxtext center-vertical" style="margin-top: 20rpx">
+                    <view>等待核销：{{user.data.lockingMoneyStr}}</view>
+                    <!-- <view class="iconfont icon-wenhao" style="margin-left: 10rpx"></view> -->
+                </view>
+                <view class="boxtext">今日收入：{{user.data.shouruTodayStr}}</view>
+                <view class="boxtext">累计收入：{{user.data.shouruStr}}</view>
+            </view>
+            <view class="boxitem column" wx:if="{{user.xvip}}">
+                <view class="center-vertical justify-SB">
+                    <view>
+                        <view class="boxname">当前身份：{{user.xxvip ? '探店团长' : user.xvip ? '探店达人' : '普通用户'}}</view>
+                        <view class="taglist center-vertical">
+                            <view class="tagcell center-all" bindtap="showTipsModal" data-tips="分享代金券链接（包括右上角分享、获取海报分享、继续砍价分享），用户通过你的链接购买后，可返佣20%" data-title="链接返20%">链接返20%</view>
+                            <view wx:if="{{user.xxvip}}" class="tagcell center-all" bindtap="showTipsModal" data-tips="通过你的分享进入程序，或输入你的邀请码完成绑定的用户，即为你的直推，你的直推在平台消费，你获得返佣35%佣金" data-title="直推返35%">直推返35%</view>
+                            <view wx:else class="tagcell center-all" bindtap="showTipsModal" data-tips="通过你的分享进入程序，或输入你的邀请码完成绑定的用户，即为你的直推，你的直推在平台消费，你获得返佣15%佣金，升级为探店团长后可与团队佣金叠加至35%" data-title="直推返15%">直推返15%</view>
+                            <view class="tagcell center-all" bindtap="showTipsModal" data-tips="{{user.xxvip?'':'升级为探店团长后可获得：'}}你可以获得直推裂变的整个团队的20%消费返佣，该效果无限代生效，且可与直推佣金叠加。" data-title="团队返20%" style="{{user.xxvip ? '': 'background: #F0F0F0;border: 1rpx solid #999'}}">团队返20%</view>
+                        </view>
+                    </view>
+                    <view class="boxbtn center-all" bindtap="updateToXX" style="background: #FF4925;color: #fff" wx:if="{{user.data.bind >= 100 && user.data.groupbind >= 300 && !user.xxvip}}">升级</view>
+                    <view class="boxbtn center-all" bindtap="toGuide" wx:else>了解更多</view>
+                </view>
+                <view wx:if="{{!user.xxvip}}">
+                    <view class="boxtext" style="margin-top: 40rpx;">升级进度</view>
+                    <view class="center-vertical justify-SB" style="margin-top: 30rpx">
+                        <view class="processline">
+                            <view class="activeline" style="width: {{(user.data.bind ? user.data.bind > 100 ? 100 : user.data.bind < 5 ? 5 : user.data.bind : 0) / 100 * 400}}rpx"></view>
+                        </view>
+                        <view class="boxtext center-vertical" style="margin-top: 0" bindtap="showTipsModal" data-tips="输入你的邀请码成为探店达人的人，即为你的直推（仅通过你的分享进入程序，未输入邀请码的属于临时直推，有返佣，但不计数）" data-title="直推人数">
+                            <view>直推人数 {{user.data.bind||0}}/100</view>
+                            <view class="iconfont icon-wenhao" style="margin-left: 10rpx"></view>
+                        </view>
+                    </view>
+                    <view class="center-vertical justify-SB" style="margin-top: 30rpx">
+                        <view class="processline">
+                            <view class="activeline" style="width: {{(user.data.groupbind ? user.data.groupbind > 300 ? 300 : user.data.groupbind < 15 ? 15 : user.data.groupbind : 0) / 300 * 400}}rpx"></view>
+                        </view>
+                        <view class="boxtext center-vertical" style="margin-top: 0" bindtap="showTipsModal" data-tips="你的直推以及他们的整个团队成员都是你的团队成员（未输入邀请码的属于临时团队成员，有返佣，但不计数）" data-title="团队人数">
+                            <view>团队人数 {{(user.data.groupbind||0)}}/300</view>
+                            <view class="iconfont icon-wenhao" style="margin-left: 10rpx"></view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="boxitem column" wx:if="{{user.xvip}}">
+                <view class="center-vertical justify-SB">
+                    <view>
+                        <view class="boxname center-vertical">
+                            <view>我的邀请码：{{user.icode}}</view>
+                            <view style="color: #FF4925;font-size: 28rpx;margin-left: 20rpx" data-code="{{user.icode}}" bindtap="handleCopy">复制</view>
+                        </view>
+                        <view class="boxtext" style="margin-top: 20rpx;font-size: 24rpx">可邀请用户成为探店达人，并送他3天黑卡特权</view>
+                    </view>
+                    <view class="boxbtn center-all" bindtap="handleToMaterial">推广素材</view>
+                </view>
+            </view>
+            <view class="boxitem column" wx:if="{{user.channel && !user.xvip}}">
+                <view class="center-vertical justify-SB">
+                    <view>
+                        <view class="boxname">推广机制升级啦</view>
+                        <view class="boxtext" style="margin-top: 20rpx;font-size: 24rpx;max-width: 480rpx;line-height: 1.4">平台已启用了全新的推广机制，收益大大提升，历史账户与收益不受影响，但新收益会根据新规则产生，建议尽快升级</view>
+                    </view>
+                    <view class="boxbtn center-all" bindtap="toGuide">查看详情</view>
+                </view>
+            </view>
+            <view class="boxitem column" wx:if="{{user.channel && !user.xvip}}">
+                <view class="center-vertical justify-SB">
+                    <view>
+                        <view class="boxname">输入邀请码立即升级</view>
+                        <view class="boxtext" style="margin-top: 20rpx;font-size: 24rpx">若没有邀请码，请咨询你的推荐人或客服</view>
+                    </view>
+                    <view class="boxbtn center-all" bindtap="handleShowCodeModel">输入邀请码</view>
+                </view>
+            </view>
+            <view class="splitline" style="margin-top: 0;"></view>
+            <view class="boxitem column">
+                <view wx:if="{{!webuser}}" class="center-vertical justify-SB">
+                    <view class="boxname">关注公众号，获取关键动态通知</view>
+                    <button open-type="contact" class="normal">
+                        <view class="boxbtn center-all" style="width:200rpx;">回复 666 关注</view>
+                    </button>
+                </view>
+                <view wx:else>
+                    <view class="center-vertical justify-SB">
+                        <view>
+                            <view class="boxname">动态通知</view>
+                            <view class="boxtext" style="margin-top: 20rpx;font-size: 24rpx">通过公众号通知与我相关的动态</view>
+                        </view>
+                        <switch style="margin-right: -10rpx;" color="#fed433" checked="{{webuser.notice && webuser.notice.channel}}" bindchange="setNotice"></switch>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="splitline" style="margin-top: 0;"></view>
+
+        <view class="searchbox">
+            <searchbox placeholder="请输入关键字" bindinputing="handleSearchInputChange" bindsearching="handleSearch" />
+            <view style="position: absolute;right: 50rpx;top: 50%;transform: translate(0, -50%);color: #999;">共{{count}}条数据</view>
+        </view>
+
+        <view class="navbox">
+            <navbar navs="{{navs}}" ispadding="{{false}}" active="{{activeIndex}}" bindChangeNav="handleChangeNav" />
+        </view>
+
+        <view wx:if="{{activeIndex==0}}">
+            <view wx:if="{{users.length || loading}}">
+                <view class="pagebottom">
+                    <view class="listbox" style="min-height: calc(100vh - 204rpx);positoin: relative">
+                        <view wx:if="{{loading}}" class="center-all" style="width: 100%;height: calc(100vh - 204rpx);z-index: 100;position: absolute;left: 0;background: #fff">
+                            <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+                        </view>
+                        <view class="listitem" wx:for="{{users}}" wx:key="index" wx:if="{{!loading}}">
+                            <view class="itemleft">
+                                <image src="{{item.headimgurl ? item.headimgurl + '@avatar' : '/res/images/icon_joinuser.png'}}" style="border-radius: 100rpx;"></image>
+                                <view class="iteminfo">
+                                    <view class="name nowrap">{{item.nickname}}</view>
+                                    <view class="itemincome center-vertical" wx:if="{{!item.xvip}}" bindtap="showTipsModal" data-tips="该用户是你的临时直推，你可以获得他的消费返佣，但不会计入你的直推人数（由你的分享而来，但未输入过邀请码，首次输入邀请码后，将重新判定直推关系，并永久绑定）" data-title="未绑定">
+                                        <view class="coupon nowrap" style="color: #FF4925;">未绑定</view>
+                                        <view class="iconfont icon-wenhao" style="margin-left: 10rpx"></view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.xvip}}">
+                                        <view class="coupon nowrap" style="color: #32a14a;" wx:if="{{item.xxvip}}">探店团长</view>
+                                        <view class="coupon nowrap" style="color: #32a14a;" wx:else>探店达人</view>
+                                    </view>
+                                    <view class="itemincome">
+                                        <view class="coupon nowrap">累计消费 {{item.totalConsumeStr}} 元</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.xvip}}">
+                                        <view class="coupon nowrap">直推{{(item.data.bind||0)}}人，团队{{(item.data.groupbind||0)}}人</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{!user.xxvip}}">
+                                        <view class="coupon nowrap">该用户消费你可以返佣15%</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{user.xxvip}}">
+                                        <view class="coupon nowrap">该用户消费你可以返佣35%</view>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="itemright">
+                                <view class="time" style="margin-top: 0">{{item.createTimeStr}} 注册</view>
+                                <view class="time" wx:if="{{item.lastLoginTime}}">{{item.lastLoginTimeStr}} 登陆</view>
+                                <view class="time">累计登陆过{{(item.data.login||0)+1}}次</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view>
+                    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore && users.length >0 }}" class="bottomloader">已全部加载</view>
+                    <view wx:if="{{nomore && users.length ==0 }}" class="nodata">暂无数据</view>
+                </view>
+            </view>
+            <view wx:else class="center-box" style="min-height: calc(100vh - 86rpx);padding-bottom: 100rpx;box-sizing: border-box">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/wodeyonghu.png" style="width: 420rpx;height: 236rpx"></image>
+                <view style="margin-top: 40rpx">暂无数据</view>
+            </view>
+        </view>
+
+        <view wx:if="{{activeIndex==1}}">
+            <view wx:if="{{groupusers.length || loading}}">
+                <view class="pagebottom">
+                    <view class="listbox" style="min-height: calc(100vh - 204rpx);positoin: relative">
+                        <view wx:if="{{loading}}" class="center-all" style="width: 100%;height: calc(100vh - 204rpx);z-index: 100;position: absolute;left: 0;background: #fff">
+                            <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+                        </view>
+                        <view wx:if="{{!loading}}" class="listitem" wx:for="{{groupusers}}" wx:key="index">
+                            <view class="itemleft">
+                                <image src="{{item.headimgurl ? item.headimgurl + '@avatar' : '/res/images/icon_joinuser.png'}}" style="border-radius: 100rpx;"></image>
+                                <view class="iteminfo">
+                                    <view class="name nowrap">{{item.nickname}}</view>
+                                    <view class="itemincome center-vertical" wx:if="{{!item.xvip}}" bindtap="showTipsModal" data-tips="该用户是你的临时团队，你可以获得他的消费返佣，但不会计入你的团队人数（由你的团队成员分享而来，但未输入过邀请码，首次输入邀请码后，将重新判定团队归属，并永久绑定）" data-title="未绑定">
+                                        <view class="coupon nowrap" style="color: #FF4925;">未绑定</view>
+                                        <view class="iconfont icon-wenhao" style="margin-left: 10rpx"></view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.xvip}}">
+                                        <view class="coupon nowrap" style="color: #32a14a;" wx:if="{{item.xxvip}}">探店团长</view>
+                                        <view class="coupon nowrap" style="color: #32a14a;" wx:else>探店达人</view>
+                                    </view>
+                                    <view class="itemincome">
+                                        <view class="coupon nowrap">累计消费 {{item.totalConsumeStr || '0'}} 元</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.xvip}}">
+                                        <view class="coupon nowrap">直推{{(item.data.bind||0)}}人，团队{{(item.data.groupbind||0)}}人</view>
+                                    </view>
+
+                                    <view class="itemincome" wx:if="{{item.shareby._id==user._id}}">
+                                        <view class="coupon nowrap">我的直推</view>
+                                    </view>
+                                    <view wx:else>
+                                        <view class="itemincome" wx:if="{{item.shareby2._id==user._id}}">
+                                            <view class="coupon nowrap">{{item.shareby.nickname}}的团队</view>
+                                        </view>
+                                        <view class="itemincome" wx:if="{{item.shareby3._id==user._id}}">
+                                            <view class="coupon nowrap">{{item.shareby2.nickname}}的团队</view>
+                                        </view>
+                                    </view>
+                                    <view wx:if="{{!user.xxvip}}">
+                                        <view class="itemincome" wx:if="{{item.shareby._id==user._id && item.shareby2._id!=user._id &&item.shareby3._id!=user._id }}">
+                                            <view class="coupon nowrap">该用户消费你可以返佣15%</view>
+                                        </view>
+                                        <view class="itemincome" wx:else>
+                                            <view class="coupon nowrap">成为探店团长后才可返佣</view>
+                                        </view>
+                                    </view>
+                                    <view wx:else>
+                                        <view class="itemincome" wx:if="{{item.shareby._id!=user._id && item.shareby2._id!=user._id &&item.shareby3._id!=user._id }}">
+                                            <view class="coupon nowrap">间隔2个以上团长，不再返佣</view>
+                                        </view>
+                                        <view class="itemincome" wx:if="{{item.shareby._id==user._id && item.shareby2._id!=user._id &&item.shareby3._id!=user._id }}">
+                                            <view class="coupon nowrap">该用户消费你可以返佣15%</view>
+                                        </view>
+                                        <view class="itemincome" wx:if="{{item.shareby._id==user._id && item.shareby2._id==user._id &&item.shareby3._id!=user._id }}">
+                                            <view class="coupon nowrap">该用户消费你可以返佣35%</view>
+                                        </view>
+                                        <view class="itemincome" wx:if="{{item.shareby._id!=user._id && item.shareby2._id==user._id &&item.shareby3._id!=user._id }}">
+                                            <view class="coupon nowrap">该用户消费你可以返佣20%</view>
+                                        </view>
+                                        <view class="itemincome" wx:if="{{item.shareby._id!=user._id && item.shareby2._id!=user._id &&item.shareby3._id==user._id }}">
+                                            <view class="coupon nowrap">该用户消费你可以返佣5%</view>
+                                        </view>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="itemright">
+                                <view class="time" style="margin-top: 0">{{item.createTimeStr}} 注册</view>
+                                <view class="time" wx:if="{{item.lastLoginTime}}">{{item.lastLoginTimeStr}} 登陆</view>
+                                <view class="time">累计登陆过{{(item.data.login||0)+1}}次</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view>
+                    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore && groupusers.length >0 }}" class="bottomloader">已全部加载</view>
+                    <view wx:if="{{nomore && groupusers.length ==0 }}" class="nodata">暂无数据</view>
+                </view>
+            </view>
+            <view wx:else class="center-box" style="min-height: calc(100vh - 86rpx);padding-bottom: 100rpx;box-sizing: border-box">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/wodeyonghu.png" style="width: 420rpx;height: 236rpx"></image>
+                <view style="margin-top: 40rpx">暂无数据</view>
+            </view>
+        </view>
+
+        <view wx:if="{{activeIndex==2}}">
+            <view wx:if="{{shops.length || loading}}">
+                <view class="pagebottom">
+                    <view class="listbox" style="min-height: calc(100vh - 204rpx);positoin: relative">
+                        <view wx:if="{{loading}}" class="center-all" style="width: 100%;height: calc(100vh - 204rpx);z-index: 100;position: absolute;left: 0;background: #fff">
+                            <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+                        </view>
+                        <view wx:if="{{!loading}}" class="listitem" wx:for="{{shops}}" wx:key="index">
+                            <view class="itemleft">
+                                <image src="{{item.avatar || '/res/images/logo1.png'}}" style="border-radius: 100rpx;"></image>
+                                <view class="iteminfo">
+                                    <view class="name nowrap">{{item.name}}</view>
+                                    <view class="itemincome">
+                                        <view class="coupon nowrap" style="margin-left: 0;max-width: 360rpx">累计访客：{{item.data.uv || 0}}人（今日{{item.data.uvToday || 0}}人）</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.serviceby2._id==user._id}}">
+                                        <view class="coupon nowrap" style="margin-left: 0;max-width: 360rpx">{{item.serviceby.nickname}}的商家</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.serviceby3._id==user._id}}">
+                                        <view class="coupon nowrap" style="margin-left: 0;max-width: 360rpx">{{item.serviceby2.nickname}}团队的推广</view>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="itemright">
+                                <view class="price" wx:if="{{item.pass}}" style="color: #09BB07;font-size: 28rpx;">已审核</view>
+                                <view class="price" wx:else style="color: #aaa;font-size: 28rpx;">待审核</view>
+                                <view class="time">{{item.createTimeStr}}</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view>
+                    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore && users.length >0 }}" class="bottomloader">已全部加载</view>
+                    <view wx:if="{{nomore && users.length ==0 }}" class="nodata">暂无数据</view>
+                </view>
+            </view>
+            <view wx:else class="center-box" style="min-height: calc(100vh - 86rpx);padding-bottom: 100rpx;box-sizing: border-box">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/shangjia.png" style="width: 420rpx;height: 236rpx"></image>
+                <view style="margin-top: 40rpx">暂无推广的商家</view>
+            </view>
+        </view>
+
+        <view wx:if="{{activeIndex==3}}">
+            <view wx:if="{{orders.length || loading}}">
+                <view class="pagebottom">
+                    <view class="listbox" style="min-height: calc(100vh - 204rpx);positoin: relative">
+                        <view wx:if="{{loading}}" class="center-all" style="width: 100%;height: calc(100vh - 204rpx);z-index: 100;position: absolute;left: 0;background: #fff">
+                            <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+                        </view>
+                        <view wx:if="{{!loading}}" class="listitem" wx:for="{{orders}}" wx:key="index">
+                            <view class="itemleft">
+                                <image src="{{item.user.headimgurl ? item.user.headimgurl + '@avatar' : '/res/images/icon_joinuser.png'}}" style="border-radius: 100rpx;"></image>
+                                <view class="iteminfo">
+                                    <view class="name nowrap">{{item.user.nickname}}</view>
+                                    <view class="itemincome">
+                                        <view class="coupon nowrap" style="margin-left: 0;max-width: {{item.createTimeStr.length > 8 ? '280rpx' : '360rpx'}}">{{item.title}}</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.shop}}">
+                                        <view class="coupon" style="margin-left: 0">{{item.shop.name}}</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.sharebyBonus.user._id==user._id}}">
+                                        <view class="coupon" style="margin-left: 0">你的直推的订单</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.shareby2Bonus.user._id==user._id}}">
+                                        <view class="coupon" style="margin-left: 0">{{item.sharebyBonus.user.nickname}}的团队的订单</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.shareby3Bonus.user._id==user._id}}">
+                                        <view class="coupon" style="margin-left: 0">{{item.shareby2Bonus.user.nickname}}的团队的订单</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.servicebyBonus.user._id==user._id}}">
+                                        <view class="coupon" style="margin-left: 0">你推广的商家</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.serviceby2Bonus.user._id==user._id}}">
+                                        <view class="coupon" style="margin-left: 0">{{item.servicebyBonus.user.nickname}}团队的商家</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.serviceby3Bonus.user._id==user._id}}">
+                                        <view class="coupon" style="margin-left: 0">{{item.serviceby2Bonus.user.nickname}}团队的商家</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.postbyBonus.user._id==user._id}}">
+                                        <view class="coupon" style="margin-left: 0">通过你的分享链接购买</view>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="itemright">
+                                <view class="price" style="color: #FF4925"><text style="font-size: 20rpx;color:#aaa;">成交价格 </text>{{item.priceStr}}</view>
+                                <view class="time">{{item.createTimeStr}}</view>
+                                <view class="time" wx:if="{{item.refund}}">已退款</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view>
+                    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore && users.length >0 }}" class="bottomloader">已全部加载</view>
+                    <view wx:if="{{nomore && users.length ==0 }}" class="nodata">暂无数据</view>
+                </view>
+            </view>
+            <view wx:else class="center-box" style="min-height: calc(100vh - 86rpx);padding-bottom: 100rpx;box-sizing: border-box">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/dingdan.png" style="width: 420rpx;height: 236rpx"></image>
+                <view style="margin-top: 40rpx">暂时没有返佣订单</view>
+            </view>
+        </view>
+
+        <view wx:if="{{activeIndex==4}}">
+            <view wx:if="{{moneys.length || loading}}">
+                <view class="pagebottom">
+                    <view class="listbox" style="min-height: calc(100vh - 204rpx);positoin: relative">
+                        <view wx:if="{{loading}}" class="center-all" style="width: 100%;height: calc(100vh - 204rpx);z-index: 100;position: absolute;left: 0;background: #fff">
+                            <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+                        </view>
+                        <view wx:if="{{!loading}}" class="listitem" wx:for="{{moneys}}" wx:key="index">
+                            <view class="itemleft">
+                                <image wx:if="{{item.type=='tixian'}}" src="{{item.user.headimgurl ? item.user.headimgurl + '@avatar' : '/res/images/icon_joinuser.png'}}"></image>
+                                <image wx:else src="{{item.order.user.headimgurl ? item.order.user.headimgurl + '@avatar' : '/res/images/icon_joinuser.png'}}"></image>
+                                <view class="iteminfo">
+                                    <view class="name" style="display: flex;align-items: center;">
+                                        <view class="tagitem" wx:if="{{item.type=='shouru'}}" style="background: #E6F8E6;border: 1rpx solid #09BB07">收入</view>
+                                        <view class="tagitem" wx:if="{{item.type=='tixian'}}" style="background: rgb(235, 235, 235);border: 1rpx solid #aaa">提现</view>
+                                        <view class="tagitem" wx:if="{{item.type=='jiesuan'}}" style="background: rgb(235, 235, 235);border: 1rpx solid #aaa">结算</view>
+                                        <view class="tagitem" wx:if="{{item.type=='tuikuan'}}" style="background: #FFECE9;border: 1rpx solid #FF4925">退款</view>
+                                        <view class="nowrap" style="margin-left: 8rpx;max-width: {{item.createTimeStr.length > 8 ? '320rpx' : '340rpx'}}">{{item.title}}</view>
+                                    </view>
+                                    <view class="itemincome" wx:if="{{item.type=='tixian'}}">
+                                        <view class="coupon nowrap" style="margin-left:0;max-width: {{item.createTimeStr.length > 8 ? '320rpx' : '360rpx'}}">{{item.user.nickname}}</view>
+                                    </view>
+                                    <view class="itemincome" wx:else>
+                                        <view class="coupon nowrap" style="margin-left:0;max-width: {{item.createTimeStr.length > 8 ? '320rpx' : '360rpx'}}">{{item.order.user.nickname}}</view>
+                                    </view>
+                                    <view class="itemincome">
+                                        <view class="coupon nowrap" style="margin-left: 0;max-width: {{item.createTimeStr.length > 8 ? '320rpx' : '360rpx'}}">{{item.order.title}}</view>
+                                    </view>
+                                    <!-- <view class="itemincome" wx:if="{{item.order.shop}}">
+                                        <view class="coupon nowrap" style="margin-left: 0;max-width: {{item.createTimeStr.length > 8 ? '320rpx' : '360rpx'}}">{{item.order.shop.name}}</view>
+                                    </view> -->
+                                    <view class="itemincome">
+                                        <view wx:if="{{item.team}}" class="coupon nowrap" style="margin-left: 0;max-width: {{item.createTimeStr.length > 8 ? '320rpx' : '360rpx'}}">{{item.team}}的团队</view>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="itemright">
+                                <view class="price" wx:if="{{item.type=='tixian'}}" style="color: #aaa">{{item.valueStr}}</view>
+                                <view class="price" wx:if="{{item.type=='shouru'}}" style="color: #09BB07">+{{item.valueStr}}</view>
+                                <view class="price" wx:if="{{item.type=='jiesuan'}}" style="color: #aaa">{{item.valueStr}}</view>
+                                <view class="price" wx:if="{{item.charge}}" style="color: #aaa;font-size: 20rpx;margin-top: 10rpx;">手续费{{item.chargeStr}}</view>
+                                <view class="price" wx:if="{{item.type=='tuikuan'}}" style="color: #FF4925">-{{item.valueStr}}</view>
+                                <view class="time">{{item.createTimeStr}}</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view>
+                    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore && moneys.length >0 }}" class="bottomloader">已全部加载</view>
+                    <view wx:if="{{nomore && moneys.length ==0 }}" class="nodata">暂无数据</view>
+                </view>
+            </view>
+            <view wx:else class="center-box" style="min-height: calc(100vh - 86rpx);padding-bottom: 100rpx;box-sizing: border-box">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/qianbao.png" style="width: 420rpx;height: 236rpx"></image>
+                <view style="margin-top: 40rpx">暂无数据</view>
+            </view>
+        </view>
+        <!-- <view wx:if="{{activeIndex==4}}">
+            <view wx:if="{{visits.length}}">
+                <view class="pagebottom">
+                    <view class="listbox" style="min-height: calc(100vh - 204rpx);positoin: relative">
+                        <view class="listitem" wx:for="{{visits}}" wx:key="index">
+                            <view class="itemleft">
+                                <image src="{{item.user.headimgurl}}"></image>
+                                <view class="iteminfo">
+                                    <view class="name" style="display: flex;align-items: center;">
+                                        <view style="margin-left: 0rpx;">{{item.user.nickname}}</view>
+                                    </view>
+                                    <view class="itemincome">
+                                        <view class="nowrap coupon" wx:if="{{item.gou}}">访问了抢购活动：{{item.shop.name}}{{item.gou.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.kanjia}}">访问了砍价活动：{{item.shop.name}}{{item.kanjia.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.coupon}}">访问了{{item.shop.name}}{{item.coupon.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.bow}}">访问了抽奖活动：{{item.shop.name}}{{item.bow.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.comment}}">通过{{item.comment.user.nickname}}的点评访问了店铺{{item.shop.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.type=='daka'}}">访问了打卡页面：{{item.shop.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.wheel}}">访问了大转盘{{item.shop.name}}{{item.wheel.name}}</view>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="itemright">
+                                <view class="time">{{item.createTimeStr}}</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view>
+                    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore && visits.length >0 }}" class="bottomloader">已全部加载</view>
+                    <view wx:if="{{nomore && visits.length ==0 }}" class="nodata">暂无数据</view>
+                </view>
+            </view>
+            <view wx:else class="center-box" style="min-height: calc(100vh - 86rpx);padding-bottom: 100rpx;box-sizing: border-box">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/dongtai.png" style="width: 420rpx;height: 236rpx"></image>
+                <view style="margin-top: 40rpx">您还暂时没有动态</view>
+            </view>
+        </view>
+        <view wx:if="{{activeIndex==5}}">
+            <view wx:if="{{actions.length}}">
+                <view class="pagebottom">
+                    <view class="listbox" style="min-height: calc(100vh - 204rpx);positoin: relative">
+                        <view class="listitem" wx:for="{{actions}}" wx:key="index">
+                            <view class="itemleft">
+                                <image src="{{item.user.headimgurl}}"></image>
+                                <view class="iteminfo">
+                                    <view class="name" style="display: flex;align-items: center;">
+                                        <view style="margin-left: 0rpx;">{{item.user.nickname}}</view>
+                                    </view>
+                                    <view class="itemincome">
+                                        <view class="nowrap coupon" wx:if="{{item.kanjia}}">{{item.first?'发起砍价 - ':'帮忙砍价 - '}}{{item.kanjia.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.gou}}">参加抢购砍价 - {{item.gou.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.coupon}}">{{item.auto?'获得':'领取'}}券 - {{item.coupon.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.bow}}">参加抽奖活动 - {{item.bow.name}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.wheel}}">通过大转盘{{item.wheel.name}}获得了{{item.bonus.coupon.name || ''}}</view>
+                                        <view class="nowrap coupon" wx:if="{{item.type=='daka'}}">参加了打卡：{{item.shop.name}}</view>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="itemright">
+                                <view class="time">{{item.createTimeStr}}</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view>
+                    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+                    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+                    <view wx:if="{{nomore && actions.length >0 }}" class="bottomloader">已全部加载</view>
+                    <view wx:if="{{nomore && actions.length ==0 }}" class="nodata">暂无数据</view>
+                </view>
+            </view>
+            <view wx:else class="center-box" style="min-height: calc(100vh - 86rpx);padding-bottom: 100rpx;box-sizing: border-box">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/dongtai.png" style="width: 420rpx;height: 236rpx"></image>
+                <view style="margin-top: 40rpx">您还暂时没有动态</view>
+            </view>
+        </view> -->
+    </view>
+
+</view>
+
+<view class="mask-dark" bindtap="hideTixianFailModal" wx:if="{{tixianFailModal}}">
+    <view class="mask-card" style="width: 590rpx;padding:90rpx 0" catchtap="doNothing">
+        <image src="/res/images/icon_tixianfail.png" style="width: 180rpx;height: 180rpx;display: block;margin: 0 auto 50rpx;"></image>
+        <view style="font-size:48rpx;font-size: 242627;text-align: center;line-height: 1">提现失败</view>
+        <!-- <view style="color:#999;font-size: 24rpx;margin-top: 30rpx;line-height: 1;text-align: center">请联系探店大师客服</view> -->
+        <button class="normal" catchtap="handleShowContact">
+            <view class="maskbtn" style="margin: 40rpx auto 0 auto;">联系客服</view>
+        </button>
+    </view>
+</view>
+
+<view class="mask-dark" bindtap="hideWechatModal" wx:if="{{wechatModal}}">
+    <view class="mask-card" style="width: 590rpx;padding:120rpx 0 80rpx" catchtap="doNothing">
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/weixin.png" style="width:176rpx;height: 144rpx;display: block;margin: 0 auto 50rpx;"></image>
+        <view class="card-body" style="text-align:center;padding-bottom:90rpx;">
+            <view style="color:#333;font-size: 28rpx">关注公众号“探店大师”获取通知</view>
+        </view>
+        <button class="mask-btn" style="background: #171a17;" catchtap="handleShowContact">
+            <view style="color: #fff;">回复 <text style="color: #f7d830;font-weight: bold">666</text></view>
+        </button>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{showContactModal}}" bindtap="hideContactModal">
+    <view class="mask-card" style="width:590rpx;min-height:600rpx;border-radius: 10rpx;padding-bottom: 30rpx " catchtap="doNothing">
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" data-image="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" style="width: 590rpx;height: 784rpx;margin: 0 auto 0 auto;display: block;border-radius: 10rpx" bindtap="handlePreviewImg" bindlongpress="handlePreviewImg"></image>
+        <view class="mask-btn" style="margin: 20rpx auto 10rpx auto" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+    </view>
+</view>
+
+<view class="mask-dark" bindtap="hideBindPhoneModal" wx:if="{{bindPhoneModal}}">
+    <view class="mask-card" style="background: #fff;width: 590rpx;padding:70rpx 0;box-sizing: border-box;border-radius: 8rpx;" catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="normal" formType="submit">
+                <view class="joinsuccessbox">
+                    <image src="/res/images/mask_otherluckcode.png" style="width: 224rpx;height: 156rpx;margin-top: 20rpx;" />
+                    <view style="padding: 50rpx;font-size: 32rpx;line-height: 1.2">绑定手机号码，保护您的权益</view>
+                    <button class="normal" open-type="getPhoneNumber" bindgetphonenumber="setPhoneThenJoin">
+                        <view class="maskbtn" style="margin-top: 50rpx;background-color: #FFDB09;color: #242627;">好的</view>
+                    </button>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+
+<mask wx:if="{{friendModal}}" bindtap="hideFriendModal" css="min-height: 590rpx;">
+    <view slot="maskcard" class="center-all column intromask">
+        <image src="{{friend.headimgurl}}"></image>
+        <view class="text1 nowrap">{{friend.nickname}}</view>
+        <view class="text1" style="font-size: 36rpx">邀请你成为探店达人</view>
+        <view class="text2">你可以获得</view>
+        <view class="boxitem" style="margin-top: 40rpx">优质吃喝玩乐，代金券、霸王餐助力</view>
+        <view class="boxitem">获得探店达人身份，分享可赚钱</view>
+        <view class="boxitem">3天黑卡特权（3倍幸运币，半价代金券）</view>
+        <view wx:if="{{user.phone}}" class="maskbtn center-all" bindtap="codebind" data-item="{{friend}}">接受邀请</view>
+        <button wx:else class="normal" open-type="getPhoneNumber" bindgetphonenumber="setPhoneThenJoin" data-bindcode="{{true}}" data-item="{{friend}}">
+            <view class="maskbtn center-all">接受邀请</view>
+        </button>
+    </view>
+</mask>
+
+<mask wx:if="{{tipsModal}}" bindtap="hideTipsModal" bindcancel="hideTipsModal">
+    <view slot="maskcard" class="center-all column tipsmask">
+        <view class="maskcardtitle">{{modalTitle}}</view>
+        <view class="masktext">{{modalTips}}</view>
+    </view>
+</mask>
+
+<mask wx:if="{{updataModal}}" bindtap="hideUpdataModal" bindcancel="hideUpdataModal">
+    <view slot="maskcard" class="center-all column updatamask">
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/mask_updata.png" class="updataimg" mode="widthFix"></image>
+        <view class="masktag">升级成功</view>
+        <view class="title">探店团长权益</view>
+        <view class="text1">直推消费时，你的佣金提高至35%，并且你可以获得直推分享裂变的整个团队消费的20%返佣，该效果无限代生效，直到你与用户之间间隔2个探店团长（间隔1个团长时，佣金下调至5%）</view>
+    </view>
+</mask>

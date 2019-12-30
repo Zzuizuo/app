@@ -1,0 +1,173 @@
+.goubox {
+  width: 690rpx;
+  position: relative;
+}
+.goubox .boxleft {
+  line-height: 1;
+  background: #fff8f5;
+  text-align: center;
+}
+.goubox .boxleft .cirlce {
+  content: '';
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 100%;
+  background: #fff;
+  position: absolute;
+  box-shadow: 0 0 10rpx #eee inset;
+}
+.goubox .boxleft::after {
+  right: -10rpx;
+  bottom: 60rpx;
+  content: '';
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 100%;
+  background: #fff;
+  position: absolute;
+  box-shadow: 0 0 10rpx #eee inset;
+}
+.goubox .boxleft::before {
+  left: -10rpx;
+  bottom: 60rpx;
+  z-index: 10;
+  content: '';
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 100%;
+  background: #fff;
+  position: absolute;
+  box-shadow: 0 0 10rpx #eee inset;
+}
+.goubox .boxleft .halfcircle {
+  width: 10rpx;
+  height: 16rpx;
+  background: #fff;
+  position: absolute;
+  z-index: 11;
+}
+.goubox .boxleft .halfcircle1 {
+  left: -10rpx;
+  bottom: 62rpx;
+  width: 10rpx;
+  height: 16rpx;
+  background: #fff;
+  position: absolute;
+  z-index: 11;
+}
+.goubox .boxleft .halfcircle2 {
+  right: -10rpx;
+  bottom: 62rpx;
+  width: 10rpx;
+  height: 16rpx;
+  background: #fff;
+  position: absolute;
+  z-index: 11;
+}
+.goubox .boxleft .gouimg {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 10rpx;
+  display: block;
+}
+.goubox .boxleft .imgmask {
+  opacity: 0.1;
+  background-color: #000;
+  position: absolute;
+  top: 20rpx;
+  left: 20rpx;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 10rpx;
+  z-index: 2;
+}
+.goubox .boxleft .dashline {
+  border-bottom: 2rpx dashed #f0f0f0;
+  margin-top: 20rpx;
+}
+.goubox .boxleft .lefttext {
+  font-size: 20rpx;
+  color: #ff4925;
+}
+.goubox .boxright .progressline {
+  width: 260rpx;
+  height: 12rpx;
+  background: #FFEAE5;
+  position: relative;
+  border-radius: 6rpx;
+}
+.goubox .boxright .activeline {
+  position: absolute;
+  background: #FF4925;
+  height: 12rpx;
+  top: 0;
+  left: 0;
+  border-radius: 6rpx;
+}
+.cardbox .cardLeft {
+  line-height: 1;
+  width: 200rpx;
+  height: 268rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  background: #fff9f0;
+  border-radius: 10rpx;
+  box-shadow: 0 0 16rpx #e8e8e8;
+  position: relative;
+}
+.cardbox .cardLeft .tagicon {
+  position: absolute;
+  top: -4rpx;
+  left: 4rpx;
+  width: 68rpx;
+  height: 40rpx;
+}
+.cardbox .cardRight {
+  line-height: 1;
+  width: 460rpx;
+  min-height: 268rpx;
+  margin-left: 30rpx;
+  box-sizing: border-box;
+}
+.cardbox .cardRight .name {
+  line-height: 1.2;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.cardbox .cardRight .righttext {
+  margin-top: 24rpx;
+  line-height: 1;
+  color: #999;
+  font-size: 24rpx;
+}
+.cardbox .cardRight .tagsbox {
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.cardbox .cardRight .tagsbox .tagitem {
+  display: flex;
+  align-items: center;
+  height: 40rpx;
+  line-height: 40rpx;
+  padding: 0 10rpx;
+  box-sizing: border-box;
+  font-size: 24rpx;
+  border-radius: 2rpx;
+}
+.cardbox .cardRight .normaltext {
+  font-size: 24rpx;
+  color: #999;
+}
+.cardbox .cardRight .joinbtn {
+  width: 140rpx;
+  height: 60rpx;
+  border-radius: 30rpx;
+  color: #fff;
+  font-size: 24rpx;
+  line-height: 60rpx;
+  text-align: center;
+  background: #ff4925;
+  font-weight: 500;
+}

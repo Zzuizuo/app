@@ -1,0 +1,65 @@
+.cardbox {
+  display: flex;
+  align-items: flex-start;
+  color: #242627;
+  line-height: 1;
+  padding: 40rpx 0 0 0;
+  box-sizing: border-box;
+}
+.cardbox .boxleft {
+  width: 160rpx;
+  height: 160rpx;
+  position: relative;
+}
+.cardbox .boxleft image {
+  width: 100%;
+  height: 100%;
+  border-radius: 10rpx;
+  display: block;
+}
+.cardbox .boxleft .tagicon {
+  position: absolute;
+  top: -4rpx;
+  left: 0;
+  width: 68rpx;
+  height: 40rpx;
+}
+.cardbox .boxright {
+  width: 500rpx;
+  min-height: 160rpx;
+  margin-left: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  padding-bottom: 40rpx;
+  box-sizing: border-box;
+}
+.cardbox .boxright .text1 {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+.cardbox .boxright .text2 {
+  font-size: 24rpx;
+}
+.cardbox .boxright .mtop10 {
+  margin-top: 20rpx;
+}
+.cardbox .tagsbox {
+  flex-wrap: wrap;
+}
+.cardbox .tagsbox .tagitem {
+  height: 40rpx;
+  line-height: 40rpx;
+  padding: 0 10rpx;
+  box-sizing: border-box;
+  font-size: 24rpx;
+  border-radius: 2rpx;
+}
+.cardbox .activebox {
+  font-size: 24rpx;
+}
+.cardbox .activebox .tagcell {
+  width: 40rpx;
+  height: 40rpx;
+  color: #fff;
+  border-radius: 2rpx;
+  margin-right: 10rpx;
+}

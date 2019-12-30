@@ -1,0 +1,643 @@
+@import '/res/iconfont/iconfont';
+
+page {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", "Arial", " Segoe UI", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun, sans-serif;
+    font-size: 28rpx;
+    line-height: 1.6;
+}
+
+.loading {
+    height: 100vh;
+    width: 750rpx;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    position: fixed;
+    z-index: 1100;
+    top: 0;
+    left: 0;
+}
+
+.bottomloader {
+    text-align: center;
+    color: #666;
+    padding: 30rpx 0;
+    padding-bottom: 60rpx;
+    font-size: 28rpx;
+    line-height: 1;
+}
+
+.nodata {
+    width: 100%;
+    padding: 100rpx 0;
+    text-align: center;
+    color: #aaa;
+}
+
+.nodata image {
+    width: 200rpx;
+    height: 200rpx;
+}
+
+.pagebutton {
+    background-color: #08983f;
+    color: white;
+    margin: 20rpx;
+}
+
+.foot-placeholder {
+    height: 40rpx;
+}
+
+button.primary {
+    background-color: #1a171a;
+    color: #fff;
+    border: none;
+    height: 100rpx;
+    line-height: 100rpx;
+}
+
+button.primary::after {
+    display: none;
+}
+
+.tag {
+    background-color: #aaa;
+    color: #fff;
+    font-size: 24rpx;
+    padding: 0rpx 20rpx;
+    border-radius: 40rpx;
+}
+
+.center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+
+/* 清除按钮样式 */
+
+button.simple {
+    width: unset;
+    height: unset;
+    padding: unset;
+    border: unset;
+    border-radius: unset;
+    margin: unset;
+    line-height: unset;
+    font-size: unset;
+    background: unset;
+    text-align: unset;
+}
+
+button.normal {
+    width: auto;
+    height: auto;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    line-height: 1;
+    font-size: 28rpx;
+    background: none;
+    text-align: left;
+    overflow: visible;
+    position: unset;
+}
+
+button.simple::after,
+button.normal::after {
+    display: none;
+}
+
+button.simple:hover,
+button.normal:hover {
+    color: unset;
+    background-color: unset;
+}
+
+
+/* 弹窗 */
+
+.mask-dark {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 750rpx;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+}
+
+.mask-dark-long {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: calc(100vh - 200rpx);
+    padding: 100rpx 0;
+    width: 750rpx;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    z-index: 11;
+}
+
+.mask-card {
+    width: 600rpx;
+    background-color: white;
+    border-radius: 10rpx;
+    font-size: 28rpx;
+}
+
+.card-head {
+    min-height: 160rpx;
+    border-top-left-radius: 10rpx;
+    border-top-right-radius: 10rpx;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 38rpx;
+}
+
+.card-body {
+    padding: 0 30rpx;
+}
+
+.card-foot {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 100rpx;
+    background-color: #30b64f;
+    color: white;
+    border-bottom-left-radius: 10rpx;
+    border-bottom-right-radius: 10rpx;
+}
+
+.card-body input {
+    padding: 20rpx;
+    background-color: #f1f1f1;
+    margin-top: 10rpx;
+    margin-bottom: 20rpx;
+}
+
+.mask-btn {
+    color: #242627;
+    width: 370rpx;
+    font-size: 28rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    border-radius: 40rpx;
+    background: #ffdb09;
+}
+
+
+/* 加载更多默认图 */
+
+.defaultbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100rpx;
+}
+
+.defaultbox image {
+    width: 180rpx;
+    height: 200rpx;
+}
+
+
+/* 省略 */
+
+.nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ellipsis {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+
+/* listtop */
+
+.page-top {
+    padding: 50rpx 40rpx 0;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #d9d9d9;
+}
+
+.page-title {
+    font-size: 36rpx;
+    margin-bottom: 20rpx;
+    font-weight: bold;
+}
+
+
+/* tab */
+
+.tabs {
+    display: flex;
+    align-items: center;
+    height: 60rpx;
+    box-sizing: border-box;
+}
+
+.tab {
+    margin-right: 40rpx;
+    padding-bottom: 20rpx;
+    position: relative;
+}
+
+.tabs-cusor {
+    position: absolute;
+    left: 0;
+    bottom: -2rpx;
+    width: 100%;
+    background-color: #333;
+    border-radius: 8rpx;
+    height: 8rpx;
+}
+
+/* panel */
+
+.panel-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 32rpx;
+}
+
+.panel-title-bottom {
+    height: 6rpx;
+    width: 40rpx;
+    background-color: #e0e0e0;
+    margin: 20rpx auto;
+    border-radius: 6rpx;
+}
+
+.panel-content {
+    margin-top: 40rpx;
+}
+
+.panelcell {
+    display: flex;
+    font-weight: 500;
+    font-size: 28rpx;
+    align-items: center;
+    margin-bottom: 10rpx;
+}
+
+.panelcell-a {
+    display: flex;
+    font-weight: 500;
+    font-size: 28rpx;
+    margin-bottom: 10rpx;
+}
+
+.panelcell-title {
+    display: flex;
+    align-items: center;
+}
+
+.panelcell-title image,
+.panelcell-a image {
+    width: 28rpx;
+    height: 28rpx;
+    margin-right: 10rpx;
+}
+
+.panelcell-a image {
+    margin-top: 8rpx;
+}
+
+.panelcell text {
+    line-height: 1.4;
+}
+
+.moreadress {
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 24rpx;
+    color: #aaa;
+    position: relative;
+    margin-top: 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.moreadress image {
+    width: 24rpx;
+    height: 24rpx;
+}
+
+.moreadress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: -38rpx;
+    border-top: 2rpx solid #f1f1f1;
+}
+
+
+/* pagebtn */
+
+.pagebtn {
+    width: 600rpx;
+    height: 100rpx;
+    line-height: 100rpx;
+    text-align: center;
+    font-size: 28rpx;
+    border-radius: 16rpx;
+    margin: 0 auto;
+}
+
+
+/* headimg list */
+
+.participantbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40rpx;
+}
+
+.joiner {
+    font-size: 24rpx;
+    display: flex;
+    justify-content: center;
+    margin-top: 20rpx;
+}
+
+.actions {
+    min-width: 60rpx;
+    height: 64rpx;
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 0;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.action {
+    position: absolute;
+    top: 0;
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 60rpx;
+    border: 2rpx solid #fafafa;
+}
+
+
+/* newheadimg list*/
+
+.headimgListbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60rpx;
+}
+
+.headimgListdata {
+    font-size: 24rpx;
+    color: #242627;
+    display: flex;
+    justify-content: center;
+    line-height: 1;
+}
+
+.headimgs {
+    min-width: 60rpx;
+    height: 64rpx;
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 0;
+    justify-content: center;
+    margin: 30rpx auto;
+}
+
+.headimg {
+    position: absolute;
+    top: 0;
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 60rpx;
+    border: 2rpx solid #fafafa;
+}
+
+
+/* nodatabox */
+
+.nodatabox {
+    width: 690rpx;
+    height: calc(100vh - 170rpx);
+    padding-top: 200rpx;
+    box-sizing: border-box;
+    color: #333;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.nodatabox image {
+    width: 420rpx;
+    height: 236rpx;
+    display: block;
+}
+
+.combox {
+    padding-top: 60rpx;
+    position: relative;
+
+}
+
+.combox::after {
+    content: '';
+    position: absolute;
+    width: 28rpx;
+    top: 0;
+    bottom: 0;
+    right: -28rpx;
+}
+
+.combox::before {
+    content: '';
+    position: absolute;
+    width: 28rpx;
+    top: 0;
+    bottom: 0;
+    left: -28rpx;
+}
+
+.smallbtn {
+    background-color: #1bb51f;
+    color: #fff;
+    width: unset;
+    height: unset;
+    margin: unset;
+    font-size: 24rpx;
+    text-align: unset;
+}
+
+/* new */
+
+/* base */
+
+.center-vertical {
+    display: flex;
+    align-items: center;
+}
+
+.center-all {
+    display: flex;
+    align-items: center;
+    justify-content: center !important;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.justify-SB {
+    display: flex;
+    justify-content: space-between;
+}
+
+.opacity {
+    opacity: 0.5;
+}
+
+/* cardbox */
+
+.cardbox .cardLeft {
+    line-height: 1;
+    width: 200rpx;
+    height: 268rpx;
+    padding: 20rpx;
+    box-sizing: border-box;
+    background: #fff9f0;
+    border-radius: 10rpx;
+    box-shadow: 0 0 16rpx #e8e8e8;
+    position: relative;
+}
+
+.cardbox .cardLeft .tagicon {
+    position: absolute;
+    top: -4rpx;
+    left: 4rpx;
+    width: 68rpx;
+    height: 40rpx;
+}
+
+.cardbox .cardRight {
+    line-height: 1;
+    width: 460rpx;
+    min-height: 268rpx;
+    margin-left: 30rpx;
+    box-sizing: border-box;
+}
+
+.cardbox .cardRight .name {
+    line-height: 1.2;
+    font-size: 32rpx;
+    font-weight: bold;
+}
+
+.cardbox .cardRight .righttext {
+    margin-top: 24rpx;
+    line-height: 1;
+    color: #999;
+    font-size: 24rpx;
+}
+
+.cardbox .cardRight .tagsbox {
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.cardbox .cardRight .tagsbox .tagitem {
+    display: flex;
+    align-items: center;
+    height: 40rpx;
+    line-height: 40rpx;
+    padding: 0 10rpx;
+    box-sizing: border-box;
+    font-size: 24rpx;
+    border-radius: 2rpx;
+}
+
+.cardbox .cardRight .normaltext {
+    font-size: 24rpx;
+    color: #999;
+}
+
+.cardbox .cardRight .joinbtn {
+    width: 140rpx;
+    height: 60rpx;
+    border-radius: 30rpx;
+    color: #fff;
+    font-size: 24rpx;
+    line-height: 60rpx;
+    text-align: center;
+    background: #ff4925;
+    font-weight: 500;
+}
+
+/* swipernum */
+.listnum {
+    position: absolute;
+    right: 30rpx;
+    bottom: 30rpx;
+    color: #fff;
+    font-size: 24rpx;
+    text-align: center;
+}
+
+.listnumcell {
+    height: 52rpx;
+    border-radius: 26rpx;
+    line-height: 52rpx;
+    padding: 0 20rpx;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* sticky */
+.sticky {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background: #fff;
+}
+
+.greenbtn {
+    height: 60rpx;
+    font-size: 24rpx;
+    text-align: center;
+    color: #fff;
+    background: #1bb51f;
+    line-height: 60rpx;
+    border-radius: 30rpx;
+    padding: 0 30rpx;
+}

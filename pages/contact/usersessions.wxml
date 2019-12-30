@@ -1,0 +1,38 @@
+<view wx:if="{{!session || loading}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+
+<view class="head">
+    <view style="color:#aaa;">
+        未处理消息：
+        <text style="color:#30b64f">{{messageUndoCount}}</text>
+        条
+    </view>
+    <button bindtap="toReadAll">全部标记已处理</button>
+</view>
+<view wx:for="{{usersessions}}" wx:key="index" bindtap="toReply" class="panel" data-item="{{item}}">
+    <view class="usersession">
+        <view class="userinfo">
+            <view>
+                <image class="avatar" src="{{item.user.headimgurl}}"></image>
+            </view>
+            <view>
+                <view style="font-size: 28rpx;">{{item.user.nickname || '用户'}}</view>
+                <view style="color: #888;">{{item.preview}}</view>
+            </view>
+        </view>
+        <view class="unit" style="display: flex;justify-content: center;align-items: center;">
+            <!-- <view>{{item.createTimeStr}}</view> -->
+            <image wx:if="{{item.undo==0}}" src="http://cdn.vlite.pro/xwifi/images/shopapp/right3.png" mode="aspectFill"
+                style="width:40rpx;height:40rpx;"></image>
+            <view wx:else class="dot">{{item.undo}}</view>
+        </view>
+    </view>
+</view>
+<view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+<view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+<view wx:if="{{nomore && usersessions.length >0}}" class="bottomloader">已全部加载</view>
+<view wx:if="{{nomore && usersessions.length ==0}}" class="nodata" style="margin-top: 366rpx;">
+    <image src="http://cdn.vlite.pro/xwifi/images/shopapp/account/4.png" mode="aspectFill"></image>
+    <view style="color:#444444;">暂无消息</view>
+</view>

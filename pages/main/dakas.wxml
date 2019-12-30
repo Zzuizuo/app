@@ -1,0 +1,52 @@
+<view wx:if="{{!session}}" class="loading">
+	<image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+
+<view class="content">
+	<view class="pagetop">
+		<searchbox placeholder="请输入关键字" bindinputing="handleSearchInputChange" bindsearching="handleSearch" />
+	</view>
+	<view class="pagemiddle">
+		<navbar navs="{{navs}}" active="{{activeIndex}}" bindChangeNav="handleChangeNav" />
+	</view>
+	<view wx:if="{{!changeNavConfirm}}" class="nodatabox">
+		<image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;opacity: 0.6;" />
+	</view>
+	<view class="nodatabox" wx:if="{{!userdakas.length}}">
+		<image src="/res/images/daka_none.png" />
+		<view class="nodatatips" wx:if="{{query.keywords}}">暂无搜索结果</view>
+		<view class="nodatatips" wx:else>
+			<view wx:if="{{tab == 2}}">暂无已兑换打卡哦~</view>
+			<view wx:elif="{{tab == 1}}">暂未进行打卡哦~</view>
+			<view wx:else>打卡是商家的线下活动，需要到店参与哦~</view>
+		</view>
+	</view>
+	<view class="listbox" wx:else>
+		<view
+		 class="listcell"
+		 wx:for="{{userdakas}}"
+		 wx:key="index"
+		 bindtap="toDetail"
+		 data-item="{{item}}"
+		>
+			<view class="cellleft">
+				<view class="imagebox">
+					<image src="{{item.config.cover ? (item.config.cover + '@avatar') : '/res/images/list_daka.png'}}" mode="aspectFill" />
+				</view>
+				<view class="infobox">
+					<view class="name nowrap" style="color: {{(!item.bonus) ?  '#242627' : '#666'}}">{{item.config.title}}</view>
+					<view class="shop nowrap" style="color: {{(!item.bonus) ?  '#666' : '#999'}}">{{item.shop.name}}</view>
+					<view class="shop">{{item.createTimeStr}}参与打卡</view>
+				</view>
+			</view>
+			<view class="cellright">
+				<view wx:if="{{item.bonus}}" style="color: #999">已兑换</view>
+				<view wx:else>
+					<view style="font-size: 32rpx;font-weight: bold;text-align: center;color: #FF4925">{{item.data.uv || 0}}</view>
+					<view style="font-size: 24rpx;color: #999999;margin-top: 30rpx">当前人气</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</view>
+

@@ -1,0 +1,26 @@
+page{
+    background-color: #1a171a;
+}
+.user{
+    padding: 40rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    border-bottom: 1rpx solid #000;
+}
+
+
+.search {
+    width: 710rpx;
+    background-color: #1a171a;
+    padding: 0 20rpx;
+}
+
+.search-bg {
+    background-color: #000;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    text-align: left;
+}

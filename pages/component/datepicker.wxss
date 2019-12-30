@@ -1,0 +1,21 @@
+.selected {
+    line-height: 50px;
+    text-align: center;
+}
+
+.btnbox {
+    width: 100vw;
+    display: flex;
+    padding: 40rpx;
+    font-size: 36rpx;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.btn:nth-child(1) {
+    color: #888;
+}
+
+.btn:nth-child(2) {
+    color: #62b900;
+}

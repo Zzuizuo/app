@@ -1,0 +1,82 @@
+<view wx:if="{{!session || loading}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view class="head">
+    <view>
+        <image src="{{usersession.user.headimgurl+'@avatar'}}" style="width:60rpx;height:60rpx;border-radius: 60rpx;" mode="aspectFill"></image>
+        <view style="font-size:20rpx;">{{usersession.user.nickname}}</view>
+        <view style="display:flex;">
+            <button wx:if="{{usersession.undo}}" class="simple" style="color:#30b64f;margin-top:20rpx;" bindtap="setRead">
+                标为已回
+            </button>
+            <button wx:if="{{!usersession.undo}}" class="simple" style="color:#aaa;margin-top:20rpx;" bindtap="doNothing">
+                已经回复
+            </button>
+            <button wx:if="{{usersession.replyBy && usersession.replyBy._id == user._id}}" class="simple" style="color:#30b64f;margin-top:20rpx;margin-left:30rpx;" bindtap="exitConnect">
+                结束会话
+            </button>
+        </view>
+    </view>
+</view>
+<view class="head-placeholder"></view>
+<view class="messages">
+    <view wx:for="{{messages}}" wx:key="index">
+        <view class="message" wx:if="{{!item.isReply}}">
+            <view>
+                <image class="avatar" src="{{item.user.headimgurl}}"></image>
+            </view>
+            <view>
+                <view style="color: #aaa;" bindtap="toDetail" data-item="{{item}}">
+                    {{item.game?(item.game.name):'其它咨询'}} # {{item.createTimeStr}}
+                </view>
+                <view class="content">
+                    <view wx:if="{{item.type=='text'}}">{{item.content}}</view>
+                    <view wx:if="{{item.type=='image'}}" bindtap="previewImage" data-item="{{item}}">
+                        [图片]
+                    </view>
+                    <view wx:if="{{item.type!='text' && item.type!='image'}}">[其它类型的消息]</view>
+                </view>
+            </view>
+        </view>
+        <view class="reply" wx:if="{{item.isReply}}">
+            <view>
+                <view style="color: #aaa;display:flex;;justify-content: flex-end;">
+                    <view style="color:#aaa">{{item.createTimeStr}}</view>
+                </view>
+                <view class="content">
+                    <view wx:if="{{item.type=='text'}}">{{item.content}}</view>
+                    <view wx:if="{{item.type=='image'}}" bindtap="previewImage" data-item="{{item}}">
+                        [图片]
+                    </view>
+                    <view wx:if="{{item.type!='text' && item.type!='image'}}">[其它类型的消息]</view>
+                </view>
+            </view>
+            <view>
+                <image class="avatar" src="{{item.replyBy.headimgurl}}"></image>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="foot-placeholder"></view>
+<view class="foot">
+    <view>
+        <button class="simple" style="color:#30b64f;padding-top:40rpx;" bindtap="refreshData">
+            刷新
+        </button>
+        <form bindsubmit="formSubmit" style="width:750rpx;">
+            <block wx:if="{{usersession.replyBy && usersession.replyBy._id==user._id}}">
+                <input class="replyInput" type="text" name="content" value="{{content}}" placeholder="请输入回复内容" confirm-type="send" bindconfirm="inputSubmit" />
+                <button class="pagebutton" formType="submit">回复</button>
+            </block>
+            <block wx:if="{{usersession.replyBy && usersession.replyBy._id!=user._id}}">
+                <view style="color:#aaa;margin-top:30rpx;">
+                    {{usersession.replyBy.nickname}}正在回复该会话
+                </view>
+            </block>
+            <block wx:if="{{!usersession.replyBy}}">
+                <view style="color:#aaa;margin-top:30rpx;">同一用户同一时间仅限一位客服接入</view>
+                <button class="pagebutton" bindtap="toReply">接入会话</button>
+            </block>
+        </form>
+    </view>
+</view>

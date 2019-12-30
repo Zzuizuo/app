@@ -1,0 +1,223 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view wx:if="{{expired}}" class="loading">
+    <view>该WiFi码已过期</view>
+</view>
+<view wx:else>
+    <view class="main" wx:if="{{qrcode && qrcode.wifi}}">
+        <view>
+            <view class="moniservice" wx:if="{{!showAd && !connecting}}">
+                <view>
+                    <view style="font-size: 22rpx;color: #aaa;padding-left: 10rpx;">{{qrcode?qrcode.name : 'inwifi'}}
+                    </view>
+                    <view style="display: flex;align-items: center;justify-content: space-between;;margin-top: 10rpx;width:670rpx;">
+                        <view style="display: flex;align-items: center;">
+                            <image class="icon" src="http://cdn.classx.cn/tandian/userapp/res/images/icon1.jpg" style="width:100rpx;height:100rpx;border-radius: 100rpx;display: block;margin-right: 20rpx;">
+                            </image>
+                            <view>
+                                <view style="font-size: 36rpx;line-height: 50rpx;">{{qrcode.wifi.SSID}}</view>
+                                <view style="color: #aaa;">wifi名称</view>
+                            </view>
+                        </view>
+                        <button class="simple" wx:if="{{!user.authed && qrcode.requireNickname}}" open-type="getUserInfo" bindgetuserinfo="authThenConnect">
+                            <view class="actionbtn">连接</view>
+                        </button>
+                        <button class="simple" wx:if="{{!user.phone && qrcode.requirePhone}}" open-type="getPhoneNumber" bindgetphonenumber="setPhoneThenConnect">
+                            <view class="actionbtn">连接</view>
+                        </button>
+                        <button class="simple" wx:if="{{!((!user.authed && qrcode.requireNickname)||(!user.phone && qrcode.requirePhone))}}" bindtap="connect">
+                            <view class="actionbtn">连接</view>
+                        </button>
+                    </view>
+                </view>
+            </view>
+            <view wx:if="{{showAd}}">
+                <view style="margin: 0 30rpx;width:690rpx;text-align: left;" wx:if="{{advancedWxservice && !qrcode.adOnly}}">
+                    <official-account bindload="wxserviceLoad" binderror="wxserviceError"></official-account>
+                </view>
+                <view wx:else style="margin: 0 30rpx;width:690rpx;">
+                    <!-- <ad unit-id="adunit-c4d96a44ebca1a51"></ad> -->
+                    <view wx:if="{{user.super}}">
+                    </view>
+                </view>
+            </view>
+
+            <view style="margin-top: 28rpx;font-size: 28rpx;color: #aaa;" wx:if="{{connecting}}">Wifi连接中</view>
+            <view style="margin-top: 28rpx;font-size: 28rpx;color: #aaa;" wx:if="{{!connecting && connected && !cd}}">连接成功</view>
+            <view style="margin-top: 28rpx;font-size: 28rpx;color: #aaa;" wx:if="{{!connecting && connected && cd}}">连接成功，{{cd}}秒后进入首页</view>
+            <view wx:if="{{error && showPassword}}" class="password" style="margin-top: 28rpx;">
+                <view style="font-size: 22rpx;color: #aaa">您的设备需要手动连接</view>
+                <view style="line-height: 1.1;margin-top: 60rpx;">
+                    <view style="font-size: 22rpx;color: #aaa;">WiFi名称</view>
+                    <view style="font-size: 40rpx;">{{qrcode.wifi.SSID}}</view>
+                    <view style="font-size: 22rpx;color: #aaa;margin-top: 20rpx;" bindtap="copyPassword"> 密码（单击可复制）</view>
+                    <view style="font-size: 40rpx;" bindtap="copyPassword">{{qrcode.wifi.password}}</view>
+                </view>
+            </view>
+            <view wx:if="{{error && !showPassword}}" class="password" style="width:500rpx;margin: 20rpx auto;color:#aaa;">
+                {{error}}
+                <view style="font-size: 22rpx;color: #aaa;margin-top: 20rpx;">如有疑问请咨询网络管理员</view>
+            </view>
+            <view class="adminButton" style="bottom:130rpx;background-color: #36ca58;border-color: #36ca58;" wx:if="{{!qrcode.channel && user.channel}}" bindtap="toBindChannel">渠道绑定</view>
+            <block wx:if="{{qrcode.channel && user.channel && qrcode.channel._id==user._id}}">
+                <view class="adminButton" bindtap="toSetting" style="background-color: #36ca58;border-color: #36ca58;">二维码管理</view>
+            </block>
+            <block wx:else>
+                <block wx:if="{{user.super || (qrcode.bindBy._id == user._id)}}">
+                    <view class="adminButton" bindtap="toSetting">二维码管理</view>
+                </block>
+                <view wx:else style="display: flex;justify-content: center;">
+                    <view class="toBuy" bindtap="showPasswordModal" wx:if="{{qrcode.showPassword && qrcode.wifi.password}}">电脑或其它设备如何连接？</view>
+                </view>
+            </block>
+        </view>
+    </view>
+
+    <view wx:if="{{qrcode && !qrcode.wifi}}">
+        <view class="adminButton" style="background-color: #36ca58;border-color: #36ca58;" wx:if="{{!qrcode.channel && user.channel}}" bindtap="toBindChannel">渠道绑定</view>
+        <view class="init">
+            <block wx:if="{{!error && !connectedWifi}}">
+                请先连入一个Wifi
+                <view style="color:#aaa;font-size: 24rpx;margin-top: 20rpx;">若您已经连入一个Wifi，可以通过配置将其与贴纸绑定。此后其它人扫码即可连入该Wifi。
+                </view>
+                <button class="connect" style="width:300rpx;" bindtap="refreshConnectedWifi">我已连入Wifi</button>
+            </block>
+            <block wx:if="{{error}}">
+                手机不支持
+                <view style="color:#aaa;font-size: 24rpx;margin-top: 20rpx;text-align: left;">您当前手机可能不支持微信Wifi，请使用其它手机配置。
+                </view>
+            </block>
+            <block wx:if="{{!error && connectedWifi}}">
+                <view style="font-size: 28rpx;">当前Wifi：{{connectedWifi.SSID}}</view>
+                <view style="color:#aaa;font-size: 24rpx;margin:0 auto;margin-top: 20rpx;text-align: left;width:500rpx;">
+                    您正在将当前连接的Wifi与该码进行绑定，绑定后其它人使用微信扫描该码即可连入Wifi</view>
+                <!-- <view style="color:#aaa;font-size: 24rpx;margin-top: 20rpx;"></view> -->
+                <view class="prop" style="justify-content: space-between;">
+                    <view class="name">Wifi密码</view>
+                    <input class="value" style="text-align: right" focus type="password" bindinput="valueChanged" data-field="password" placeholder="请输入" />
+                </view>
+                <view class="prop" style="justify-content: space-between;">
+                    <view class="name">店铺名称</view>
+                    <input class="value" style="text-align: right" type="text" bindinput="valueChanged" data-field="name" placeholder="请输入" />
+                </view>
+                <view class="prop" style="justify-content: space-between;">
+                    <view class="name">店铺地址</view>
+                    <input style="text-align: right" wx:if="{{form.location}}" value="{{form.address}}" class="value" type="text" bindinput="valueChanged" data-field="address" placeholder="请输入" />
+                    <view wx:if="{{!form.location}}" class="value" style="color: #36ca58;font-weight: bold;text-align: right;" bindtap="openLocation">选择位置</view>
+                </view>
+                <view class="prop" style="justify-content: center;" bindtap="switchAdvancedSetting">
+                    <!-- <view class="name">高级设置</view>
+                <view class="value" style="text-align: right;color: #36ca58;font-weight: bold;">{{showAdvancedSetting?'隐藏':'显示'}}</view> -->
+                    <view class="name" style="width:unset;color: #36ca58;font-weight: bold;">{{showAdvancedSetting?'隐藏高级设置':'显示高级设置'}}</view>
+                </view>
+                <block wx:if="{{showAdvancedSetting}}">
+                    <view class="prop" style="justify-content: space-between;">
+                        <view class="name" style="width: unset">
+                            在必要时显示密码
+                            <view style="font-size: 22rpx;color: #aaa;">以便支持电脑等更多设备手动连接</view>
+                        </view>
+                        <switch checked="{{form.showPassword}}" bindchange="showPasswordChanged" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                    </view>
+                    <view class="prop" style="justify-content: space-between;">
+                        <view class="name" style="width: unset">
+                            联网要求授权昵称
+                            <view style="font-size: 22rpx;color: #aaa;">需用户授权，获取微信头像与昵称</view>
+                        </view>
+                        <switch checked="{{form.requireNickname}}" bindchange="requireNicknameChanged" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                    </view>
+                    <view class="prop" style="justify-content: space-between;" wx:if="{{user.super}}">
+                        <view class="name" style="width: unset">
+                            联网要求绑定手机
+                            <view style="font-size: 22rpx;color: #aaa;">需用户授权，请合法保护用户隐私</view>
+                        </view>
+                        <switch checked="{{form.requirePhone}}" bindchange="requirePhoneChanged" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                    </view>
+                    <view class="prop" style="justify-content: space-between;">
+                        <view class="name" style="width: unset">
+                            连接后弹出广告图
+                            <view style="font-size: 22rpx;color: #aaa;">支持图里带小程序码长按跳转</view>
+                        </view>
+                        <view wx:if="{{!form.adImage}}" class="value" style="color: #36ca58;font-weight: bold;text-align: right;" bindtap="uploadAdImage">选择图片</view>
+                        <image wx:if="{{form.adImage}}" src="{{form.adImage+'@avatar'}}" style="height: 80rpx;width: 80rpx;border-radius: 4rpx;" mode="aspectFill" bindtap="modifyAdImage"></image>
+                    </view>
+                    <view class="prop" style="justify-content: space-between;" wx:if="{{user.super}}">
+                        <view class="name" style="width: unset">
+                            连接后视频广告
+                            <view style="font-size: 22rpx;color: #aaa;">15秒内微信官方渠道广告</view>
+                        </view>
+                        <switch checked="{{form.showVideo}}" bindchange="showVideoChanged" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                    </view>
+                    <view class="prop" style="justify-content: space-between;" wx:if="{{user.super}}">
+                        <view class="name" style="width: unset">
+                            连接前视频广告
+                            <view style="font-size: 22rpx;color: #aaa;">15秒内微信官方渠道广告</view>
+                        </view>
+                        <switch checked="{{form.forceVideo}}" bindchange="forceVideoChanged" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                    </view>
+                    <view class="prop" style="justify-content: space-between;" wx:if="{{user.super}}">
+                        <view class="name" style="width: unset">
+                            连接后插屏广告
+                            <view style="font-size: 22rpx;color: #aaa;">进入页面第20秒时展示</view>
+                        </view>
+                        <switch checked="{{form.showChaping}}" bindchange="showChapingChanged" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                    </view>
+                    <view class="prop" style="justify-content: space-between;" wx:if="{{user.super}}">
+                        <view class="name" style="width: unset">
+                            连接后渠道推广
+                            <view style="font-size: 22rpx;color: #aaa;">探店大师首页</view>
+                        </view>
+                        <switch checked="{{form.channelMode}}" bindchange="channelModeChanged" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                    </view>
+                </block>
+                <button wx:if="{{user.authed}}" class="connect" style="width:300rpx;" bindtap="save">完成</button>
+                <button wx:if="{{!user.authed}}" class="connect" style="width:300rpx;" open-type="getUserInfo" bindgetuserinfo="authThenSave">完成</button>
+            </block>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{phoneModal}}" bindtap="hidePhoneModal">
+    <view class="card" style="width:560rpx;min-height:600rpx;" catchtap="doNothing">
+        <view class="card-head" style="background-color: #08be31;padding: 30rpx;">
+            <view>
+                <image src="/res/images/info-6.png" style="width:100rpx;height: 100rpx;margin-top: 16rpx;"></image>
+            </view>
+        </view>
+        <view style="background-color: white;padding: 40rpx 20rpx;border-bottom-left-radius: 12rpx;border-bottom-right-radius: 12rpx;">
+            <view style="padding: 0 30rpx;text-align: left;font-size: 28rpx;color:#333;">您的账号还没有绑定手机号码，绑定后可获得更周到的服务与安全保障。</view>
+            <button class="primary" style="width:280rpx;background-color: #08be31;color: white;border-radius: 60rpx;margin-top: 40rpx;font-size: 32rpx;" open-type="getPhoneNumber" bindgetphonenumber="setPhoneThenSave">一键绑定</button>
+            <button class="primary" style="width:280rpx;background-color: #08be31;color: #aaa;border-radius: 60rpx;margin-top: 20rpx;font-size: 32rpx;background-color: #fff;" bindtap="save" data-force="{{true}}">暂不绑定</button>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{passwordModal}}" bindtap="hidePasswordModal">
+    <view class="card" style="width:560rpx;min-height:600rpx;" catchtap="doNothing">
+        <view class="card-head" style="background-color: #08be31;padding: 30rpx;">
+            <view>
+                <image src="/res/images/info-6.png" style="width:100rpx;height: 100rpx;margin-top: 16rpx;"></image>
+                <view style="padding: 0 30rpx;text-align: left;font-size: 28rpx;color:#fff;">请使用密码手动连接</view>
+            </view>
+        </view>
+        <view style="background-color: white;padding: 40rpx 20rpx;padding-bottom: 80rpx;border-bottom-left-radius: 12rpx;border-bottom-right-radius: 12rpx;text-align: center;">
+            <view style="font-size: 22rpx;color: #aaa;">Wifi名称</view>
+            <view style="font-size: 60rpx;line-height: 70rpx;">{{qrcode.wifi.SSID}}</view>
+            <view style="font-size: 22rpx;color: #aaa;margin-top: 20rpx;">密码</view>
+            <view style="font-size: 60rpx;line-height: 70rpx;">{{qrcode.wifi.password}}</view>
+        </view>
+    </view>
+</view>
+
+<view class="adImage" wx:if="{{qrcode.adImage && previewing}}">
+    <image src="{{qrcode.adImage+'@avatar'}}" style="width:200rpx;height: 200rpx;border-radius: 8rpx;" mode="aspectFill" bindtap="toPreview"></image>
+</view>
+
+<view class="mask-dark" wx:if="{{channelModal}}" bindtap="hideChannelModal">
+    <view class="card" style="width:560rpx;min-height:600rpx;" catchtap="doNothing">
+        <image src="{{channel.image}}" style="width:560rpx;height:700rpx;display: block;border-top-right-radius: 12rpx;border-top-left-radius: 12rpx" mode="aspectFill"></image>
+        <view style="background-color: white;padding: 40rpx 20rpx;border-bottom-left-radius: 12rpx;border-bottom-right-radius: 12rpx;">
+            <button class="primary" style="width:280rpx;background-color: #08be31;color: white;border-radius: 60rpx;font-size: 32rpx;" open-type="contact">回复 <text style="font-weight: bold;">1</text> 查看</button>
+        </view>
+    </view>
+</view>

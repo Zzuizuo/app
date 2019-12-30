@@ -1,0 +1,23 @@
+<view>
+    <view class="btnbox">
+        <view class="btn" bindtap="handleCancle">取消</view>
+        <view class="btn" bindtap="handleConfirm">确认</view>
+    </view>
+    <picker-view indicator-style="height: 50px;" style="width: 100%; height: 480rpx;" value="{{value}}" bindchange="bindChange">
+        <picker-view-column>
+            <view wx:for="{{years}}" wx:key="index" class="selected">{{item}}年</view>
+        </picker-view-column>
+        <picker-view-column>
+            <view wx:for="{{months}}" wx:key="index" class="selected">{{item}}月</view>
+        </picker-view-column>
+        <picker-view-column>
+            <view wx:for="{{days}}" wx:key="index" class="selected">{{item}}日</view>
+        </picker-view-column>
+        <picker-view-column>
+            <view wx:for="{{hours}}" wx:key="index" class="selected">{{item}}时</view>
+        </picker-view-column>
+        <picker-view-column>
+            <view wx:for="{{minutes}}" wx:key="index" class="selected">{{item}}分</view>
+        </picker-view-column>
+    </picker-view>
+</view>

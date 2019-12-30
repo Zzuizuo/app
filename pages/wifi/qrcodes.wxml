@@ -1,0 +1,52 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view class="head">
+    <view class="search-bg">
+        <input style="padding: 0 40rpx;width:400rpx;" placeholder="输入关键字搜索" bindinput="keywordsChanged" bindconfirm="doSearch" bindfocus="startSearch" bindblur="endSearch"></input>
+        <view style="text-align: right;font-weight: bold;color: #42a766" bindtap="doSearch">搜索</view>
+    </view>
+</view>
+<view class="items">
+    <view class="item" wx:for="{{qrcodes}}" wx:key="index" bindtap="toShop" data-item="{{item}}">
+        <view>
+            <view style="display: flex;align-items: center;">
+                <view style="color: #ea8844;max-width: 200rpx;" class="nowrap">{{item.name || '未激活'}}</view>
+            </view>
+            <view style="color: #42a766;line-height: 62rpx;display: flex; align-items: center;">
+                <view style="font-size: 22rpx;width:220rpx;" class="nowrap">{{item.address||'扫码绑定WiFi来激活'}}</view>
+                <!-- <view class="locked" wx:if="{{item.locked}}">已锁定</view> -->
+            </view>
+        </view>
+        <view class="datas">
+            <view class="data" style="width:140rpx;">
+                <view class="name">今日连接</view>
+                <view class="value">{{item.data.connectToday||0}}</view>
+            </view>
+            <!-- <view class="data" style="width:140rpx;">
+                <view class="name">创建时间</view>
+                <view class="value" style="font-size: 22rpx;line-height: 64rpx;">{{item.createTimeStr}}</view>
+            </view> -->
+            <view class="data" style="width:140rpx;">
+                <view class="name">总计连接</view>
+                <view class="value">{{item.data.connect||0}}</view>
+            </view>
+            <view class="data" style="width:140rpx;" catchtap="showChannel" data-item="{{item}}">
+                <view class="name">渠道</view>
+                <view class="value" style="display: flex;justify-content: center;align-items: center;">
+                    <image class="icon" src="{{item.channel?item.channel.headimgurl:'http://cdn.classx.cn/tandian/logo1.png'}}" style="width:40rpx;height: 40rpx;border-radius: 40rpx;display: block;margin-top: 12rpx;"></image>
+                </view>
+                <!-- <view class="value" style="font-size: 22rpx;line-height: 64rpx;">{{item.lastConnectTimeStr||'-'}}</view> -->
+            </view>
+        </view>
+
+    </view>
+    <view>
+        <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+        <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+        <view wx:if="{{nomore && qrcodes.length >0 }}" class="bottomloader">已全部加载</view>
+    </view>
+    <view wx:if="{{nomore && qrcodes.length ==0}}" class="nodata">
+        <view style="margin-top: 100rpx;">暂无数据</view>
+    </view>
+</view>

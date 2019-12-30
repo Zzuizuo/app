@@ -1,0 +1,240 @@
+.page {
+  color: #242627;
+  background: #fafafa;
+  padding-bottom: 40rpx;
+  min-height: 100vh;
+  position: relative;
+}
+.topbg {
+  position: absolute;
+  top: -20rpx;
+  left: 0;
+  width: 100vw;
+  height: 480rpx;
+  transform-origin: 0% 100%;
+}
+.pagetop {
+  width: 690rpx;
+  padding: 30rpx;
+  box-sizing: border-box;
+  border-radius: 20rpx;
+  background: #fff;
+  margin: 20rpx auto 0 auto;
+  line-height: 1;
+  position: relative;
+}
+.pagetop .swiperbox {
+  width: 630rpx;
+  height: 354rpx;
+  border-radius: 6rpx;
+  position: relative;
+}
+.pagetop .swiperbox swiper {
+  width: 630rpx;
+  height: 354rpx;
+}
+.pagetop .swiperbox .swiperimg {
+  width: 100%;
+  height: 100%;
+  border-radius: 6rpx;
+}
+.pagetop .title {
+  font-size: 40rpx;
+  line-height: 1.4;
+  font-weight: bold;
+  max-width: 480rpx;
+}
+.pagetop .text1 {
+  font-size: 24rpx;
+}
+.pagetop .tagsbox {
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pagetop .tagsbox .tagitem {
+  display: flex;
+  align-items: center;
+  height: 40rpx;
+  line-height: 40rpx;
+  padding: 0 10rpx;
+  box-sizing: border-box;
+  font-size: 24rpx;
+  border-radius: 2rpx;
+}
+.pagetop .licensebox {
+  height: 36rpx;
+  border: 2rpx solid #e8cb93;
+  padding: 0 8rpx;
+  border-radius: 18rpx;
+  font-size: 20rpx;
+  margin-left: 20rpx;
+}
+.pagetop .licensebox image {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 10rpx;
+}
+.navbox {
+  z-index: 1000;
+  padding: 30rpx 60rpx;
+  background: #fafafa;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-top: 20rpx;
+}
+.navbox .navitem {
+  margin-right: 60rpx;
+}
+.navbox .activeitem {
+  color: #FE9E00;
+  line-height: 1;
+  position: relative;
+}
+.navbox .activeitem::after {
+  content: '';
+  position: absolute;
+  bottom: -20rpx;
+  left: 10rpx;
+  right: 10rpx;
+  height: 6rpx;
+  background: #FE9E00;
+  border-radius: 3rpx;
+}
+.masklist {
+  line-height: 1;
+}
+.masklist .itemtitle {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 40rpx;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+}
+.masklist .maskitem {
+  padding: 30rpx 30rpx 50rpx 30rpx;
+  position: relative;
+}
+.masklist .maskitem .panelicon {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 100%;
+  background: #ffdb09;
+}
+.masklist .maskitem .panelicon image {
+  width: 24rpx;
+  height: 24rpx;
+}
+.masklist .maskitem::after {
+  content: '';
+  width: 690rpx;
+  position: absolute;
+  left: 30rpx;
+  bottom: 0;
+  border-bottom: 2rpx solid #fafafa;
+}
+.masklist .maskitem:nth-last-child(1)::after,
+.masklist .maskitem:nth-child(2)::after {
+  content: '';
+  width: 690rpx;
+  position: absolute;
+  left: 30rpx;
+  bottom: 0;
+  border-bottom: 0;
+}
+.panelbox {
+  width: 690rpx;
+  padding: 30rpx 30rpx;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 20rpx;
+  margin: 0 auto;
+}
+.panelbox .title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 30rpx;
+  line-height: 1;
+}
+.panelbox .richtext {
+  width: 630rpx;
+  overflow: hidden;
+}
+.panelbox .shopImage {
+  width: 630rpx;
+}
+.panelbox .tag {
+  width: 44rpx;
+  height: 44rpx;
+  color: #fff;
+  font-size: 26rpx;
+  margin-right: 20rpx;
+  border-radius: 4rpx;
+  padding: 0;
+}
+.panelbox .panelbtn {
+  width: 140rpx;
+  height: 60rpx;
+  background: #FF4925;
+  color: #fff;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  line-height: 1;
+}
+.panelbox .tagtitle {
+  font-size: 32rpx;
+  font-weight: 500;
+}
+.panelbox .text1 {
+  color: #999;
+  font-size: 24rpx;
+  line-height: 1;
+  margin-top: 20rpx;
+}
+.maskBtn {
+  width: 420rpx;
+  height: 80rpx;
+  text-align: center;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  background: #ffdb09;
+}
+.progressline {
+  width: 260rpx;
+  height: 12rpx;
+  background: #FFEAE5;
+  border-radius: 6rpx;
+}
+.activeline {
+  height: 12rpx;
+  background: #FF4925;
+  border-radius: 6rpx;
+}
+.jianbox {
+  padding: 0 10rpx;
+  height: 30rpx;
+  background: #fff1eb;
+  color: #FF6D26;
+  font-size: 20rpx;
+  margin-left: 20rpx;
+  position: relative;
+}
+.jianbox::after {
+  content: '';
+  position: absolute;
+  left: -16rpx;
+  top: 50%;
+  transform: translate(0, -50%) rotate(90deg);
+  width: 0;
+  height: 0;
+  border: 10rpx solid transparent;
+  border-top-color: #fff1eb;
+}
+.splitline {
+  width: 690rpx;
+  height: 20rpx;
+  margin: 0 auto;
+  background: #fafafa;
+}

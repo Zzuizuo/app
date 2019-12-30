@@ -1,0 +1,9 @@
+{
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#d1503b",
+    "backgroundColor": "#d1503b",
+    "backgroundTextStyle": "light",
+    "usingComponents": {
+        "mask": "/pages/component/mask"
+    }
+}

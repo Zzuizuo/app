@@ -1,0 +1,321 @@
+.page {
+    color: #242627;
+    min-height: 100vh;
+}
+
+.boxpadding {
+    padding: 0 30rpx;
+    box-sizing: border-box;
+}
+
+.sticky {
+    position: sticky;
+    width: 100vw;
+    top: 0;
+    right: 0;
+    background: #fff;
+    z-index: 1001;
+    padding-bottom: 10px;
+}
+
+.navtab {
+    display: flex;
+    align-items: center;
+    color: #999;
+    font-weight: 600;
+    font-size: 36rpx;
+
+    .navitem {
+        margin-right: 40rpx;
+    }
+
+    .activetab {
+        font-size: 48rpx;
+        font-weight: bold;
+        color: #242627;
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -8rpx;
+            height: 8rpx;
+            border-radius: 4rpx;
+            background: #242627;
+        }
+    }
+}
+
+.seletebox {
+    width: 100vw;
+    margin-top: 14px;
+
+    .boxleft {
+        color: #999;
+        font-size: 28rpx;
+        font-weight: 500;
+
+        .activebar {
+            font-size: 32rpx;
+            color: #242627;
+            font-weight: bold;
+        }
+    }
+
+    .boxright {
+        .boxitem {
+            padding: 0 38rpx 0 20rpx;
+            box-sizing: border-box;
+            height: 25px;
+            line-height: 25px;
+            background: #f8f8f8;
+            color: #666;
+            font-size: 24rpx;
+            position: relative;
+            margin-left: 20rpx;
+            border-radius: 6rpx;
+
+            &::after {
+                content: '';
+                position: absolute;
+                right: 20rpx;
+                bottom: 10rpx;
+                width: 0;
+                height: 0;
+                border-color: #999 transparent;
+                border-width: 0 0 8rpx 8rpx;
+                border-style: solid;
+            }
+        }
+    }
+
+    .searchBox {
+        width: 500rpx;
+        border: 1rpx solid #f0f0f0;
+        border-radius: 25rpx;
+        height: 25px;
+        font-size: 24rpx;
+        position: relative;
+    }
+}
+
+.listbox {
+    background: #fafafa;
+
+    .listitem {
+        width: 100vw;
+        padding: 40rpx 30rpx;
+        background: #fff;
+        min-height: 240rpx;
+        box-sizing: border-box;
+        margin-bottom: 30rpx;
+        color: #242627;
+        position: relative;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .listboxitem {
+        width: 100vw;
+        padding: 0 30rpx;
+        box-sizing: border-box;
+    }
+}
+
+.adbox {
+    width: 100vw;
+    height: 375rpx;
+    margin-top: 10rpx;
+
+    .bannerimg {
+        width: 100%;
+        height: 375rpx;
+    }
+}
+
+.icon-search {
+    color: #999;
+    margin-left: 20rpx;
+}
+
+.icon-wrong {
+    position: absolute;
+    color: #999;
+    top: 50%;
+    right: 20rpx;
+    transform: translate(0, -50%);
+}
+
+
+.introcell {
+    font-size: 20rpx;
+    color: #242627;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    image {
+        width: 60rpx;
+        height: 60rpx;
+        margin-bottom: 20rpx;
+    }
+
+    .introtext {
+        font-size: 20rpx;
+        color: #999;
+        text-align: center;
+        position: absolute;
+        top: 120rpx;
+        left: 50%;
+        transform: translate(-50%, 0);
+        line-height: 1.4;
+    }
+}
+
+.funintro {
+    display: flex;
+    margin-top: 90rpx;
+}
+
+.nextimg {
+    width: 28rpx;
+    height: 28rpx;
+}
+
+.maskbtn {
+    width: 420rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 32rpx;
+    color: #242627;
+    background: #FFDB09;
+    border-radius: 40rpx;
+    margin: 0 auto;
+}
+
+
+.blankbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100rpx;
+
+    image {
+        width: 420rpx;
+        height: 244rpx;
+    }
+}
+
+
+.newsbox {
+    width: 288rpx;
+    height: 60rpx;
+    background: #FF4925;
+    position: fixed;
+    right: 30rpx;
+    bottom: 12rpx;
+    border-radius: 10rpx;
+
+    &::after {
+        content: '';
+        width: 0;
+        height: 0;
+        border: 10rpx solid transparent;
+        border-top-color: #FF4925;
+        position: absolute;
+        right: 82rpx;
+        bottom: -18rpx;
+    }
+}
+
+.news {
+    width: 100%;
+    height: 60rpx;
+    color: #fff;
+    font-size: 24rpx;
+    line-height: 60rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.newsbox2 {
+    width: 288rpx;
+    height: 60rpx;
+    background: #333;
+    position: fixed;
+    right: 30rpx;
+    bottom: 12rpx;
+    border-radius: 10rpx;
+
+    &::after {
+        content: '';
+        width: 0;
+        height: 0;
+        border: 10rpx solid transparent;
+        border-top-color: #333;
+        position: absolute;
+        right: 82rpx;
+        bottom: -18rpx;
+    }
+
+    .news {
+        color: #fecf8f;
+    }
+}
+
+.signbox {
+    height: 100rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    position: relative;
+    background: rgba(255, 219, 9, .2);
+    line-height: 1;
+
+    .signbox_left {
+        display: flex;
+        align-items: center;
+
+        image {
+            width: 42rpx;
+            height: 36rpx;
+            margin-right: 14rpx;
+        }
+    }
+
+    .signbtn {
+        width: 140rpx;
+        height: 52rpx;
+        box-sizing: border-box;
+        text-align: center;
+        line-height: 52rpx;
+        border-radius: 26rpx;
+        font-size: 24rpx;
+        background: #ffdb09;
+        color: #242627;
+        font-weight: 500;
+    }
+}
+
+.blankbox-btn {
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    color: #242627;
+    border-radius: 40rpx;
+    background: #FFDB09;
+    box-sizing: border-box;
+    font-size: 32rpx;
+}

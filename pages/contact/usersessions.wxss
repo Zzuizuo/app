@@ -1,0 +1,68 @@
+page {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.loading {
+    background-color: white;
+}
+
+.head {
+    padding: 30rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-bottom: 1rpx solid #eee;
+    margin-bottom: 20rpx;
+}
+
+.head button {
+    background-color: #30b64f;
+    color: white;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    height: 60rpx;
+    border: unset;
+    margin: 0;
+}
+
+.head button::after {
+    display: none;
+}
+
+.dot {
+    width: 40rpx;
+    height: 40rpx;
+    background-color: #ffa64d;
+    color: white;
+    border-radius: 40rpx;
+    text-align: center;
+    line-height: 40rpx;
+}
+
+.panel {
+    margin-top: 20rpx;
+}
+
+.usersession {
+    background-color: white;
+    padding: 30rpx;
+    display: flex;
+    justify-content: space-between;
+}
+
+.userinfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 24rpx;
+}
+
+.userinfo .avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 8rpx;
+    margin-right: 20rpx;
+    display: block;
+}

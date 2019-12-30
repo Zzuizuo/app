@@ -1,0 +1,496 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+
+<view class="main" style="{{usercoupon && usercoupon.zhuan ? 'min-height: 374rpx' : 'min-height: 100vh'}}">
+    <view style="background: #fff;">
+        <image src="/res/images/coupon_bg.png" class="couponbg" mode="aspectFill" />
+        <view wx:if="{{usercoupon && usercoupon.zhuan && !usercoupon.zhuanedBy}}">
+            <view class="pagetop">
+                <image class="avatar" bindtap="toShop" src="{{shop.avatar?(shop.avatar +'@avatar'):'/res/images/logo2.png'}}" mode="aspectFill" />
+                <view bindtap="toShop" class="name nowrap" style="display: flex;align-items: center;">
+                    <view style="margin-left: 28rpx;z-index: 20;">{{shop.name}}</view>
+                    <image src="/res/images/right-7.png" style="width:28rpx;height:28rpx;display: block;z-index: 20;"></image>
+                </view>
+                <view class="nowrap" style="font-size: 24rpx;line-height: 1;margin-top: 20rpx;color: #E8CB93;z-index: 20;max-width: 480rpx">{{shop.address}}</view>
+
+                <view class="condition" style="font-size: 24rpx;line-height: 1;margin-top: 20rpx;color: #E8CB93;z-index: 20" wx:if="{{coupon.expiryTimeStr}}">
+                    <view wx:if="{{!usercoupon.expired && !usercoupon.used}}">
+                        <view wx:if="{{coupon.next && usercoupon.neednext}}">{{usercoupon.startTimeStr}}后可用</view>
+                        <view wx:else>
+                            <view wx:if="{{usercoupon.expiryTimeStr}}">{{usercoupon.expiryTimeStr}}前可用</view>
+                            <view wx:else>永久有效</view>
+                        </view>
+                    </view>
+                    <view wx:else style="color:#242627">{{usercoupon.expiryTimeStr}}前可用</view>
+                </view>
+                <view class="couponvalue" style="font-size: 48rpx;margin-top: 30rpx">{{coupon.name}}</view>
+            </view>
+            <view wx:if="{{user._id==usercoupon.user._id}}" class="zhuanbox">
+                <view class="center-all" style="margin-top: 60rpx;font-size: 32rpx;color:#242627;line-height: 1;font-weight: 500" bindtap="toCancelZhuan" bindlongpress="toCancelZhuan">
+                    <view>{{usercoupon.user.nickname}}正在 <text style="color: #FF4925">{{usercoupon.zhuan.priceStr}}</text> 转让这张券</view>
+                </view>
+                <view class="center-all column" style="height: calc(100vh - 798rpx)" bindtap="toCancelZhuan" bindlongpress="toCancelZhuan">
+                    <image src="{{usercoupon.zhuan.qrcode.url}}" style="width:215rpx;height:215rpx;"></image>
+                    <view style="font-size: 24rpx;line-height: 1;margin-top: 20rpx">长按图片 前往小程序 领取</view>
+                    <view style="color: #aaa;"> ··· </view>
+                </view>
+                <view style="position: absolute;bottom: 140rpx;left: 50%;transform: translate(-50%,0);line-height: 1;color: #E8CB93;font-size: 32rpx;z-index: 101">还有更多无门槛代金券</view>
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/canvas_bottom_gou.png" style="position: absolute;bottom: -120rpx;left: 0;width: 750rpx;height: 332rpx;z-index: 100"></image>
+            </view>
+            <view wx:else>
+                <view class="couponinfo">
+                    <view class="couponname" style="">{{coupon.name}}</view>
+                    <view class="tags">
+                        <view class="tagitem" style="margin-right: 20rpx" wx:if="{{!coupon.condition}}">无门槛</view>
+                        <view class="tagitem" style="border: 1rpx solid #FF764C;background: #FFEBE5;color:#FF764C" wx:if="{{coupon.enjoyWithOther}}">可与店内优惠同享</view>
+                        <!-- <view class="tagitem" style="border: 1rpx solid #FF4925;background: #FFECE9;color:#FF4925" wx:if="{{!order.allowRefund}}">不支持退款</view> -->
+                    </view>
+                    <view class="condition" wx:if="{{(coupon.condition != '') || (coupon.condition != null)}}">
+                        <view class="dashed" />
+                        <view wx:if="{{coupon.condition}}">满{{coupon.condition || 0}}元可用</view>
+                        <view wx:else>无门槛使用</view>
+                    </view>
+                    <view class="condition" style="margin-top: 16rpx" wx:if="{{coupon.next}}">
+                        <view class="dashed" />
+                        <view>24小时后可用</view>
+                    </view>
+                    <view class="condition" style="margin-top: 16rpx" wx:if="{{coupon.expiryTimeStr}}">
+                        <view class="dashed" />
+                        <view wx:if="{{usercoupon}}" style="color:#FF4925">
+                            <view wx:if="{{!usercoupon.expired && !usercoupon.used}}">
+                                <view wx:if="{{coupon.next && usercoupon.neednext}}">{{usercoupon.startTimeStr}}后可用</view>
+                                <view wx:else>
+                                    <view wx:if="{{usercoupon.expiryTimeStr}}">{{usercoupon.expiryTimeStr}}前可用</view>
+                                    <view wx:else>永久有效</view>
+                                </view>
+                            </view>
+                            <view wx:else style="color:#666">{{usercoupon.expiryTimeStr}}前可用</view>
+                        </view>
+                        <view wx:else style="color:#666">{{coupon.expiryTimeStr}}</view>
+                    </view>
+                    <view class="origin" wx:if="{{usercoupon.origin}}">{{usercoupon.origin}}</view>
+                </view>
+                <view class="panel" wx:if="{{coupon.rule}}">
+                    <view class="paneltitle">使用说明</view>
+                    <view class="panelcontent">
+                        <text decode style="white-space: pre-wrap;">{{coupon.rule}}</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view wx:else>
+            <view class="pagetop">
+                <image class="avatar" bindtap="toShop" src="{{shop.avatar?(shop.avatar +'@avatar'):'/res/images/logo2.png'}}" mode="aspectFill" />
+                <view bindtap="toShop" class="name nowrap" style="display: flex;align-items: center;">
+                    <view style="margin-left: 28rpx;">{{shop.name}}</view>
+                    <image src="/res/images/right-7.png" style="width:28rpx;height:28rpx;display: block;"></image>
+                </view>
+                <view wx:if="{{!coupon.type || coupon.type == 'jiangjia'}}" class="couponvalue">
+                    <text style="font-size: 72rpx;">{{coupon.valueStr}}</text>
+                    <text>元</text>
+                </view>
+                <view wx:if="{{coupon.type == 'dazhe'}}" class="couponvalue">
+                    <text style="font-size: 72rpx;">{{coupon.discountStr}}</text>
+                    <text>折</text>
+                </view>
+                <view class="couponvalue" wx:if="{{coupon.type == 'duihuan'}}" style="font-size: 48rpx;">兑换券</view>
+                <view wx:if="{{usercoupon && usercoupon.zhuan}}" class="allcenter findcoupon">
+                    <view>{{usercoupon.user._id==user._id ? '我' : usercoupon.user.nickname}}正在{{usercoupon.zhuan.priceStr}}转让这张券</view>
+                </view>
+                <view wx:else class="allcenter findcoupon" bindtap="handleShowFindcoupon">
+                    <view>如何找到这张券</view>
+                    <image src="/res/images/icon_question.png"></image>
+                </view>
+            </view>
+            <view class="couponinfo">
+                <view class="couponname">{{coupon.name}}</view>
+                <view class="couponname" wx:if="{{order && order.plan}}" style="color:#FF4925;font-size: 24rpx;margin-top: 20rpx">已付定金{{order.priceStr}}元，到店需再付{{}}元</view>
+                <view class="tags">
+                    <view class="tagitem" style="margin-right: 20rpx" wx:if="{{!coupon.condition}}">无门槛</view>
+                    <view class="tagitem" style="border: 1rpx solid #FF764C;background: #FFEBE5;color:#FF764C" wx:if="{{coupon.enjoyWithOther}}">可与店内优惠同享</view>
+                    <!-- <view class="tagitem" style="border: 1rpx solid #FF4925;background: #FFECE9;color:#FF4925" wx:if="{{!order.allowRefund}}">不支持退款</view> -->
+                </view>
+                <view class="condition" wx:if="{{(coupon.condition != '') || (coupon.condition != null)}}">
+                    <view class="dashed" />
+                    <view wx:if="{{coupon.condition}}">满{{coupon.condition || 0}}元可用</view>
+                    <view wx:else>无门槛使用</view>
+                </view>
+
+                <view class="condition" style="margin-top: 16rpx" wx:if="{{coupon.next}}">
+                    <view class="dashed" />
+                    <view>24小时后可用</view>
+                </view>
+                <view class="condition" style="margin-top: 16rpx" wx:if="{{order && order.plan}}">
+                    <view class="dashed" />
+                    <view>使用时间：{{usercoupon.startTimeStr}} -- {{usercoupon.expiryTimeStr}}</view>
+                </view>
+                <view class="condition" style="margin-top: 16rpx" wx:if="{{coupon.expiryTimeStr && !order.plan}}">
+                    <view class="dashed" />
+                    <view wx:if="{{usercoupon}}" style="color:#FF4925">
+                        <view wx:if="{{!usercoupon.expired && !usercoupon.used}}">
+                            <view wx:if="{{coupon.next && usercoupon.neednext}}">{{usercoupon.startTimeStr}}后可用</view>
+                            <view wx:else>
+                                <view wx:if="{{usercoupon.expiryTimeStr}}">{{usercoupon.expiryTimeStr}}前可用</view>
+                                <view wx:else>永久有效</view>
+                            </view>
+                        </view>
+                        <view wx:else style="color:#666">{{usercoupon.expiryTimeStr}}前可用</view>
+                    </view>
+                    <view wx:else style="color:#666">{{coupon.expiryTimeStr}}</view>
+                </view>
+                <view class="origin center-vertical" wx:if="{{usercoupon.origin}}">
+                    <view>{{usercoupon.origin}} </view>
+                    <view class="showbtn center-all" wx:if="{{usercoupon.origin == '通过霸王餐抽奖获得'}}" bindtap="onShowShareModal">炫耀一下</view>
+                </view>
+            </view>
+            <!-- <view class="panel" wx:if="{{coupon.rule}}">
+                <view class="paneltitle">使用说明</view>
+                <view class="panelcontent">
+                    <text decode style="white-space: pre-wrap;">{{coupon.rule}}</text>
+                </view>
+            </view> -->
+
+            <view class="panel">
+                <view class="paneltitle">卡券使用条件</view>
+                <view class="ruleitem" style="margin-top: 50rpx">
+                    <view class="rulecircle"></view>
+                    <view wx:if="{{coupon.expiryType=='day' && coupon.expiryDay==7}}">领取后7天内有效</view>
+                    <view wx:if="{{coupon.expiryType=='never' || !coupon.expiryType}}">永久有效</view>
+                    <view wx:if="{{coupon.expiryType=='time'}}">{{coupon.expiryTimeStr}}到期</view>
+                    <view wx:if="{{coupon.expiryType=='day' && coupon.expiryDay!=7}}">领取后{{coupon.expiryDay}}天内有效</view>
+                </view>
+                <view class="ruleitem" wx:if="{{(coupon.dayLimit == 'custom' && coupon.dayLimitCustom) || coupon.dayLimit != 'custom'}}">
+                    <view class="rulecircle"></view>
+                    <view>{{coupon.dayLimit == 'custom' ? coupon.dayLimitCustom : '节假日通用'}}</view>
+                </view>
+                <view class="ruleitem" wx:if="{{(coupon.timeLimit == 'custom' && coupon.timeLimitCustom) || coupon.timeLimit != 'custom'}}">
+                    <view class="rulecircle"></view>
+                    <view>{{coupon.timeLimit == 'custom' ? coupon.timeLimitCustom : '全天可用'}}</view>
+                </view>
+                <view class="ruleitem" wx:if="{{(coupon.scope == 'custom' && coupon.scopeCustom) || coupon.scope != 'custom'}}">
+                    <view class="rulecircle"></view>
+                    <view wx:if="{{coupon.scope == 'custom'}}">{{coupon.scopeCustom}}</view>
+                    <view wx:if="{{coupon.scope == 'all' || !coupon.scope}}">全场通用</view>
+                    <view wx:if="{{coupon.scope == 'cai'}}">仅限菜品与堂食</view>
+                </view>
+                <view class="ruleitem" wx:if="{{(coupon.appointment == 'custom' && coupon.appointmentCustom) || coupon.appointment != 'custom'}}">
+                    <view class="rulecircle"></view>
+                    <view>{{coupon.appointment == 'custom' ? coupon.appointmentCustom : '无需预约，消费高峰期可能需要等位'}}</view>
+                </view>
+                <view class="ruleitem" wx:if="{{coupon.type != 'duihuan' && ((coupon.person == 'custom' && coupon.personCustom) || coupon.person != 'custom')}}">
+                    <view class="rulecircle"></view>
+                    <view>{{coupon.person == 'custom' ? coupon.personCustom : '2人及以上可用'}}</view>
+                </view>
+                <view class="ruleitem" wx:if="{{coupon.rule}}">
+                    <view class="rulecircle"></view>
+                    <text wx:if="{{coupon.rule}}" decode style="white-space:pre-wrap;color: #242627;flex: 1;line-height: 1.6">{{coupon.rule}}</text>
+                </view>
+            </view>
+            <view class="panel" wx:if="{{coupon.type == 'duihuan' && coupon.includes.length}}">
+                <view class="paneltitle">兑换内容</view>
+                <view class="panelcontent">
+                    <view wx:for="{{coupon.includes}}" wx:key="index" class="ruleitem">
+                        <view class="rulecircle"></view>
+                        <view style="flex: 1">
+                            <view wx:if="{{item.title}}" style="font-weight: bold;font-size: 28rpx;margin-bottom: 30rpx;">{{item.title}}</view>
+                            <view wx:for="{{item.cais}}" wx:for-item="cell" class="justify-SB center-vertical" style="flex: 1;margin-bottom: 30rpx;line-height: 1">
+                                <view style="font-size: 28rpx;color: #242627">{{cell.name}} <text style="font-size: 24rpx;color: #999">({{cell.amount}}份)</text></view>
+                                <view wx:if="{{cell.price}}">￥<text style="font-weight: bold">{{cell.price}}</text></view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="panel" wx:if="{{usercoupon.order && usercoupon.user._id==user._id}}">
+                <view class="paneltitle">订单信息</view>
+                <view class="panelcontent">
+                    <view class="panelcell">
+                        <view class="celltitle">订单编号：</view>
+                        <view class="cellvalue">{{order.code}}</view>
+                    </view>
+                    <view class="panelcell">
+                        <view class="celltitle">下单时间：</view>
+                        <view class="cellvalue">{{usercoupon.createTimeStr}}</view>
+                    </view>
+                    <view class="panelcell">
+                        <view class="celltitle">支付金额：</view>
+                        <view class="cellvalue" style="color: #FF4925;font-weight: 500">{{order.priceStr}}元</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="bottombtnbox">
+    <view wx:if="{{usercoupon}}">
+        <view class="twobtn" wx:if="{{usercoupon.used}}">
+            <view class="refundbtn" bindtap="toComment" wx:if="{{!usercoupon.comment}}">写点评</view>
+            <view class="refundbtn" bindtap="toComment" wx:if="{{usercoupon.comment}}">查看点评</view>
+            <form bindsubmit="saveToken" report-submit>
+                <button class="simple" formType="submit">
+                    <view class="usecouponbtn" style="background: #f0f0f0;color:#666;width: 440rpx">已于 {{usercoupon.useTimeStr}} 使用</view>
+                </button>
+            </form>
+        </view>
+        <view wx:else>
+            <view wx:if="{{usercoupon.expired}}" class="onebtn" style="background: #f0f0f0;color:#666">券已于 {{usercoupon.expiryTimeStr}} 过期</view>
+            <view wx:else>
+                <view wx:if="{{usercoupon.refund}}" class="onebtn" style="background: #f0f0f0;color:#666">订单已退款，该券已不可用</view>
+                <view wx:else>
+                    <view wx:if="{{usercoupon.zhuaned}}" class="onebtn" style="background: #f0f0f0;color:#666">该券已转让</view>
+                    <view wx:else>
+                        <view wx:if="{{usercoupon.zhuan}}">
+                            <!-- <view wx:if="{{user._id==usercoupon.user._id}}" class="zhuanbox">
+                                <view class="center-all" style="margin-top: 60rpx;font-size: 32rpx;color:#242627;line-height: 1;font-weight: 500">
+                                    <view>{{usercoupon.user.nickname}}正在 <text style="color: #FF4925">{{usercoupon.zhuan.priceStr}}</text> 转让这张券</view>
+                                </view>
+                                <view class="center-all column" style="height: calc(100vh - 798rpx)" bindtap="toCancelZhuan" bindlongpress="toCancelZhuan">
+                                    <image src="{{usercoupon.zhuan.qrcode.url}}" style="width:215rpx;height:215rpx;"></image>
+                                    <view style="font-size: 24rpx;line-height: 1;margin-top: 20rpx">长按图片 前往小程序 领取</view>
+                                    <view style="color: #aaa;"> ··· </view>
+                                </view>
+                                <image src="http://cdn.classx.cn/tandian/userapp/res/images/canvas_bottom_gou.png" style="position: absolute;bottom: 0;left: 0;width: 750rpx;height: 332rpx"></image>
+                            </view> -->
+                            <view wx:if="{{user._id != usercoupon.user._id}}">
+                                <form bindsubmit="saveToken" report-submit wx:if="{{user.authed}}">
+                                    <button class="simple" formType="submit">
+                                        <view class="onebtn" bindtap="toBuy" wx:if="{{!limited}}">领取</view>
+                                        <view class="onebtn" wx:else style="background: #f0f0f0;color:#666">该优惠只能享受一次</view>
+                                    </button>
+                                </form>
+                                <button wx:else class="simple" open-type="getUserInfo" bindgetuserinfo="authThenToBuy">
+                                    <view class="onebtn">领取</view>
+                                </button>
+                            </view>
+                        </view>
+                        <view wx:else>
+                            <view wx:if="{{user._id==usercoupon.user._id}}">
+                                <view class="twobtn" wx:if="{{order && order.allowRefund}}">
+                                    <view class="center-all column iconbtn" bindtap="openLocation">
+                                        <image src="/res/images/buttonicon_address.png" style="width: 30rpx;height: 36rpx" />
+                                        <view style="font-size: 20rpx;margin-top: 10rpx;line-height: 1">地址</view>
+                                    </view>
+                                    <view class="center-all column iconbtn" bindtap="callShop">
+                                        <image src="/res/images/buttonicon_phone.png" style="width: 36rpx;height: 36rpx" />
+                                        <view style="font-size: 20rpx;margin-top: 10rpx;line-height: 1">电话</view>
+                                    </view>
+                                    <view class="refundbtn" bindtap="toRefund">退款</view>
+                                    <form bindsubmit="saveToken" report-submit>
+                                        <button class="simple" formType="submit">
+                                            <view class="usecouponbtn" bindtap="toUse">使用</view>
+                                        </button>
+                                    </form>
+                                </view>
+                                <view wx:else>
+                                    <view class="twobtn" wx:if="{{!usercoupon.fromzhuan}}">
+                                        <view class="center-all column iconbtn" bindtap="openLocation">
+                                            <image src="/res/images/buttonicon_address.png" style="width: 30rpx;height: 36rpx" />
+                                            <view style="font-size: 20rpx;margin-top: 10rpx;line-height: 1">地址</view>
+                                        </view>
+                                        <view class="center-all column iconbtn" bindtap="callShop">
+                                            <image src="/res/images/buttonicon_phone.png" style="width: 36rpx;height: 36rpx" />
+                                            <view style="font-size: 20rpx;margin-top: 10rpx;line-height: 1">电话</view>
+                                        </view>
+                                        <view class="refundbtn" bindtap="toZhuanrang">转让</view>
+                                        <form bindsubmit="saveToken" report-submit>
+                                            <button class="simple" formType="submit">
+                                                <view class="usecouponbtn" bindtap="toUse">使用</view>
+                                            </button>
+                                        </form>
+                                    </view>
+                                    <view wx:else class="twobtn">
+                                        <view class="center-all column iconbtn" bindtap="openLocation">
+                                            <image src="/res/images/buttonicon_address.png" style="width: 30rpx;height: 36rpx" />
+                                            <view style="font-size: 20rpx;margin-top: 10rpx;line-height: 1">地址</view>
+                                        </view>
+                                        <view class="center-all column iconbtn" bindtap="callShop">
+                                            <image src="/res/images/buttonicon_phone.png" style="width: 36rpx;height: 36rpx" />
+                                            <view style="font-size: 20rpx;margin-top: 10rpx;line-height: 1">电话</view>
+                                        </view>
+                                        <form bindsubmit="saveToken" report-submit>
+                                            <button class="simple" formType="submit">
+                                                <view class="onebtn" style="width: 440rpx" bindtap="toUse">使用</view>
+                                            </button>
+                                        </form>
+                                    </view>
+                                </view>
+                            </view>
+                            <view wx:else class="onebtn" style="background: #f0f0f0;color:#666">
+                                {{usercoupon.user.nickname}}的券
+                            </view>
+                        </view>
+                    </view>
+                    <!-- <form wx:else bindsubmit="saveToken" report-submit>
+						<button class="simple" formType="submit">
+							<view class="onebtn" bindtap="toUse">使用</view>
+						</button>
+					</form> -->
+                </view>
+            </view>
+        </view>
+    </view>
+    <view wx:else>
+        <view wx:if="{{!coupon.online}}" class="onebtn" style="background: #f0f0f0;color:#666">该券暂未发放</view>
+        <view wx:else>
+            <view wx:if="{{!coupon.onlineget}}" class="onebtn" style="background: #f0f0f0;color:#666">不支持直接领取</view>
+            <view wx:else>
+                <form bindsubmit="saveToken" report-submit>
+                    <button class="normal" formType="submit">
+                        <view class="onebtn" bindtap="getCoupon">立即领取</view>
+                    </button>
+                </form>
+            </view>
+        </view>
+    </view>
+</view>
+
+<!-- <view wx:if="{{usercoupon && usercoupon.zhuan && !usercoupon.zhuaned && usercoupon.user._id==user._id}}" style="height:370rpx;"></view> -->
+
+<!-- <view wx:if="{{order && !order.refund && usercoupon && !usercoupon.used}}">
+	你支付了{{order.priceStr}}元购买此券
+	<button bindtap="toRefund" wx:if="{{order.allowRefund}}">退款</button>
+	<view wx:else>该订单不可退款</view>
+</view> -->
+
+<view class="mask-dark" wx:if="{{qrcodeModal}}" bindtap="hideQrcodeModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;height: 808rpx;text-align: center;position: relative;padding-top: 220rpx;box-sizing: border-box;border-radius: 10rpx">
+            <view style="font-size: 32rpx;line-height: 1;color: #E8CB93;position: absolute;z-index: 1;text-align:center;width: 590rpx;top: 60rpx">向商家出示二维码，扫码后核销成功</view>
+            <view style="font-size: 24rpx;line-height: 1;color: #E8CB93;position: absolute;z-index: 1;text-align:center;width: 590rpx;top: 126rpx" wx:if="{{usercoupon.expiryTimeStr}}">{{usercoupon.expiryTimeStr}}前可用</view>
+            <image src="/res/images/coupon_bg.png" class="couponbg" style="width: 590rpx;height: 220rpx;z-index: 0;border-radius: 10rpx" />
+            <image wx:if="{{!usercoupon.qrcode}}" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;margin: 140rpx 0" />
+            <image wx:else src="{{usercoupon.qrcode}}" style="width:240rpx;height:240rpx;margin: 70rpx 0" />
+            <view class="mask-btn" bindtap="hideQrcodeModal" style="background: #D24D39;color: #fff;margin: 0 auto">已完成核销</view>
+            <view class="center-all" style="line-height: 1;color: #999;font-size: 24rpx;margin-top: 30rpx" bindtap="handleShowQuestion">
+                <view>核销遇到问题</view>
+                <view class="iconfont icon-wenhao" style="font-size: 28rpx;margin-left: 10rpx"></view> 
+            </view>
+        </view>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{questionModal}}" bindtap="hideQuestionModal" catchtouchmove='ture'>
+    <view catchtap="doNothing">
+        <view class="maskcontent-bottom">
+            <view class="content-cell center-vertical justify-SB" style="height: 140rpx">
+                <view class="maskcellleft">
+                    <view class="maskcelllefttitle">商家不予核销</view>
+                </view>
+                <view class="maskcellbtn" bindtap="handleShowContact">投诉商家</view>
+            </view>
+            <view class="maskline center-all" style="height: 1rpx"></view>
+            <view class="content-cell center-vertical justify-SB" style="height: 140rpx">
+                <view class="maskcellleft">
+                    <view class="maskcelllefttitle">商家无法识别二维码</view>
+                </view>
+                <view class="maskcellbtn" bindtap="handleShowContact" >联系客服</view>
+            </view>
+            <view class="maskline center-all" style="height: 20rpx;width: 100vw"></view>
+            <view class="content-cell center-all" style="height: 120rpx" bindtap="hideQuestionModal">取消</view>
+        </view>
+    </view>
+</view>
+
+<mask wx:if="{{showContactModal}}" bindtap="hideContactModal" css="min-height: 590rpx;">
+    <view slot="maskcard" class="center-vertical column">
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" data-image="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" style="width: 590rpx;height: 784rpx;margin: 0 auto 0 auto;display: block;border-radius: 10rpx" data-image="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" bindtap="handlePreviewImg" bindlongpress="handlePreviewImg"></image>
+        <view class="mask-btn" style="margin: 20rpx auto 10rpx auto" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+    </view>
+</mask>
+
+<view class="mask-dark" wx:if="{{findModal}}" bindtap="hideFindModal">
+    <view catchtap="doNothing">
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/findcoupon.png" style="width:590rpx;height: 1084rpx"></image>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{zhuanModal}}" bindtap="hideZhuanModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:544rpx;height: 679rpx;border-radius: 10rpx;text-align: center;position: relative;padding-top: 80rpx;">
+            <view style="color:#333;">转让价格</view>
+            <input type="digit" style="height: 100rpx;font-size: 80rpx;color: #FF4925" value="{{zhuanForm.priceStr}}" bindfocus="priceFocus" bindinput="priceChanged" bindblur="priceBlur"></input>
+            <view style="color:#aaa;">点击修改</view>
+            <view style="text-align: left;width:460rpx;margin: 40rpx auto 0 auto">
+                <view style="margin-top: 12rpx;">1. 开启转让后，朋友可以通过扫码领取这张券</view>
+                <view style="margin-top: 12rpx;">2. 如果设置了转让价格，则需要支付才可领取，收款将直接进入您的微信零钱包，平台收取1%交易手续费</view>
+                <view style="margin-top: 12rpx;">3. 通过转让获得的券不可再次转让</view>
+            </view>
+            <view class="maskbtn" style="margin-top:40rpx;" bindtap="zhuanConfirm">确定</view>
+        </view>
+    </view>
+</view>
+
+<!-- <view class="mask-dark" wx:if="{{paidModal}}" bindtap="doNothing">
+    <view catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="simple" formType="submit">
+                <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding: 70rpx 0;box-sizing: border-box">
+                    <view class="boxitem">
+                        <image src="/res/images/icon_paysuccess.png" style="width: 180rpx;height: 180rpx" />
+                        <view style="font-size: 48rpx;margin-top: 50rpx">支付成功</view>
+                        <view style="font-size: 24rpx;margin-top: 30rpx;color: #999">该券已加入您的券包</view>
+                        <view class="primary" style="margin-top: 40rpx;color: #FF4925" bindtap="toNewUserCoupon">立即查看</view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</view> -->
+
+
+<view class="mask-dark" wx:if="{{paidModal}}" bindtap="hidePaidModal">
+    <view catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="simple" formType="submit">
+                <view class="paidbox">
+                    <image src="/res/images/bg_paid.png" class="paidbg"></image>
+                    <view class="paidboxcontent column">
+                        <view class="paidtxt1">支付成功</view>
+                        <view class="paidtxt2">此券已加入您的券包</view>
+                        <view class="paidtxt3">{{coupon.name}}</view>
+                        <view class="paidtxt4">{{shop.name}}</view>
+                        <view class="paidtxt4" style="color: #999">{{usercoupon.expiryTimeStr ? usercoupon.expiryTimeStr + '过期' : ''}}</view>
+                        <view class="paidBtn" bindtap="toNewUserCoupon">立即查看</view>
+                        <view class="paidtips">到店出示凭证即可使用</view>
+                    </view>
+                    <view class="signbox" data-content="ss317903133" bindtap="handleCopy" bindlongpress="handleCopy" style="background: #FFF8CE;padding: 0 20rpx">
+                        <view class="signbox_left">
+                            <image src="http://cdn.classx.cn/tandian/2455e313f229ac53acc80136f32cc3f.jpg@avatar" style="border-radius: 48rpx;height: 48rpx;width:48rpx;"></image>
+                            <view>
+                                <view style="font-size: 24rpx;font-weight: bold;margin-bottom: 8rpx;">小师妹</view>
+                                <view style="font-size: 20rpx;color: #666;">加客服微信，<text style="color: #111;font-weight: bold;"></text>领福利进群，找到组织！</view>
+                            </view>
+                        </view>
+                        <view class="signbtn center-all" style="font-size: 20rpx" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{fullModal}}" bindtap="hideFullModal">
+    <view catchtap="doNothing">
+        <view class="mask-card" style="width: 590rpx;padding:70rpx 0 " catchtap="doNothing">
+            <image src="/res/images/mask_nomore.png" style="width:225rpx;height: 170rpx;display: block;margin: 0 auto 70rpx;" />
+            <view class="card-body" style="text-align:center;padding-bottom:70rpx;">
+                <view style="color:#242627;font-size: 32rpx;font-weight: bold;">手慢了，已经被抢走啦</view>
+                <view style="margin-top:30rpx;color: #aaa;" wx:if="{{usercoupon.zhuan.price>0}}">您支付的款项稍后将原路退回</view>
+            </view>
+            <view class="maskbtn" bindtap="hideFullModal">我知道了</view>
+        </view>
+    </view>
+</view>
+
+<mask class="mask-dark" wx:if="{{shareModal}}" contentType="share" shareFriend="{{false}}" tempFilePath="{{tempFilePath}}" bindcancel="hideShareModal">
+    <view slot="maskshare" class="center-all" style="height: calc(100% - 160rpx)" bindtap="hideShareModal">
+        <view class="center-all column" style="margin-top: 500rpx" wx:if="{{percent < 100}}">
+            <progress percent="{{percent}}" style="width: 400rpx" stroke-width="6" border-radius="3" activeColor="#D24D39" />
+            <view style="font-size: 24rpx;color: #fff;margin-top: 20rpx">海报生成中{{percent || 0}}%</view>
+        </view>
+        <image wx:else src="{{imgs[0]}}" class="canvasbox" style="width: 500rpx;height: 890rpx" catchtap="handlePreviewImg" data-image="{{imgs[0]}}"></image>
+        <canvas canvas-id="canvas" wx:if="{{!showImage}}" id="canvas" catchtap="handleDrawimg" class="canvasbox" style="width: 750rpx;height: 1334rpx;position:fixed;top: 200%"></canvas>
+    </view>
+</mask>

@@ -1,0 +1,25 @@
+.searchbox {
+    width: 100%;
+    height: 80rpx;
+    border-radius: 40rpx;
+    border: 2rpx solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+}
+
+.imgbox {
+    width: 30rpx;
+    height: 30rpx;
+}
+
+.imgbox image {
+    width: 30rpx;
+    height: 30rpx;
+}
+
+.inputbox {
+    flex: 1;
+    margin-left: 10rpx;
+}

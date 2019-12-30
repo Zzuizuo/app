@@ -1,0 +1,130 @@
+page {
+    background-color: white;
+    color: #333;
+}
+
+.loading {
+    height: 100vh;
+    width: 750rpx;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 1);
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
+.moniservice {
+    width: 670rpx;
+    height: 170rpx;
+    border: 1rpx solid #ccc;
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 10rpx;
+    padding-bottom: 0;
+}
+
+.actionbtn {
+    border: 1rpx solid #4bbc37;
+    color: #4bbc37;
+    border-radius: 8rpx;
+    line-height: 58rpx;
+    height: 58rpx;
+    padding: 0 40rpx;
+    margin-right: 10rpx;
+}
+
+.wxservice {
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+    max-width: 690rpx;
+}
+
+.main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.connect {
+    background-color: #333;
+    width: 200rpx;
+    color: white;
+    font-size: 28rpx;
+    margin-top: 60rpx;
+    margin-bottom: 60rpx;
+}
+
+.init {
+    text-align: center;
+    font-size: 36rpx;
+    padding: 60rpx;
+    background-color: white;
+}
+
+.adminButton {
+    position: fixed;
+    bottom: 30rpx;
+    background-color: #444;
+    border: 1rpx solid #222;
+    color: white;
+    width: 200rpx;
+    left: 265rpx;
+    text-align: center;
+    padding: 10rpx;
+    border-radius: 32rpx;
+}
+
+.toBuy {
+    position: fixed;
+    bottom: 30rpx;
+    color: #aaa;
+    width: 400rpx;
+    text-align: center;
+    padding: 10rpx;
+    border-radius: 32rpx;
+    margin: 0 auto;
+}
+
+.prop {
+    display: flex;
+    width: 500rpx;
+    border-bottom: 1rpx solid #f1f1f1;
+    padding: 16rpx 8rpx;
+    margin: 0 auto;
+    align-items: center;
+    text-align: left;
+}
+
+.prop .name {
+    font-size: 28rpx;
+    width: 150rpx;
+}
+
+.prop .value {
+    font-size: 28rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+}
+
+button.primary::after {
+    display: none;
+}
+
+.adImage {
+    position: absolute;
+    top: 40rpx;
+    width: 750rpx;
+    text-align: center;
+}
+
+.adImage image {
+    box-shadow: 0 0 40rpx 10rpx #eee;
+}

@@ -1,0 +1,267 @@
+ <view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+
+<view class="content">
+    <view class="pagetop">
+        <image class="pagetopbg" src="/res/images/image_fuli.png" />
+        <!-- <searchbox placeholder="请输入关键字" bindinputing="handleSearchInputChange" bindsearching="handleSearch" css="background:#FFE54C;border: 0" /> -->
+        <view class="searchBox">
+            <view class="search {{navFixed?'navFixed':''}}">
+                <view class="search-bg">
+                    <button class="simple" bindtap="toUpdateLocation">
+                        <view class="city">
+                            {{user.lastLocation?user.city:'附近'}}
+                            <!-- <image src="/res/images/location.png" style="width:30rpx;height: 30rpx;display: block;margin-left: 6rpx;"></image> -->
+                        </view>
+                    </button>
+                    <input value="{{keywords}}" style="padding: 0 20rpx;flex: 1" placeholder="输入关键字搜索" bindinput="keywordsChanged" bindconfirm="doSearch"></input>
+                    <view class="search_deletebox" wx:if="{{keywords}}" bindtap="handleDeleteKeywords">
+                        <image src="/res/images/search_deleteicon.png"></image>
+                    </view>
+                </view>
+            </view>
+            <view class="{{navFixed?'nav-holder':''}}"></view>
+        </view>
+    </view>
+    <view class="title" style="display: flex;justify-content: space-between;align-items: center;">
+        <view style="display: flex;align-items: center;position: relative;">
+            <view style="font-weight: bold">附近免单机会</view>
+            <!-- <view wx:if="{{taskTips}}" style="width:10rpx;height: 10rpx;border-radius: 10rpx;background: #FF4925;position: absolute;top:0;right:-20rpx"></view> -->
+        </view>
+        <view class="switchbtn" style="background-color: #f0f0f0;border: none">
+            <view bindtap="sortChanged" data-type="dis" style="width:140rpx; height: 60rpx;border-radius: 30rpx;{{query.sort=='dis'?'background-color:#ffdb09':'color:#666'}}">距离优先</view>
+            <view bindtap="sortChanged" data-type="time" style="width:140rpx; height: 60rpx;border-radius: 30rpx;{{query.sort!='dis'?'background-color:#ffdb09':'color:#666'}}">最新上线</view>
+        </view>
+    </view>
+
+    <view wx:if="{{query.sort=='dis' && !query.location}}" class="nodataBox">
+        <view class="defaultbox" wx:if="{{locateFailed}}">
+            <image src="/res/images/address_default.png" />
+            <view style="color: #999;font-size: 28rpx;margin-top: 50rpx">该功能需要使用您的地理位置</view>
+            <view class="addbtn" bindtap="toSetLocation">去设置</view>
+        </view>
+    </view>
+    <view wx:else>
+        <view class="listbox" style="{{bows.length?'min-height: calc(100vh - 456rpx)':''}}">
+            <view class="listitem" wx:for="{{bows}}" wx:key="index">
+                <bowbox item="{{item}}" query="{{query}}" bindonbow="toBow" data-item="{{item}}" bindonactions="bowActions">
+                    <view slot="cardbtn">
+                        <view wx:if="{{item.recommendToIndex}}">
+                            <view class="joinbtn" wx:if="{{item.status==1}}" style="background: #f0f0f0;color: #666;">已开奖</view>
+                            <view wx:if="{{item.status==0}}">
+                                <view class="joinbtn" wx:if="{{item.joined}}" style="background: #f0f0f0;color: #666;">待开奖</view>
+                                <view wx:else>
+                                    <view class="joinbtn" catchtap="joinBow" data-item="{{item}}" data-index="{{index}}" wx:if="{{user.authed}}">免费抽</view>
+                                    <button class="normal" open-type="getUserInfo" bindgetuserinfo="authThenJoin" data-item="{{item}}" data-index="{{index}}" catchtap="doNothing" wx:if="{{!user.authed}}">
+                                        <view class="joinbtn">免费抽</view>
+                                    </button>
+                                </view>
+                            </view>
+                        </view>
+                        <view wx:else>
+                            <view class="joinbtn" style="background: #f0f0f0;color: #666">
+                                未推荐
+                            </view>
+                        </view>
+                    </view>
+                </bowbox>
+            </view>
+        </view>
+
+        <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+        <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+        <view wx:if="{{nomore && bows.length > 0}}" style="margin-top: 40rpx;padding: 0 30rpx;box-sizing: border-box;">
+            <view class="combox">
+                <serverinfo bindoncontact="handleShowContact"></serverinfo>
+            </view>
+        </view>
+        <view wx:if="{{nomore && bows.length == 0}}" class="nodataBox">
+            <view wx:if="{{query.keywords}}" style="text-align: center">暂无数据</view>
+            <view wx:if="{{!query.keywords}}" class="blankbox">
+                <image src="/res/images/data_none.png" />
+                <view style="color: #999;font-size: 28rpx;margin-top: 20rpx">探索10%的靠谱好店</view>
+            </view>
+        </view>
+    </view>
+
+    <view class="newsbox2" wx:if="{{user.invited && !user.vip && !skipVipTips}}" bindtap="toVip">
+        <view class="news">
+            <view>限量黑卡已可激活!</view>
+        </view>
+    </view>
+
+    <block wx:else>
+        <view class="newsbox" wx:if="{{expiringCouponCount}}" bindtap="toCoupons">
+            <view class="news">
+                <view>有{{expiringCouponCount}}张券即将过期</view>
+                <image src="/res/images/icon_close.png" bindtap="hideNewsbox" style="width:30rpx ;height: 30rpx"></image>
+            </view>
+        </view>
+    </block>
+</view>
+
+<!-- <view class="boxtop" style="position: relative">
+			<view wx:if="{{!item.recommendToIndex}}" class="tag" style="padding: 6rpx 20rpx;text-align: center;position:absolute;left: 40rpx;top: 40rpx;background-color: #333;">
+				<view>未对用户显示</view>
+			</view>
+			<image style="{{item.recommendToIndex?'':'opacity: 0.1;'}}" src="{{item.cover ? (item.cover + '@cover7') : '/res/images/bow_default.png'}}" mode="aspectFill" />
+		</view> -->
+
+<view class="mask-dark" bindtap="hideSuccessModal" wx:if="{{successModal}}">
+    <view class="mask-card" style="background: #fff;width: 590rpx;padding-bottom:70rpx;box-sizing: border-box;border-radius: 10rpx;" catchtap="doNothing">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="normal" formType="submit">
+                <view class="joinsuccessbox">
+                    <image src="/res/images/mask_circlebg.png" style="width: 590rpx;height: 220rpx;position: relative">
+                        <view style="font-size: 40rpx;color: #E8CB93;font-weight: 500;position: absolute;left: 50%;transform: translate(-50%,0);top: 90rpx">参与成功</view>
+                    </image>
+                    <view style="color:#666;font-size: 24rpx;margin-top: 90rpx">我的幸运码</view>
+                    <view style="font-size: 36rpx;color: #FF4925;margin-top: 20rpx">{{code}}</view>
+                    <view class="funintro">
+                        <view class="introcell" style="margin-right: 50rpx">
+                            <image src="/res/images/icon_award1.png"></image>
+                            <view>抽奖</view>
+                            <view class="introtext" style="width: 110rpx">
+                                <view>一键抽取</view>
+                                <view>获得幸运码</view>
+                            </view>
+                        </view>
+                        <image class="nextimg" style="margin-right: 50rpx;margin-top: 16rpx" src="/res/images/icon_next.png"></image>
+                        <view class="introcell" style="margin-right: 50rpx">
+                            <image src="/res/images/icon_award2.png"></image>
+                            <view>开奖</view>
+                            <view class="introtext" style="width: 170rpx">
+                                <view>随机选取中奖号码</view>
+                                <view>微信通知中奖</view>
+                            </view>
+                        </view>
+                        <image class="nextimg" style="margin-right: 50rpx;margin-top: 16rpx" src="/res/images/icon_next.png"></image>
+                        <view class="introcell">
+                            <image src="/res/images/icon_award3.png"></image>
+                            <view>兑奖</view>
+                            <view class="introtext" style="width: 130rpx">
+                                <view>凭中奖二维码</view>
+                                <view>到店兑奖</view>
+                            </view>
+                        </view>
+                    </view>
+                    <view wx:if="{{showAd}}">
+                        <button class="normal" bindtap="showVideo" style="{{ading?'opacity: 0.3;':''}}">
+                            <view class="maskbtn" style="margin-top: 140rpx;background: #D24D39;color: #fff">
+                                获取更多幸运码
+                            </view>
+                        </button>
+                        <view style="color: #999;font-size: 24rpx;margin-top: 20rpx;text-align: center;">
+                            看一段视频广告，获取额外幸运码
+                        </view>
+                    </view>
+                    <view wx:else>
+                        <button class="normal" open-type="share">
+                            <view class="maskbtn" style="margin-top: 140rpx;background: #D24D39;color: #fff">
+                                邀请好友抽奖
+                            </view>
+                        </button>
+                        <view style="color: #999;font-size: 24rpx;margin-top: 20rpx;text-align: center;">
+                            好友参与抽奖，你也可以获得额外幸运码
+                        </view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{coinSuccessModal}}" bindtap="hideCoinSuccessModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:600rpx;border-radius: 8rpx;padding: 70rpx 0;box-sizing: border-box">
+            <view class="joinsuccessbox" style="padding: 40rpx;">
+                <image src="/res/images/mask_otherluckcode.png" style="width: 224rpx;height: 156rpx;margin-top: 20rpx;" />
+                <view style="margin-top: 70rpx;font-size: 36rpx;color: #242627">恭喜获得额外幸运码</view>
+                <view style="font-size: 36rpx;margin-top: 50rpx;color:#FF4925;font-weight: 500">
+                    {{code}}
+                </view>
+            </view>
+            <view wx:if="{{extraInfoType}}" style="margin-top: 40rpx;">
+                <view style="display: flex;align-items: center;justify-content: space-between;width:600rpx;" wx:if="{{(extraInfoType==1 && wxserviceLoad) || extraInfoType==2 || extraInfoType==3}}">
+                    <view style="height: 2rpx;width:120rpx;background-color: #f8f8f8;"></view>
+                    <view style="color: #aaa;" wx:if="{{extraInfoType==1 || extraInfoType==2}}">更多福利请关注</view>
+                    <view style="color: #aaa;" wx:if="{{extraInfoType==3}}">加入粉丝群获取更多福利</view>
+                    <view style="height: 2rpx;width:120rpx;background-color: #f8f8f8;"></view>
+                </view>
+                <view wx:else style="color: #aaa;text-align: center;"> ··· </view>
+                <view wx:if="{{extraInfoType==1 && !wxserviceError}}" style="margin-top: 40rpx;">
+                    <official-account bindload="wxserviceLoad" binderror="wxserviceError"></official-account>
+                </view>
+                <view wx:if="{{(extraInfoType==1 && wxserviceError)||extraInfoType==2}}" style="padding: 40rpx 20rpx;">
+                    <view style="background-color: #fafafa;display: flex;align-items: center;justify-content: space-between;">
+                        <view style="display: flex;align-items: center;">
+                            <image src="http://cdn.classx.cn/tandian/userapp/res/images/wechaticon.png" style="width:100rpx;height:100rpx;border-radius: 10rpx;display: block;margin-right: 10rpx;"></image>
+                            <view>
+                                <view style="font-weight: bold;">探店大师</view>
+                                <view style="color: #aaa;font-size: 20rpx;">让更多人体验更多好店</view>
+                            </view>
+                        </view>
+                        <button class="smallbtn" open-type="contact" style="margin-right: 10rpx;">回复666关注</button>
+                    </view>
+                </view>
+                <view wx:if="{{extraInfoType==3}}" style="padding: 40rpx 20rpx;">
+                    <view style="background-color: #fafafa;display: flex;align-items: center;justify-content: space-between;">
+                        <view style="display: flex;align-items: center;">
+                            <image src="http://cdn.classx.cn/tandian/userapp/res/images/group.png" style="width:100rpx;height:100rpx;border-radius: 10rpx;display: block;margin-right: 10rpx;"></image>
+                            <view>
+                                <view style="font-weight: bold;">探店大师福利群</view>
+                                <view style="color: #aaa;font-size: 20rpx;">福利不断，惊喜不断</view>
+                            </view>
+                        </view>
+                        <button class="smallbtn" open-type="contact" style="margin-right: 10rpx;">回复111加入</button>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{newItemModal}}" bindtap="hideNewItemModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding-bottom: 70rpx;box-sizing: border-box;line-height: 1;font-width: 500">
+            <view class="joinsuccessbox">
+                <image src="/res/images/mask_chance.png" style="width: 590rpx;height: 400rpx;" />
+                <view style="margin-top: 50rpx;font-size: 32rpx;color: #242627">有 <text style="font-size:48rpx;color: #FF4925">{{newItemCount}}</text> 个</view>
+                <view style="margin-top: 30rpx;font-size: 32rpx;color: #242627">新的免单机会上线了</view>
+                <view class="maskbtn" style="margin-top: 50rpx" bindtap="hideNewItemModal">我知道了</view>
+            </view>
+        </view>
+    </view>
+</view>
+<!-- <view class="mask-dark" wx:if="{{newChanceModal}}" bindtap="hideNewChanceModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;border-radius: 8rpx;padding-bottom: 70rpx;box-sizing: border-box;line-height: 1;font-width: 500">
+            <view class="joinsuccessbox">
+                <image src="/res/images/http://cdn.classx.cn/tandian/userapp/res/images/mask_getchance.png" style="width: 590rpx;height: 279rpx;" />
+                <view style="margin-top: 50rpx;font-size: 32rpx;color: #242627">今日抽奖机会已用完</view>
+                <view style="margin-top: 30rpx;font-size: 28rpx;color: #999;width:460rpx;line-height: 1.4">您可以明天继续抽奖，也可以做任务提升每日机会上限</view>
+                <view class="maskbtn" style="margin-top: 50rpx;background-color: #f8f8f8;font-weight: normal;" wx:if="{{!user.signNoticed}}" bindtap="noticeMe">明天提醒我签到</view>
+                <view class="maskbtn" style="margin-top: 50rpx;background-color: #f8f8f8;color:#aaa;font-weight: normal;font-size: 28rpx;" wx:if="{{user.signNoticed}}" bindtap="toCancelNoticeMe">已预约明天{{user.signNotice}}的签到提醒</view>
+                <view class="maskbtn" style="margin-top: 30rpx" bindtap="toTasks">获取更多机会</view>
+            </view>
+        </view>
+    </view>
+</view> -->
+
+<view class="mask-dark" wx:if="{{adImage}}" bindtap="hideAdImage">
+    <view style="text-align: center;">
+        <view class="mask-card" style="width:600rpx;border-radius: 12rpx;" catchtap="doNothing">
+            <image src="{{adImage}}" style="width:600rpx;height:800rpx;display: block;border-top-right-radius: 12rpx;border-top-left-radius: 12rpx;border-radius: 12rpx;" mode="aspectFill" bindtap="previewAdImage"></image>
+            <!-- <view style="background-color: white;padding: 40rpx 20rpx;border-bottom-left-radius: 12rpx;border-bottom-right-radius: 12rpx;">
+            <button class="primary" style="width:300rpx;background-color: #08be31;color: white;border-radius: 60rpx;font-size: 32rpx;" open-type="contact">回复 <text style="font-weight: bold;">123</text> 查看</button>
+        </view> -->
+        </view>
+        <image src="http://cdn.classx.cn/tandian/userapp/res/images/LogonClosed.png" style="width:60rpx;height:60rpx;margin-top: 40rpx;opacity: 0.3;"></image>
+    </view>
+</view>
+<view class="mask-dark" wx:if="{{showContactModal}}" bindtap="hideContactModal">
+    <view class="mask-card" style="width:590rpx;min-height:600rpx;border-radius: 10rpx;padding-bottom: 30rpx " catchtap="doNothing">
+                <image src="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" data-image="http://cdn.classx.cn/tandian/userapp/res/images/image_contact.jpg" style="width: 590rpx;height: 784rpx;margin: 0 auto 0 auto;display: block;border-radius: 10rpx" bindtap="handlePreviewImg" bindlongpress="handlePreviewImg" ></image>
+        <view class="mask-btn" style="margin: 20rpx auto 10rpx auto" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+    </view>
+</view>

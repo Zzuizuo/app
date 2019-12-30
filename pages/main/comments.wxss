@@ -1,0 +1,63 @@
+.content {
+    color: #242627;
+    min-height: 100vh;
+}
+
+.pagetop {
+    width: 690rpx;
+    padding: 14rpx 0;
+    box-sizing: border-box;
+    position: relative;
+    margin: 0 auto;
+}
+
+.pagemiddle {
+    width: 690rpx;
+    margin: 26rpx auto 0 auto;
+}
+
+.cardbox {
+    padding: 40rpx 30rpx;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.cardbox::after {
+    content: '';
+    position: absolute;
+    left: 30rpx;
+    right: 30rpx;
+    bottom: 0;
+    border-bottom: 2rpx solid #f0f0f0;
+}
+
+.cardcontent image {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 6rpx;
+    margin-right: 30rpx;
+    display: block;
+}
+
+.cardcontent {
+    color: #242627;
+    line-height: 1;
+}
+
+.boxbtn {
+    width: 120rpx;
+    height: 60rpx;
+    background: #FF4925;
+    color: #fff;
+    font-size: 24rpx;
+    border-radius: 30rpx;
+}
+
+.text1 {
+    font-size: 32rpx;
+}
+
+.text2 {
+    font-size: 24rpx;
+    color: #999;
+}

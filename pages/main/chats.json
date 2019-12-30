@@ -1,0 +1,5 @@
+{
+    "navigationStyle": "custom",
+    "backgroundColor": "#140f13",
+    "usingComponents": { "circle": "/pages/component/circle" }
+}

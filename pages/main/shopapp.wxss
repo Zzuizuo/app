@@ -1,0 +1,73 @@
+.head {
+    font-size: 60rpx;
+    text-align: center;
+    height: 750rpx;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slogan {
+    font-size: 36rpx;
+}
+
+
+.maskbtn {
+    width: 420rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 32rpx;
+    color: #242627;
+    background: #FFDB09;
+    border-radius: 40rpx;
+    margin: 0 auto;
+}
+
+.prop {
+    display: flex;
+    width: 500rpx;
+    border-bottom: 1rpx solid #f1f1f1;
+    padding: 16rpx 8rpx;
+    margin: 0 auto;
+    align-items: center;
+    text-align: left;
+}
+
+.prop .name {
+    font-size: 28rpx;
+    width: 150rpx;
+}
+
+.prop .value {
+    font-size: 28rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+}
+
+.result {
+    padding: 40rpx;
+}
+
+.item {
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #f1f1f1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button.right {
+    margin: 0;
+    background-color: #333;
+    color: #fff;
+    font-size: 24rpx;
+    border-radius: 60rpx;
+    padding: 0rpx 20rpx;
+    min-width: 140rpx;
+}
+
+button.right::after {
+    display: none;
+}

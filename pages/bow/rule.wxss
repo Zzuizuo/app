@@ -1,0 +1,43 @@
+page {
+    background: #FFDB09;
+    font-size: 28rpx;
+    padding: 40rpx 30rpx;
+    box-sizing: border-box;
+    min-height: 100vh;
+    line-height: 1;
+    font-weight: 500;
+}
+
+.textbox {
+    background: #fff;
+    padding: 50rpx 30rpx;
+    border-radius: 10rpx;
+    box-sizing: border-box;
+    font-size: 24rpx;
+    color: #242627;
+}
+
+.title{
+    margin-top: 60rpx;
+}
+.userbox {
+    padding: 20rpx 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #aaa;
+    font-size: 24rpx;
+    border-bottom: 1rpx solid #f1f1f1;
+}
+
+.userboxlf {
+    display: flex;
+    align-items: center;
+}
+
+.userboxlf image {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 100%;
+    margin-right: 10rpx;
+}

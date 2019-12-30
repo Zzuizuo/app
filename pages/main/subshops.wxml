@@ -1,0 +1,23 @@
+<view wx:for="{{shop.subshops}}" wx:key="index">
+    <view class="panel-content" style="padding: 10rpx 40rpx;">
+        <view style="font-weight: bold;font-size: 32rpx;margin-bottom: 20rpx">{{item.name}}</view>
+        <view class="panelcell" wx:if="{{item.openTime}}">
+            <view class="panelcell-title">
+                <image src="/res/images/shopicon.png"></image>
+                <view>营业时间：</view>
+            </view>
+            <view>{{item.openTime}}</view>
+        </view>
+        <view class="panelcell" wx:if="{{item.contact}}" data-phone="{{item.contact}}" bindtap="callShop">
+            <view class="panelcell-title">
+                <image src="/res/images/phoneicon.png"></image>
+                <view>联系电话：</view>
+            </view>
+            <text>{{item.contact}}</text>
+        </view>
+        <view class="panelcell-a" bindtap="openLocation" data-shop="{{item}}">
+            <image src="/res/images/addressicon.png"></image>
+            <view style="max-width: 630rpx">{{item.address}}</view>
+        </view>
+    </view>
+</view>

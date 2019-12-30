@@ -1,0 +1,42 @@
+@font-face {
+    font-family: 'iconfont';
+    /* project id 1515317 */
+    src: url('//at.alicdn.com/t/font_1515317_l0u0ld0yela.eot');
+    src: url('//at.alicdn.com/t/font_1515317_l0u0ld0yela.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_1515317_l0u0ld0yela.woff2') format('woff2'),
+        url('//at.alicdn.com/t/font_1515317_l0u0ld0yela.woff') format('woff'),
+        url('//at.alicdn.com/t/font_1515317_l0u0ld0yela.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_1515317_l0u0ld0yela.svg#iconfont') format('svg');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-search:before {
+    content: "\e600";
+}
+
+.icon-sey-telephone-b:before {
+    content: "\e677";
+}
+
+.icon-dizhi2:before {
+    content: "\e631";
+}
+
+.icon-wenhao:before {
+    content: "\e71d";
+}
+
+.icon-right:before {
+    content: "\e61c";
+}
+
+.icon-wrong:before {
+    content: "\e615";
+}

@@ -1,0 +1,50 @@
+<view class="cardbox" bindlongpress="onActions" data-item="{{item}}">
+    <view class="boxleft">
+        <image src="{{item.shop.avatar ? (item.shop.avatar + '@avatar') : '/res/images/list_fuli.png'}}" mode="aspectFill"></image>
+        <image wx:if="{{item.shop.nice}}" src="/res/images/index_nice.png" class="tagicon" style="z-index: 10"></image>
+        <image wx:if="{{!item.shop.nice && item.shop.hot}}" src="/res/images/index_hot.png" class="tagicon"></image>
+    </view>
+    <view class="boxright">
+        <view class="text1 nowrap" style="max-width: 500rpx;line-height: 1.2">{{item.shop.name}}</view>
+        <view class="text2 mtop10 justify-SB">
+            <view class="nowrap" style="max-width: 400rpx">{{item.shop.address || '成都'}}</view>
+            <view style="color: #999" wx:if="{{query.location || item.disStr}}">{{item.disStr}}</view>
+        </view>
+        <view class="text2 mtop10 center-vertical justify-SB" wx:if="{{item.shop.feature || item.shop.cpi}}">
+            <view>{{item.shop.feature}}</view>
+            <view style="margin-left: 20rpx" wx:if="{{item.shop.cpi}}">人均￥{{item.shop.cpi}}</view>
+        </view>
+        <view class="tagsbox center-vertical" wx:if="{{item.shop.tag2 || item.shop.tag1}}" style="margin-top: 20rpx">
+            <view wx:if="{{item.shop.tag1}}" class="tagitem center-vertical" style="color: #FE9E00;background: #FFF5E5;margin-right: 10rpx;margin-bottom:{{((item.shop.tag1.length + item.shop.tag2.length > 15) && item.shop.tag2) ? '10rpx' : '0'}}">
+                <image src="/res/images/index_tag.png" style="width: 20rpx;height: 22rpx;margin-right: 10rpx"></image>
+                <view class="nowrap" style="max-width: 320rpx;">{{item.shop.tag1}}</view>
+            </view>
+            <view wx:if="{{item.shop.tag2}}" class="tagitem center-vertical" style="color: #FF6D26;background: #FFF1EB">“<view class="nowrap" style="max-width: 320rpx;">{{item.shop.tag2}}</view>”</view>
+        </view>
+        <view class="activebox center-vertical mtop10 justify-SB" wx:if="{{item.bow}}">
+            <view class="center-vertical">
+                <view class="tagcell center-all" style="color: #242627;background: #FFDB09">抽</view>
+                <view class="nowrap" style="max-width: 180rpx">{{item.bow.name}}</view>
+            </view>
+            <view style="color: #999">{{item.bow.startTimeStr}}</view>
+        </view>
+        <view class="activebox center-vertical mtop10 justify-SB" wx:if="{{item.gou}}">
+            <view class="center-vertical">
+                <view class="tagcell center-all" style="background: #FF4925">砍</view>
+                <view class="nowrap" style="max-width: 180rpx">{{item.gou.name}}</view>
+            </view>
+            <view style="color: #999">当前价格：￥{{item.gou.priceStr}}</view>
+        </view>
+        <view class="activebox center-vertical mtop10 justify-SB" wx:if="{{item.miao}}">
+            <view class="center-vertical">
+                <view class="tagcell center-all" style="background: #E8CB93">订</view>
+                <view class="nowrap" style="max-width: 180rpx">{{item.miao.name}}</view>
+            </view>
+            <view style="color: #999">剩余{{item.miao.amount || 0}}份</view>
+        </view>
+        <view class="activebox center-vertical mtop10" wx:if="{{item.tuan}}">
+            <view class="tagcell center-all" style="background: #FEA40F">团</view>
+            <view class="nowrap" style="max-width: 420rpx">{{item.tuan.name}}</view>
+        </view>
+    </view>
+</view>

@@ -1,0 +1,61 @@
+<view class="goubox cardbox center-vertical {{(item.recommendToIndex) ? '' : 'opacity'}}" style="align-items: flex-start" bindtap="onGou" data-item="{{item}}" bindlongpress="onActions">
+    <view class="boxleft cardLeft" style="{{item.status==2 ? 'background: #f0f0f0' : ''}}">
+        <image wx:if="{{item.nice}}" src="/res/images/index_nice.png" class="tagicon" style="z-index: 10"></image>
+        <image wx:if="{{!item.nice && item.hot}}" src="/res/images/index_hot.png" class="tagicon"></image>
+
+        <view wx:if="{{item.full}}" class="imgmask"></view>
+        <image class="gouimg" src="{{item.shop.avatar ? (item.shop.avatar + '@avatar') : '/res/images/list_fuli.png'}}" mode="aspectFill"/>
+        
+        <view class="dashline"></view>
+        
+        <view class="lefttext" style="margin-top: 10rpx;" wx:if="{{item.bonus && item.bonus.type == 'duihuan'}}">
+            <view style="margin-top: 10rpx;">价值 ￥<text style="font-size: 24rpx;font-weight: bold">{{item.originPrice}}</text></view>
+            <view style="color: #999;margin-top: 6rpx;">{{item.name}}</view>
+        </view>
+        <view class="lefttext center-vertical justify-SB {{item.originPrice > 1000 ? 'center-all' : ''}}" style="margin-top: 20rpx" wx:else>
+            <view>￥<text style="font-size: 32rpx;font-weight: bold;">{{item.originPrice}}</text></view>
+            <view style="color: #999" wx:if="{{item.originPrice < 1000}}">代金券</view>
+        </view>
+
+        <view class="halfcircle1"></view>
+        <view class="halfcircle2"></view>
+    </view>
+    <view class="boxright cardRight">
+        <view class="name nowrap" style="max-width: 450rpx;">{{item.shop.name}}</view>
+        <view class="center-vertical justify-SB righttext">
+            <view class="nowrap" style="max-width: 380rpx">{{item.shop.address || '成都'}}</view>
+            <view wx:if="{{query.location}}">{{item.disStr}}</view>
+        </view>
+        <view class="center-vertical justify-SB righttext" wx:if="{{item.shop.feature || item.shop.cpi}}">
+            <view class="center-vertical">
+                <view style="margin-right: 20rpx;">{{item.shop.feature}}</view>
+                <view style="margin-right: 20rpx;" wx:if="{{item.shop.cpi}}">人均￥{{item.shop.cpi}}</view>
+            </view>
+            <view>
+                <text wx:if="{{!item.repeat}}">仅剩 <text style="color:{{item.amount - (item.data.paid||0) ? '#FF4925': '#999'}}">{{item.amount - (item.data.paid||0)}}</text> 份</text>
+                <text wx:if="{{item.repeat=='day'}}">今日仅剩 <text style="color:{{item.amount - (item.data.paidToday||0) ? '#FF4925': '#999'}}">{{item.amount - (item.data.paidToday||0)}}</text> 份</text>
+            </view>
+        </view>
+        <view class="tagsbox center-vertical" wx:if="{{item.shop.tag2 || item.shop.tag1}}" style="margin-top: 20rpx">
+            <view wx:if="{{item.shop.tag1}}" class="tagitem center-vertical" style="color: #FE9E00;background: #FFF5E5;margin-right: 10rpx;margin-bottom:{{((item.shop.tag1.length + item.shop.tag2.length > 15) && item.shop.tag2) ? '10rpx' : '0'}}">
+                <image src="/res/images/index_tag.png" style="width: 20rpx;height: 22rpx;margin-right: 10rpx"></image>
+                <view class="nowrap" style="max-width: 320rpx;">{{item.shop.tag1}}</view>
+            </view>
+            <view wx:if="{{item.shop.tag2}}" class="tagitem center-vertical" style="color: #FF6D26;background: #FFF1EB">“<view class="nowrap" style="max-width: 320rpx;">{{item.shop.tag2}}</view>”</view>
+        </view>
+        <view class="justify-SB center-vertical" style="margin-top:{{(item.shop.tag2 && item.shop.tag1) ? '12rpx' : (item.shop.tag2 || item.shop.tag1) ? (item.shop.feature) ? '20rpx' : '60rpx' : (item.shop.feature || item.shop.cpi) ? '76rpx' :'120rpx'}}">
+            <view class="normaltext" wx:if="{{!isuserlist}}">
+                <view class="progressline" style="{{item.status==2 ? 'background: #f0f0f0' : ''}}">
+                    <view class="activeline" style="width: {{(item.price || item.originPrice)/item.originPrice * 260}}rpx;{{item.status==2 ? 'background: #999' : ''}}"></view>
+                </view>
+                <view style="margin-top: 16rpx">
+                    <text style="color:#FF4925;">当前价格￥</text>
+                    <text style="color:#FF4925;font-size: 24rpx">{{item.priceStr}}</text>
+                    <text wx:if="{{!item.repeat && !item.shop.feature && !item.shop.cpi}}"  style="color:{{item.amount - (item.data.paid||0) ? '#FF4925': '#999'}}"> / 剩<text>{{item.amount - (item.data.paid||0)}}</text>份</text>
+                    <text wx:if="{{item.repeat=='day' && !item.shop.feature && !item.shop.cpi}}"  style="color:{{item.amount - (item.data.paidToday||0) ? '#FF4925': '#999'}}"> / 剩<text>{{item.amount - (item.data.paidToday||0)}}</text>份</text>
+                </view>
+            </view>
+            <slot name="cardbtn"></slot>
+        </view>
+    </view>
+</view>

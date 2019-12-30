@@ -1,0 +1,50 @@
+<view class="circle-model" style="{{full?'padding:30rpx 0rpx;':''}}{{circleData.pass?'':'opacity: 0.3;'}}">
+    <view class="circle-img" catchtap="avatartap" data-item="{{circleData}}" style="{{css.headimg}}">
+        <image src="{{circleData.user.headimgurl+'@avatar'}}" style="{{css.headimg}}"></image>
+    </view>
+    <view class="circle-content" catchlongpress="contentlongpress" data-item="{{circleData}}">
+        <view class="circle-shop">
+            <view class="shopname nowrap">{{circleData.user.nickname}}</view>
+        </view>
+        <view class="circle-info">
+            <view class="circle-txt {{!isShowMore ? limitClass : ''}}" bindtap="handleShowMore" id="circleid" data-item="{{circleData}}" style="padding-bottom: {{isShowMore ? '46rpx' : '10rpx'}}">
+                <text decode>{{circleData.content}}</text>
+                <view class="limithide" catchtap="handleSpreadMore" wx:if="{{height > 150}}">{{!isShowMore ? '全文' : '收起'}}
+                    <!-- <view class="limitmodel" wx:if="{{height > 78}}"></view> -->
+                    <!-- <view class="spread {{height > 78 ? 'spreaded' : 'tospread'}}"></view> -->
+                </view>
+            </view>
+            <view class="circle-imgs" wx:if="{{circleData.images.length}}">
+                <view wx:if="{{circleData.images.length == 1}}">
+                    <view class="imgtype1" wx:for="{{circleData.images}}" wx:key="index">
+                        <image catchtap="previewImg" data-imglist="{{circleData.images}}" data-index="{{index}}" style="{{item.height > item.width ? 'height: 360rpx;width:'+(360*item.width/item.height)+'rpx' : 'width: 360rpx;height:'+(360*item.height/item.width)+'rpx'}}" mode="aspectFit" src="{{item.url+'@wechat1'}}"></image>
+                    </view>
+                </view>
+                <view class="imglist" wx:if="{{circleData.images.length == 4}}">
+                    <view class="imgtype2" wx:for="{{circleData.images}}" wx:key="index">
+                        <image catchtap="previewImg" data-imglist="{{circleData.images}}" data-index="{{index}}" src="{{item.url+'@avatar'}}"></image>
+                    </view>
+                </view>
+                <view wx:if="{{circleData.images.length != 1 && circleData.images.length != 4}}">
+                    <view class="imgtype2" wx:for="{{circleData.images}}" wx:key="index">
+                        <image catchtap="previewImg" data-imglist="{{circleData.images}}" data-index="{{index}}" src="{{item.url+'@avatar'}}"></image>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="addressbox" bindtap="handletoShop" data-item="{{circleData}}" wx:if="{{shop}}">
+            <image src="/res/images/shop_b.png"></image>
+            <view class="nowrap" style="max-width: 480rpx">{{circleData.shop.name}}</view>
+        </view>
+        <view class="timebox">
+            <view style="color: #b2b2b2;font-size: 22rpx;">{{circleData.createTimeStr}}</view>
+            <!-- <view class="action" bindtap="handleAction" data-item="{{circleData}}" data-i="{{circleIndex}}">··</view> -->
+        </view>
+        <view class="replys" style="margin-top: 10rpx;" wx:if="{{circleData.replys && circleData.replys.length}}">
+            <view wx:for="{{circleData.replys}}" wx:key="index" wx:for-item="reply" bindtap="handleReply" data-reply="{{reply}}" data-comment="{{circleData}}" data-index="{{index}}" class="reply">
+                <text style="font-weight: bold;color: #576b95">{{reply.createBy.nickname}}</text>：{{reply.content}}
+            </view>
+        </view>
+    </view>
+    <view class="splitline" wx:if="{{showline}}"></view>
+</view>

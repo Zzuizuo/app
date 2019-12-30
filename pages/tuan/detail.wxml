@@ -1,0 +1,346 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+<view class="page">
+    <view class="pagetop">
+        <view class="swiperbox">
+            <swiper class="swiper" duration="{{100}}" easing-function="linear" bindchange="handleSwiperCurrent" current="{{swiperCurrent}}" circular autoplay display-multiple-items="{{1}}">
+                <block wx:for="{{images}}" wx:key="index">
+                    <swiper-item style="width: 100vw !important;height: 375rpx !important;">
+                        <image src="{{item.url + '@cover7'}}" mode="aspectFill"></image>
+                    </swiper-item>
+                </block>
+            </swiper>
+            <view wx:if="{{images.length > 1}}" class="listnum center-vertical">
+                <view class="listnumcell" wx:if="{{publicPics.length}}" bindtap="handleShowSwiperImg" data-type="pub" style="margin-right: 10rpx">环境 {{ (swiperIndex - 1 && swiperIndex <= publicPics.length + 1) ? (swiperIndex - 1) + ' /' : ''}} {{publicPics.length}}</view>
+                <view class="listnumcell" wx:if="{{caiPics.length}}" bindtap="handleShowSwiperImg" data-type="cai">菜品 {{(swiperIndex && swiperIndex > publicPics.length + 1) ? (swiperIndex - publicPics.length - 1) + ' /' : ''}} {{caiPics.length}}</view>
+            </view>
+        </view>
+        <view class="pagepadding" style="margin-top: 50rpx">
+            <view class="pagetitle">{{tuan.bonus.name}}</view>
+        </view>
+        <view class="center-vertical justify-SB pagepadding" style="margin-top: 24rpx">
+            <view class="nowrap text2" style="max-width: 470rpx;line-height: 1.2" bindtap="toShop">{{tuan.shop.name}}</view>
+            <view class="text1">{{tuan.shop.feature}} {{tuan.shop.cpi ? '人均￥'+tuan.shop.cpi : ''}}</view>
+        </view>
+        <view class="center-vertical justify-SB pagepadding" style="margin-top: 20rpx;" bindtap="handleShowAddrList">
+            <view class="nowrap text1" style="max-width: 580rpx;line-height: 1.2">{{tuan.shop.address}}</view>
+            <view class="text1" wx:if="{{location}}">{{disStr}}</view>
+        </view>
+        <view class="center-vertical justify-SB pagepadding" style="margin-top: 24rpx">
+            <view class="center-vertical">
+                <view style="color: #FF4925;font-size: 24rpx;font-weight: 500">团购价：<text style="font-size: 20rpx">{{tuan.priceStr}}</text>元</view>
+                <view class="text1" style="margin-left: 10rpx;text-decoration:line-through">￥{{tuan.originPriceStr}}</view>
+            </view>
+            <view class="text1">已售{{taun.data.paid || 0}}份</view>
+        </view>
+        <view class="center-vertical pagepadding" style="margin-top: 26rpx">
+            <view class="jianbox center-all">提前订减{{tuan.minusPrice}}元</view>
+        </view>
+    </view>
+
+    <view class="panelbox pagepadding" style="margin-top: 50rpx" wx:if="{{tuan.bonus.type == 'duihuan' && tuan.bonus.includes.length}}">
+        <view class="paneltitle">兑换内容</view>
+        <view wx:for="{{tuan.bonus.includes}}" wx:key="index" class="listitem">
+            <view class="rulecircle"></view>
+            <view style="flex: 1">
+                <view wx:if="{{item.title}}" style="font-weight: bold;">{{item.title}}</view>
+                <view wx:for="{{item.cais}}" wx:for-item="cell" wx:key="index" class="justify-SB center-vertical boxcell">
+                    <view>{{cell.name}} <text style="font-size: 24rpx;color: #999">({{cell.amount}}份)</text></view>
+                    <view wx:if="{{cell.price}}" style="font-size: 20rpx">￥<text style="font-weight: bold;font-size: 28rpx">{{cell.price}}</text></view>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="spliltline" style="margin-top: 40rpx"></view>
+
+    <view class="sticky pagenav">
+        <navbar navs="{{navs}}" active="{{activeIndex}}" bindChangeNav="handleChangeNav" />
+    </view>
+
+    <view class="panelbox pagepadding tabbox" style="margin-top: 10rpx">
+        <view class="paneltitle">使用规则</view>
+        <view class="listitem m-30" style="margin-top: 40rpx">
+            <view class="rulecircle"></view>
+            <view wx:if="{{(tuan.bonus.expiryType=='day' && tuan.bonus.expiryDay==7) || !tuan.bonus.expiryType}}">领取后7天内有效</view>
+            <view wx:if="{{tuan.bonus.expiryType=='never'}}">永久有效</view>
+            <view wx:if="{{tuan.bonus.expiryType=='time'}}">{{tuan.bonus.expiryTimeStr}}到期</view>
+            <view wx:if="{{tuan.bonus.expiryType=='day' && tuan.bonus.expiryDay!=7}}">领取后{{tuan.bonus.expiryDay}}天内有效</view>
+        </view>
+        <view class="listitem m-30" wx:if="{{(tuan.bonus.dayLimit == 'custom' && tuan.bonus.dayLimitCustom) || tuan.bonus.dayLimit != 'custom'}}">
+            <view class="rulecircle"></view>
+            <view>{{tuan.bonus.dayLimit == 'custom' ? tuan.bonus.dayLimitCustom : '节假日通用'}}</view>
+        </view>
+        <view class="listitem m-30" wx:if="{{(tuan.bonus.timeLimit == 'custom' && tuan.bonus.timeLimitCustom) || tuan.bonus.timeLimit != 'custom'}}">
+            <view class="rulecircle"></view>
+            <view>{{tuan.bonus.timeLimit == 'custom' ? tuan.bonus.timeLimitCustom : '全天可用'}}</view>
+        </view>
+        <view class="listitem m-30" wx:if="{{(tuan.bonus.appointment == 'custom' && tuan.bonus.appointmentCustom) || tuan.bonus.appointment != 'custom'}}">
+            <view class="rulecircle"></view>
+            <view>{{tuan.bonus.appointment == 'custom' ? tuan.bonus.appointmentCustom : '无需预约，消费高峰期可能需要等位'}}</view>
+        </view>
+        <view class="listitem m-30" wx:if="{{tuan.bonus.rule}}">
+            <view class="rulecircle"></view>
+            <text wx:if="{{tuan.bonus.rule}}" class="textcode" decode>{{tuan.bonus.rule}}</text>
+        </view>
+    </view>
+
+    <view class="panelbox pagepadding tabbox" style="margin-top: 30rpx">
+        <view class="paneltitle">商家信息</view>
+        <view class="center-vertical" style="margin-top: 40rpx">
+            <view class="nowrap text2" bindtap="toShop" style="max-width: 500rpx">{{shop.name}}</view>
+            <view class="licensebox center-all" wx:if="{{shop.pass}}" bindtap="toLicense" data-license="{{shop.license}}">
+                <image src="/res/images/icon_attestation.png"></image>
+                <view>已认证</view>
+            </view>
+            <view class="licensebox center-all" style="border: 1rpx solid #f0f0f0" wx:else bindtap="handleShopPass">
+                <image src="/res/images/icon_unattestation.png"></image>
+                <view style="color: #999">未认证</view>
+            </view>
+        </view>
+        <view class="tagsbox" wx:if="{{shop.tag2 || shop.tag1}}" style="margin-top: 20rpx;">
+            <view wx:if="{{shop.tag1}}" class="tagitem " style="color: #FE9E00;background: #FFF5E5;margin-right: 10rpx;margin-bottom:{{((shop.tag1.length + shop.tag2.length > 26) && shop.tag2) ? '10rpx' : '0'}}">
+                <image src="/res/images/index_tag.png" style="width: 20rpx;height: 22rpx;margin-right: 10rpx"></image>
+                <view class="nowrap" style="max-width: 600rpx;">{{shop.tag1}}</view>
+            </view>
+            <view wx:if="{{shop.tag2}}" class="tagitem" style="color: #FF6D26;background: #FFF1EB">“<view class="nowrap" style="max-width: 600rpx;">{{shop.tag2}}</view>”</view>
+        </view>
+        <view class="panelitem" wx:if="{{shop.openTime}}">营业时间：{{shop.openTime}}</view>
+        <view class="panelitem center-vertical justify-SB">
+            <view style="line-height: 1.4;max-width: 400rpx" bindtap="openLocation">{{shop.address}}</view>
+            <view class="center-vertical">
+                <view class="panelicon center-all" bindtap="openLocation">
+                    <image src="/res/images/icon_address.png" />
+                </view>
+                <view class="panelicon center-all" wx:if="{{shop.contact}}" bindtap="callShop" style="margin-left: 20rpx">
+                    <image src="/res/images/icon_phone.png" />
+                </view>
+            </view>
+        </view>
+        
+        <view class="panelitem" wx:if="{{shop.subshops && shop.subshops.length >= 5}}" bindtap="toSubshops">
+            <view class="panelitemtext">其余分店</view>
+            <view class="panelicon">
+                <image src="/res/images/icon_shop.png" />
+            </view>
+        </view>
+
+        <view class="paneltitle" style="margin-top: 30rpx">商家详情</view>
+        <view wx:if="{{shop.detailHTML}}" style="margin-top: 30rpx">
+            <view class="richtext">
+                <rich-text nodes="{{shop.detailHTML}}" />
+            </view>
+        </view>
+        <image class="shopImage" wx:if="{{!shop.detailHTML && shop.detailImage}}" src="{{shop.detailImage}}" mode="widthFix" />
+
+        <view class="paneltitle" style="margin-top: 30rpx" wx:if="{{shop.subCais.length}}" >推荐菜 <text style="color: #999;font-weight: 400">({{shop.subCais.length}})</text></view>
+        <swiper wx:if="{{shop.subCais.length}}" style="width: 690rpx;height: 260rpx;margin-top: 30rpx" duration="{{100}}" easing-function="linear" next-margin="280rpx" circular>
+            <block wx:for="{{shop.subCais}}" wx:key="index">
+                <swiper-item>
+                    <view>
+                        <image src="{{item.imgurl + '@cover7'}}" style="width: 400rpx;height: 200rpx;border-radius: 10rpx" mode="aspectFill"></image>
+                        <view class="center-all" style="font-size: 28rpx;line-height: 1;margin-top: 20rpx">
+                            <view>{{item.name}}</view>
+                            <view style="margin-left: 20rpx">￥{{item.price}}</view>
+                        </view>
+                    </view>
+                </swiper-item>
+            </block>
+        </swiper>
+    </view>
+
+    <view class="panelbox tabbox" style="margin-top: 40rpx">
+        <view class="paneltitle" style="padding: 30rpx 0;" wx:if="{{comments.length}}">
+            <view class="title" style="padding-left: 30rpx">用户点评</view>
+            <view wx:for="{{comments}}" wx:key="index">
+                <circle circle-data="{{item}}" circle-index="{{index}}" shop="{{false}}"
+                 showline="{{comments.length == index + 1 ? false : true}}"/>
+            </view>
+        </view>
+    </view>
+
+    <view class="footbox justify-SB center-vertical">
+        <view class="boxleft justify-SB center-vertical">
+            <view class="boxleft-cell center-all column" bindtap="toIndex">
+                <image src="/res/images/buttonicon_shop.png" />
+                <view style="font-size: 20rpx;margin-top: 10rpx">首页</view>
+            </view>
+            <view class="boxleft-cell center-all column" bindtap="onSelectPhone">
+                <image src="/res/images/buttonicon_phone.png" />
+                <view style="font-size: 20rpx;margin-top: 10rpx">咨询</view>
+            </view>
+            <view class="boxleft-cell center-all column" bindtap="handleGetShareCard">
+                <image src="/res/images/share_img.png" />
+                <view style="font-size: 20rpx;margin-top: 10rpx">海报</view>
+            </view>
+        </view>
+        <view class="boxright">
+            <view wx:if="{{!tuan.online}}" class="onebtn center-all" style="">活动未开启</view>
+            <view class="twobtn center-vertical" wx:else>
+                <view class="twobtnleft column center-all" bindtap="toBuy" wx:if="{{user.authed}}" data-plan="{{true}}">
+                    <view>提前买</view>
+                    <view style="font-size: 20rpx;margin-top: 10rpx">￥{{tuan.planpriceStr}}</view>
+                </view>
+                <button wx:else class="simple" open-type="getUserInfo" bindgetuserinfo="authThenToBuy" data-plan="{{true}}">
+                    <view class="twobtnleft column center-all">
+                        <view>提前买</view>
+                        <view style="font-size: 20rpx;margin-top: 10rpx">￥{{tuan.planpriceStr}}</view>
+                    </view>
+                </button>
+                <view class="twobtnright column center-all" bindtap="toBuy" wx:if="{{user.authed}}">
+                    <view>立即购买</view>
+                    <view style="font-size: 20rpx;margin-top: 10rpx">￥{{tuan.priceStr}}</view>
+                </view>
+                <button wx:else class="simple" open-type="getUserInfo" bindgetuserinfo="authThenToBuy">
+                    <view class="twobtnright column center-all">
+                        <view>立即购买</view>
+                        <view style="font-size: 20rpx;margin-top: 10rpx">￥{{tuan.priceStr}}</view>
+                    </view>
+                </button>
+            </view>
+
+            <view class="waitpaybox" wx:if="{{usertuan && usertuan.paying}}" bindtap="pay">
+                <view class="waitpayboxbg" wx:if="{{usertuan && usertuan.paying}}" />
+                <view style="z-index: 2;">你有一笔订单尚未支付</view>
+                <view class="paybox">立即支付</view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<mask contentType="bottom" wx:if="{{callModal}}" bindtap="onHideCallModal" bindcancel="onHideCallModal">
+    <view slot="masklist" class="masklist">
+        <view class="masklistcell center-vertical justify-SB">
+            <view>
+                <view class="title">联系商家</view>
+                <view class="tips">欢迎致电预约或咨询</view>
+            </view>
+            <view class="maskcellbtn center-all" bindtap="callShop">拨打电话</view>
+        </view>
+        <view class="maskline" style="height: 1rpx;width: 690rpx"></view>
+        <view class="masklistcell center-vertical justify-SB">
+            <view>
+                <view class="title">联系客服</view>
+                <view class="tips">遇到问题可咨询客服</view>
+            </view>
+            <view class="maskcellbtn center-all" bindtap="oncall" data-phoneNumber="18380459072">拨打电话</view>
+        </view>
+    </view>
+</mask>
+
+<mask contentType="buy" wx:if="{{buyModal}}" bindtap="hideBuyModal">
+    <view slot="maskbuy" class="maskbuy">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="normal" formType="submit">
+                <view class="productinfo justify-SB center-vertical">
+                    <view class="boxleft center-vertical">
+                        <image src="{{shop.cover ? (shop.cover+'@cover7') : '/res/images/kanjia_defalut.png'}}" mode="aspectFill" />
+                        
+                        <view class="column" style="margin-left: 30rpx">
+                            <view class="name ellipsis">{{tuan.name}}</view>
+                            <view class="center-all" style="margin-top: 20rpx">
+                                <view class="text1" style="margin-right: 20rpx">{{tuan.bonus.dayLimit == 'custom' ? tuan.bonus.dayLimitCustom : '节假日通用'}}</view>
+                                <view class="text1" style="margin-right: 20rpx">{{tuan.bonus.appointment == 'custom' ? tuan.bonus.appointmentCustom : '免预约'}}</view>
+                                <view class="text1" style="margin-right: 20rpx">{{!tuan.allowRefund ? '不可退' : '随时退'}}</view>
+                            </view>
+                            <view class="timebox center-all" wx:if="{{plan}}" style="width: 180rpx">购买{{tuan.planhours}}小时后可用</view>
+                            <view class="timebox center-all" wx:else>购买后立即可用</view>
+                        </view>
+                    </view>
+                    <view class="boxright" wx:if="{{plan}}">￥<text style="font-size: 36rpx">{{tuan.planpriceStr}}</text></view>
+                    <view class="boxright" wx:else>￥<text style="font-size: 36rpx">{{tuan.priceStr}}</text></view>
+                </view>
+              
+                <view wx:if="{{user.phone}}" class="buybtn center-all" style="{{plan ? 'color: #242627;background: #FFDB09' : ''}}" bindtap="buy">立即支付</view>
+                <button wx:else class="normal" open-type="getPhoneNumber" bindgetphonenumber="setPhoneThenJoin" data-buy="{{true}}">
+                    <view class="buybtn center-all" style="{{plan ? 'color: #242627;background: #FFDB09' : ''}}">立即支付</view>
+                </button>
+            </button>
+        </form>
+    </view>
+</mask>
+
+<mask wx:if="{{paidModal}}" bindtap="hidePaidModal" css="padding: 0;border-radius: 30rpx;background: rgba(255, 255, 255,0)">
+    <view slot="maskcard" class="maskpaid">
+        <form bindsubmit="saveToken" report-submit>
+            <button class="simple" formType="submit">
+                <view class="column">
+                    <image src="/res/images/bg_paid.png" class="paidbg"></image>
+                    <view class="paidboxcontent column">
+                        <view class="paidtxt1">支付成功</view>
+                        <view class="paidtxt2">此券已加入您的券包</view>
+                        <view class="paidtxt3 nowrap" style="max-width: 500rpx">{{tuan.name}}</view>
+                        <view class="paidtxt4 nowrap" style="max-width: 500rpx">{{shop.name}}</view>
+                        <view class="paidtxt4" wx:if="{{plan}}" style="color: #999">购买{{tuan.planhours}}小时后可用</view>
+                        <view class="paidtxt4" wx:else style="color: #999">可立即使用</view>
+                        <view class="paidBtn" bindtap="toUse" data-usercoupon="{{usertuan.usercoupon}}">查看凭证</view>
+                        <view class="paidtips">到店出示凭证即可使用</view>
+                    </view>
+                    <view class="signbox justify-SB center-vertical" data-content="ss317903133" bindtap="handleCopy" bindlongpress="handleCopy" style="background: #FFF8CE;padding: 0 20rpx">
+                        <view class="signbox_left">
+                            <image src="http://cdn.classx.cn/tandian/2455e313f229ac53acc80136f32cc3f.jpg@avatar" style="border-radius: 48rpx;height: 48rpx;width:48rpx;"></image>
+                            <view>
+                                <view style="font-size: 24rpx;font-weight: bold;margin-bottom: 8rpx;">小师妹</view>
+                                <view style="font-size: 20rpx;color: #666;">加客服微信，<text style="color: #111;font-weight: bold;"></text>领福利进群，找到组织！</view>
+                            </view>
+                        </view>
+                        <view class="signbtn center-all" style="font-size: 20rpx" catchtap="handleCopy" data-content="ss317903133">复制微信号</view>
+                    </view>
+                </view>
+            </button>
+        </form>
+    </view>
+</mask>
+
+<mask wx:if="{{passModal}}" bindtap="hidePassModal">
+    <view slot="maskcard" class="column center-all maskpass">
+        <image src="/res/images/icon_tixianfail.png"/>
+        <view class="passtext" style="margin-top: 60rpx">该商家信息未经平台官方认</view>
+        <view class="passtext" style="margin-top: 20rpx">请自行识别风险</view>
+        <view class="maskbtn center-all" style="margin-top: 80rpx" bindtap="handleReport">举报</view>
+    </view>
+</mask>
+
+<mask contentType="bottom" wx:if="{{showAddrListModal}}" bindtap="hideAddrListModal" bindcancel="hideAddrListModal">
+    <view slot="masklist" class="masklist">
+        <view class="itemtitle">当前店铺</view>
+        <view class="maskitem center-vertical justify-SB" bindtap="openLocation">
+            <view>
+                <view>{{shop.name}}</view>
+                <view class="center-vertical" style="font-size: 24rpx;color: #999;margin-top: 30rpx">
+                    <view style="margin-right: 10rpx">{{disStr}} | </view>
+                    <view class="nowrap" style="max-width: 450rpx">{{shop.address}}</view>
+                </view>
+            </view>
+            <view class="panelicon">
+                <image src="/res/images/icon_address.png" />
+            </view>
+        </view>
+        <view class="maskline" style="height: 2rpx;width: 690rpx" wx:if="{{shop.subshops.length > 0}}"></view>
+        <view class="itemtitle" wx:if="{{shop.subshops.length > 0}}">其他店铺</view>
+        <view class="maskitem center-vertical justify-SB" wx:if="{{shop.subshops.length > 0}}" wx:for="{{shop.subshops}}" wx:key="index" bindtap="openLocation" data-item="{{item}}">
+            <view>
+                <view>{{item.name}}</view>
+                <view class="center-vertical" style="font-size: 24rpx;color: #999;margin-top: 30rpx">
+                    <view style="margin-right: 10rpx">{{item.distance}} | </view>
+                    <view class="nowrap" style="max-width: 450rpx">{{item.address}}</view>
+                </view>
+            </view>
+            <view class="panelicon">
+                <image src="/res/images/icon_address.png" />
+            </view>
+        </view>
+    </view>
+</mask>
+
+<mask class="mask-dark" wx:if="{{shareModal}}" contentType="share" tempFilePath="{{shareImg}}" bindcancel="hideShareModal">
+    <view slot="maskshare" class="center-all" style="height: calc(100% - 160rpx)" bindtap="hideShareModal">
+        <view class="center-all column" style="margin-top: 500rpx" wx:if="{{percent < 100}}">
+            <progress percent="{{percent}}" style="width: 400rpx" stroke-width="6" border-radius="3" activeColor="#D24D39" />
+            <view style="font-size: 24rpx;color: #fff;margin-top: 20rpx">海报生成中{{percent || 0}}%</view>
+        </view>
+        <image wx:else src="{{shareImg}}" class="canvasbox" style="width: 500rpx;height: 890rpx" catchtap="handlePreviewImg" data-image="{{shareImg}}"></image>
+        <canvas canvas-id="canvas" wx:if="{{!showImage}}" id="canvas" catchtap="handleDrawimg" class="canvasbox" style="width: 750rpx;height: 1334rpx;position:fixed;top: 200%"></canvas>
+    </view>
+</mask>

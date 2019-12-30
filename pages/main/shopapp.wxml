@@ -1,0 +1,96 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view class="head" wx:if="{{!shopcode || !shopcode.actived}}">
+    <view>
+        <image src="http://cdn.classx.cn/tandian/shopapplogo.png" style="width:160rpx;height:160rpx;"></image>
+        <view style="display: flex;position:relative;">
+            探店大师商户端
+        </view>
+        <view class="slogan">门店裂变营销工具</view>
+    </view>
+</view>
+
+<view wx:if="{{shopcode}}">
+    <view wx:if="{{!shopcode.actived}}">
+        <view style="position: fixed;bottom:180rpx;text-align: center;width:100vw;">
+            <!-- <view class="tag" style="font-size: 24rpx;position: absolute;right: 170rpx;z-index: 2;;top: -10rpx;background-color: #ff7909;color: #fff;">永久免费</view> -->
+            <button bindtap="toActive" class="primary" style="width:400rpx;margin: 0 auto;border-radius: 80rpx;background-color: #ffdb09;color: #333;">立即激活</button>
+            <button bindtap="toBind" class="primary" style="width:400rpx;margin: 0 auto;border-radius: 80rpx;background-color: #f8f8f8;color: #333;margin-top: 40rpx;">绑定至已有店铺</button>
+        </view>
+    </view>
+    <view wx:else>
+        <view wx:if="{{!shopcode.bindBy}}" style="width:100vw;display: flex;justify-content: center;text-align: center;margin-top: 160rpx;">
+            <view>
+                <view>已创建店铺</view>
+                <view style="font-size: 48rpx;">{{shopcode.shop.name}}</view>
+                <image src="{{shopcode.inviteUrl}}" style="width:600rpx;height: 600rpx;margin-top: 100rpx;"></image>
+                <view>请店主扫码关注，完成入驻</view>
+            </view>
+        </view>
+        <view wx:else>
+            <view style="font-size: 48rpx;padding: 40rpx;">已激活的店铺码</view>
+            <view style="text-align: left;background-color: #fafafa;padding: 40rpx;margin-bottom: 80rpx;">
+                <view>激活：{{shopcode.activedBy.nickname}}</view>
+                <view>店铺：{{shopcode.shop.name}}</view>
+                <view>店主：{{shopcode.bindBy.nickname}}</view>
+                <view>{{shopcode.bindBy.bindTimeStr}}完成绑定</view>
+            </view>
+            <button bindtap="toUsermode" class="primary" style="width:400rpx;margin: 0 auto;border-radius: 80rpx;background-color: #ffdb09;color: #333;margin-bottom: 40rpx;">顾客视角</button>
+            <button bindtap="toShopSetting" class="primary" style="width:400rpx;margin: 0 auto;border-radius: 80rpx;background-color: #f8f8f8;color: #333;margin-bottom: 40rpx;">店铺设置</button>
+            <button bindtap="toUnbind" class="primary" style="width:400rpx;margin: 0 auto;border-radius: 80rpx;background-color: #f8f8f8;color: #333;">解除绑定</button>
+        </view>
+    </view>
+</view>
+<view wx:else style="position: fixed;bottom:180rpx;text-align: center;width:100vw;">
+    <view class="tag" style="font-size: 24rpx;position: absolute;right: 170rpx;z-index: 2;;top: -10rpx;background-color: #ff7909;color: #fff;">永久免费</view>
+    <button bindtap="toShopapp" class="primary" style="width:400rpx;margin: 0 auto;border-radius: 80rpx;background-color: #ffdb09;color: #333;">立即体验</button>
+</view>
+
+<view class="mask-dark" wx:if="{{formModal}}" bindtap="hideFormModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;box-sizing: border-box;border-radius: 8rpx;padding: 70rpx 0;">
+            <view class="prop" style="justify-content: space-between;">
+                <view class="name">店铺名称</view>
+                <input class="value" focus style="text-align: right" type="text" bindinput="valueChanged" data-field="name" placeholder="请输入" />
+            </view>
+            <view class="prop" style="justify-content: space-between;">
+                <view class="name">店铺地址</view>
+                <input style="text-align: right" wx:if="{{form.location}}" value="{{form.address}}" class="value" type="text" bindinput="valueChanged" data-field="address" placeholder="请输入具体位置" />
+                <view wx:if="{{!form.location}}" class="value" style="color: #ff7909;font-weight: bold;text-align: right;" bindtap="openLocation">选择位置</view>
+            </view>
+            <view style="justify-content: flex-end;padding-right: 40rpx;margin-top: 8rpx;" wx:if="{{form.location}}">
+                <view class="value" style="color: #ff7909;font-weight: bold;text-align: right;" bindtap="openLocation">重新选择</view>
+            </view>
+            <view>
+                <view class="maskbtn" style="margin-top:50rpx" bindtap="save">确定
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{bindModal}}" bindtap="hideBindModal">
+    <view catchtap="doNothing">
+        <view style="background: #fff;width:590rpx;box-sizing: border-box;border-radius: 8rpx;padding: 70rpx 0;">
+            <view class="prop" style="justify-content: space-between;">
+                <view class="name">店铺名称</view>
+                <input class="value" focus style="text-align: right" type="text" bindinput="keywordsChanged" placeholder="请输入" bindconfirm="doSearch" />
+            </view>
+            <view class="result">
+                <view style="color: #aaa;" wx:if="{{!shops.length}}">暂无数据</view>
+                <view wx:else>
+                    <view wx:for="{{shops}}" wx:key="index" class="item" bindtap="bind" data-item="{{item}}">
+                        <view class="nowrap" style="width: 360rpx;">{{item.name}}</view>
+                        <button class="right">确认</button>
+                    </view>
+                    <view style="color: #aaa;margin-top: 20rpx;">共{{count}}条数据</view>
+                </view>
+            </view>
+            <view>
+                <view class="maskbtn" style="margin-top:50rpx" bindtap="doSearch">搜索
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

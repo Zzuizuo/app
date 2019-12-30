@@ -1,0 +1,119 @@
+page {
+    color: #333;
+}
+
+.loading {
+    background-color: white;
+}
+
+.head {
+    text-align: center;
+    position: fixed;
+    top: 0;
+    height: 200rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-bottom: 1rpx solid #f1f1f1;
+    width: 750rpx;
+}
+
+.head-placeholder {
+    height: 220rpx;
+    width: 750rpx;
+    background-color: #f1f1f1;
+}
+
+
+.message .avatar {
+    width: 66rpx;
+    height: 66rpx;
+    border-radius: 4rpx;
+    margin-right: 20rpx;
+    display: block;
+}
+
+.messages {
+    padding: 30rpx;
+    background-color: #f1f1f1;
+    min-height: calc(100vh - 600rpx);
+}
+
+.message {
+    padding: 30rpx 0;
+    display: flex;
+    align-items: center;
+    width: 650rpx;
+}
+
+.message .content {
+    width: 400rpx;
+    background-color: white;
+    padding: 20rpx;
+    border-radius: 4rpx;
+}
+
+.message:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.reply {
+    padding: 30rpx 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 690rpx;
+}
+
+.reply .content {
+    width: 400rpx;
+    background-color: white;
+    padding: 20rpx;
+    border-radius: 4rpx;
+}
+
+.reply:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.reply .avatar {
+    width: 66rpx;
+    height: 66rpx;
+    border-radius: 4rpx;
+    margin-left: 20rpx;
+    display: block;
+}
+
+
+.replyInput {
+    line-height: 88rpx;
+    height: 88rpx;
+    font-size: 28rpx;
+    margin: 20rpx 0;
+    padding: 0 60rpx;
+    border-bottom: 1rpx solid #f1f1f1;
+    text-align: left;
+    width: 600rpx;
+}
+
+.foot {
+    width: 750rpx;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    border-top: 1rpx solid #f1f1f1;
+    background-color: rgba(255, 255, 255, 0.95);
+    height: 320rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.foot-placeholder {
+    height: 340rpx;
+    width: 750rpx;
+    background-color: #f1f1f1;
+}

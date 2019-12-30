@@ -1,0 +1,20 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+
+<view class="users">
+    <view class="user" wx:for="{{users}}" wx:key="index" bindtap="showActions" data-item="{{item}}">
+        <view style="display: flex;align-items: center;">
+            <image src="{{item.headimgurl}}" style="width:60rpx;height:60rpx;border-radius:60rpx;display: block;margin-right: 20rpx;"></image>
+            <view>
+                <view style="font-weight: bold;">{{item.nickname}}</view>
+                <view style="font-size: 24rpx;opacity: 0.5;" bindlongtap="copy" data-content="{{item._id}}">id:{{item._id}}</view>
+                <view style="font-size: 24rpx;">创建于：{{item.createTimeStr}}</view>
+                <view style="font-size: 24rpx;">注销于：{{item.switchTimeStr}}</view>
+            </view>
+        </view>
+        <view style="color: #33a140;font-weight: bold;">
+            选择
+        </view>
+    </view>
+</view>

@@ -1,0 +1,11 @@
+page{
+    background-color: #1a171a;
+}
+.user{
+    padding: 40rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    border-bottom: 1rpx solid #000;
+}

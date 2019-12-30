@@ -1,0 +1,22 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+<view wx:if="{{usertasks.length}}">
+    <view style="padding: 20rpx 30rpx;border-bottom: 1rpx solid #f8f8f8;font-size: 36rpx;">
+        <view style="font-weight: bold;">做任务赢取额外幸运币</view>
+        <view style="font-size: 28rpx;">幸运币可用于在任意霸王餐抽奖活动中，额外获取一个幸运号码，可通过每日签到，任务获得。</view>
+    </view>
+
+    <view class="tasks">
+        <view class="task" wx:for="{{usertasks}}" wx:key="index" style="display: flex;justify-content: space-between;align-items: center;padding: 20rpx 30rpx;{{item.done?'opacity:0.4':''}}">
+            <view>
+                <view>{{item.task.content}}</view>
+                <view style="color:#aaa;">{{item.task.bonus}}</view>
+            </view>
+            <view style="color: #f78830;font-weight: bold;">
+                <view wx:if="{{item.done}}">已完成</view>
+                <view wx:if="{{!item.done}}">{{(item.progress||0)}}/{{item.task.max}}</view>
+            </view>
+        </view>
+    </view>
+</view>

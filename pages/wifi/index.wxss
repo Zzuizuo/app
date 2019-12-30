@@ -1,0 +1,90 @@
+page {
+    background-color: #333;
+}
+
+.datas {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.data {
+    width: 250rpx;
+    text-align: center;
+    padding: 30rpx 0;
+}
+
+.value {
+    font-size: 40rpx;
+    color: #36ca58;
+}
+
+.value2 {
+    color: #888;
+    font-size: 22rpx;
+}
+
+.name {
+    color: #888;
+    font-size: 22rpx;
+}
+
+.product {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20rpx;
+    padding-top: 30rpx;
+    border-bottom: 1rpx solid #222;
+}
+
+.connect {
+    background-color: #36ca58;
+    width: 320rpx;
+    color: #333;
+    font-size: 32rpx;
+    border-radius: 60rpx;
+    border: 2rpx solid #222;
+    margin-top: 60rpx;
+}
+
+/* .grids {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.grid {
+    width: 249rpx;
+    height: 249rpx;
+    color: #36ca58;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1rpx solid #222;
+    border-bottom: 1rpx solid #222;
+} */
+
+.grid:nth-of-type(3n) {
+    width: 250prx;
+    border-right: none;
+}
+
+.more-line {
+    border-top: 1rpx solid #212121;
+    margin: 0 80rpx;
+    width: 590rpx;
+    position: absolute;
+    margin-top: 45rpx;
+    z-index: 1;
+}
+
+.more {
+    text-align: center;
+    padding: 30rpx;
+    left: 245rpx;
+    width: 200rpx;
+    background-color: #333;
+    color: #36ca58;
+    height: 30rpx;
+    line-height: 30rpx;
+    position: absolute;
+    z-index: 2;
+}

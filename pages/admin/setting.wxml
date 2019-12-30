@@ -1,0 +1,71 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+
+<view class="grids">
+    <view class="grid" bindtap="toContacts">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>用户消息</view>
+        </view>
+    </view>
+    <view class="grid" bindtap="toMockAccount">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>鹰眼模式</view>
+            <view class="tag" wx:if="{{!user.super}}" style="background-color:#aaa;width:80rpx;position: absolute;margin-left: 25rpx;margin-top: 8rpx;">不可用</view>
+        </view>
+    </view>
+    <view class="grid" bindtap="openDebug">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>打开调试</view>
+        </view>
+    </view>
+    <view class="grid" bindtap="closeDebug">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>关闭调试</view>
+        </view>
+    </view>
+    <view class="grid" bindtap="setTrial">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>连接体验数据</view>
+            <view class="tag" wx:if="{{env=='trial'}}" style="background-color:#399f4e;width:80rpx;position: absolute;margin-left: 25rpx;margin-top: 8rpx;">当前</view>
+            <view class="tag" wx:if="{{env=='develop'}}" style="background-color:#aaa;width:80rpx;position: absolute;margin-left: 25rpx;margin-top: 8rpx;">不支持</view>
+        </view>
+    </view>
+    <view class="grid" bindtap="setRelease">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>连接正式数据</view>
+            <view class="tag" wx:if="{{env=='release'}}" style="background-color:#399f4e;width:80rpx;position: absolute;margin-left: 25rpx;margin-top: 8rpx;">当前</view>
+            <view class="tag" wx:if="{{env=='develop'}}" style="background-color:#aaa;width:80rpx;position: absolute;margin-left: 25rpx;margin-top: 8rpx;">不支持</view>
+        </view>
+    </view>
+    <view class="grid" bindtap="resetAccount">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>重置账号信息</view>
+        </view>
+    </view>
+    <view class="grid" bindtap="revertAccount">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>切换历史账号</view>
+        </view>
+    </view>
+    <view class="grid" bindtap="toWifi">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>WiFi码</view>
+        </view>
+    </view>
+    <view class="grid" bindtap="debugQrCode">
+        <view>
+            <image src="/res/images/setting.png" style="width:100rpx;height:100rpx;"></image>
+            <view>扫码调试</view>
+        </view>
+    </view>
+</view>

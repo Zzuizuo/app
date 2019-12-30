@@ -1,0 +1,17 @@
+.page {
+    padding: 30rpx 30rpx 0 30rpx;
+    box-sizing: border-box;
+    font-size: 0;
+}
+
+.page image {
+    width: 690rpx;
+}
+
+.page .watermark {
+    position: absolute;
+    top: 30rpx;
+    left: 30rpx;
+    width: 690rpx;
+    bottom: 0;
+}

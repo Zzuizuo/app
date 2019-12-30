@@ -1,0 +1,13 @@
+{
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "dark",
+    "usingComponents": {
+        "serverinfo": "/pages/component/serverinfo",
+        "circle": "/pages/component/circle",
+        "mask": "/pages/component/mask",
+        "navbar": "/pages/component/navbar"
+    }
+}

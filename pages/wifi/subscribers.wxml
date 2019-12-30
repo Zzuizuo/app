@@ -1,0 +1,48 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+
+<view class="head">
+    <view class="search-bg">
+        <input style="padding: 0 40rpx;width:400rpx;text-align: left;color:#ea8844" placeholder="输入昵称/电话/openid搜索" bindinput="keywordsChanged" bindfocus="startSearch" bindblur="endSearch" bindconfirm="doSearch"></input>
+        <view wx:if="{{query.keywords}}" style="text-align: right;font-weight: bold;color: #42a766" bindtap="doSearch">搜索</view>
+    </view>
+</view>
+
+<view class="qrcodes">
+    <view class="qrcode" wx:for="{{subscribers}}" wx:key="index" bindtap="toActions" data-item="{{item}}" style="{{item.subscribe?'':'opacity: 0.2'}}">
+        <view>
+            <view style="display: flex;align-items: center;">
+                <image class="icon" src="{{item.headimgurl+'@avatar'}}" style="width:40rpx;height: 40rpx;border-radius: 40rpx;display: block;margin-right: 10rpx;"></image>
+                <view style="color: #ea8844;max-width: 200rpx;" class="nowrap">{{item.nickname}}</view>
+            </view>
+            <view style="color: #aaa;max-width: 200rpx;font-weight: normal;font-size: 20rpx;" class="nowrap">{{item.createTimeStr}}</view>
+        </view>
+        <view class="datas">
+            <!-- <view class="data" style="width:140rpx;">
+                <view class="name"></view>
+                <view class="value">{{item.data.connectToday}}</view>
+            </view> -->
+            <!-- <view class="data" style="width:140rpx;">
+                <view class="name">创建时间</view>
+                <view class="value" style="font-size: 22rpx;line-height: 64rpx;">{{item.createTimeStr}}</view>
+            </view> -->
+            <view class="data" style="width:200rpx;">
+                <view class="name">WiFi</view>
+                <view class="value" style="font-size: 22rpx;line-height: 64rpx;max-width: 200px;color: #42a766;" class="nowrap">{{item.origin.wificode?item.origin.wificode.name:'-'}}</view>
+            </view>
+            <view class="data" style="width:200rpx;" bindtap="showChannel">
+                <view class="name">渠道</view>
+                <view class="value" style="font-size: 22rpx;line-height: 64rpx;max-width: 200px;color: #42a766;" class="nowrap">{{item.channel?item.channel.nickname:'-'}}</view>
+            </view>
+        </view>
+    </view>
+    <view>
+        <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+        <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+        <view wx:if="{{nomore && subscribers.length >0 }}" class="bottomloader">已全部加载</view>
+    </view>
+    <view wx:if="{{nomore && subscribers.length ==0}}" class="nodata">
+        <view style="margin-top: 100rpx;">暂无数据</view>
+    </view>
+</view>

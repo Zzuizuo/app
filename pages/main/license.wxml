@@ -1,0 +1,8 @@
+<view wx:if="{{!session || androidHTMLLoading}}" class="loading">
+	<image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;" />
+</view>
+<view class="page">
+	<image mode="widthFix" wx:if="{{showPic}}" src="{{url}}" bindload="handleLoadImg"/>
+	<image src="https://cdn.classx.cn/tandian/watermark.png" mode="aspectFill" bindload="handleLoadMark" class="watermark" style="height: {{height}}rpx"></image>
+</view>
+

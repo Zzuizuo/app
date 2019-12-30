@@ -1,0 +1,562 @@
+page {
+  min-height: 100vh;
+  color: #242627;
+}
+.page {
+  position: relative;
+}
+.contentbox {
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  z-index: 10;
+}
+.contenttop {
+  position: relative;
+  padding-bottom: 120rpx;
+}
+.contenttop::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -30rpx;
+  right: -30rpx;
+  background: #FFDB09;
+  z-index: -1;
+}
+.pagetop {
+  width: 100%;
+  height: 210rpx;
+  padding: 30rpx 0;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+}
+.userbox {
+  min-width: 600rpx;
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #242627;
+}
+.userbox image {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 100%;
+  margin-right: 20rpx;
+}
+.databox {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.datacell {
+  width: 160rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+.tosigninbox {
+  width: 115rpx;
+  height: 51rpx;
+  position: absolute;
+  left: 50%;
+  top: -50rpx;
+  transform: translate(-10%, 0);
+}
+.tosigninbox image {
+  width: 100%;
+  height: 100%;
+}
+.datanum {
+  font-size: 32rpx;
+  line-height: 1;
+  font-weight: bold;
+}
+.datatext {
+  font-size: 24rpx;
+  line-height: 1;
+  margin-top: 20rpx;
+}
+.signbox {
+  height: 100rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  position: relative;
+  background: rgba(255, 219, 9, 0.2);
+  border-radius: 10rpx;
+  margin-top: 50rpx;
+  line-height: 1;
+}
+.signbox_left {
+  display: flex;
+  align-items: center;
+}
+.signbox_left image {
+  width: 42rpx;
+  height: 36rpx;
+  margin-right: 14rpx;
+}
+.signbtn {
+  width: 160rpx;
+  height: 52rpx;
+  box-sizing: border-box;
+  text-align: center;
+  line-height: 52rpx;
+  border-radius: 26rpx;
+  font-size: 24rpx;
+  background: #ffdb09;
+  color: #242627;
+  font-weight: 500;
+}
+.navbox {
+  margin-top: 50rpx;
+  padding: 0 0 50rpx 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+}
+.navcell {
+  width: 160rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.navcell image {
+  width: 50rpx;
+  height: 50rpx;
+}
+.cellname {
+  color: #999;
+  font-size: 22rpx;
+  margin-top: 20rpx;
+  line-height: 1;
+}
+.divideline {
+  height: 20rpx;
+  width: 100%;
+  background: #FAFAFA;
+  position: relative;
+}
+.divideline::after {
+  position: absolute;
+  content: '';
+  top: 0;
+  right: -28rpx;
+  width: 28rpx;
+  height: 20rpx;
+  background: #FAFAFA;
+}
+.divideline::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: -28rpx;
+  width: 28rpx;
+  height: 20rpx;
+  background: #FAFAFA;
+}
+.singleboxs {
+  border-radius: 10rpx;
+  background: #fff;
+}
+.singleboxtitle {
+  font-size: 28rpx;
+  color: #242627;
+}
+.singlebox {
+  height: 100rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+.singleboxStyle {
+  border-radius: 10rpx;
+  background: #fff;
+}
+.singleboxs > .singlebox::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+.singleboxs > .singlebox:nth-last-child(1)::after {
+  border-bottom: none;
+}
+.attendbtn {
+  height: 52rpx;
+  width: 132rpx;
+  text-align: center;
+  line-height: 52rpx;
+  border-radius: 26rpx;
+  font-size: 24rpx;
+  background: #ffdb09;
+  color: #242627;
+}
+.righticon {
+  width: 14rpx;
+  height: 20rpx;
+}
+.favTips {
+  display: flex;
+  align-items: center;
+  height: 60rpx;
+  width: 370rpx;
+  color: #242627;
+  font-size: 24rpx;
+  line-height: 60rpx;
+  text-align: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 6rpx;
+  position: absolute;
+  top: 10rpx;
+  right: 0;
+}
+.triangle {
+  content: '';
+  width: 0;
+  height: 0;
+  border-right: 10rpx solid transparent;
+  border-left: 10rpx solid transparent;
+  border-bottom: 10rpx solid rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: -8rpx;
+  right: 100rpx;
+}
+.contactcell {
+  padding: 0 40rpx;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20rpx;
+}
+.contactbtn {
+  width: 120rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #242627;
+  background: #ffdb09;
+  font-size: 24rpx;
+  text-align: center;
+  border-radius: 60rpx;
+}
+.mask-card {
+  box-sizing: border-box;
+}
+.cardtitle {
+  font-size: 48rpx;
+  line-height: 1;
+  text-align: center;
+}
+.cardcontent {
+  font-size: 24rpx;
+  line-height: 1.4;
+  text-align: center;
+  margin-top: 50rpx;
+}
+.vipCard {
+  background-color: #333;
+  border-radius: 8rpx;
+  height: 80rpx;
+  width: 300rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30rpx;
+  position: absolute;
+  right: 0;
+  margin-right: -30rpx;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.payModal {
+  position: fixed;
+  bottom: -2rpx;
+  left: 0;
+  width: 750rpx;
+  padding-top: 30rpx;
+  background-color: white;
+}
+.pay {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f1f1f1;
+}
+.pay .intro {
+  color: #aaa;
+  width: 420rpx;
+}
+.styles {
+  display: flex;
+  margin-top: 10rpx;
+}
+.style {
+  background-color: #fc4b31;
+  color: #333;
+  padding: 10rpx 20rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+}
+.style .intro {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 22rpx;
+}
+.payModal .title {
+  color: #aaa;
+  font-size: 22rpx;
+}
+.addressButton {
+  color: #fc4b31;
+  line-height: 100rpx;
+}
+.addressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.buy {
+  margin-top: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.xieyi {
+  text-align: left;
+  padding: 0 30rpx;
+  background-color: #f8f8f8;
+  width: 430rpx;
+  font-size: 24rpx;
+  line-height: 40rpx;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+.confirm {
+  padding: 0 30rpx;
+  background-color: #fc4b31;
+  color: #fff;
+  min-width: 200rpx;
+  text-align: center;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.options {
+  display: flex;
+  align-items: center;
+  border-radius: 4rpx;
+  height: 60rpx;
+  background-color: #f8f8f8;
+  text-align: center;
+  justify-content: space-between;
+}
+.option {
+  border-radius: 4rpx;
+  height: 60rpx;
+  width: 140rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.vipsign {
+  width: 160rpx;
+  height: 30rpx;
+  box-sizing: border-box;
+  background: #f0f0f0;
+  color: #999;
+  font-size: 20rpx;
+  text-align: center;
+  line-height: 30rpx;
+  border-radius: 4rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.signinbox {
+  height: 280rpx;
+  position: relative;
+  text-align: center;
+  line-height: 1;
+  color: #242627;
+}
+.signinbox image {
+  width: 590rpx;
+  height: 280rpx;
+  border-top-left-radius: 10rpx;
+  border-top-right-radius: 10rpx;
+}
+.signtext {
+  position: absolute;
+  top: 70rpx;
+  left: 50%;
+  font-size: 28rpx;
+  transform: translate(-50%, 0);
+}
+.cornlist {
+  width: 100%;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  margin-top: 50rpx;
+}
+.cornitem {
+  width: 70rpx;
+  height: 80rpx;
+  position: relative;
+  text-align: center;
+  line-height: 1;
+  font-size: 20rpx;
+}
+.cornitem image {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.corntext {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #FF8900;
+  font-weight: bold;
+}
+.vipblock {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 690rpx;
+  height: 90rpx;
+}
+.vipblock .vipblockcontent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 690rpx;
+  height: 90rpx;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  color: #FFD08A;
+  font-size: 28rpx;
+}
+.vipblock .vipblockcontent .vipblockbtn {
+  width: 160rpx;
+  height: 52rpx;
+  font-size: 24rpx;
+  border-radius: 26rpx;
+  background: #FFD08A;
+  color: #242627;
+}
+.vipmask {
+  line-height: 1;
+}
+.vipmask .maskbg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 590rpx;
+}
+.vipmask .titlebox {
+  position: relative;
+  font-size: 36rpx;
+  color: #FFD08A;
+  font-weight: 500;
+}
+.vipmask .titlebox .viptag {
+  width: 40rpx;
+  height: 34rpx;
+  margin-right: 10rpx;
+}
+.vipmask .text1 {
+  position: relative;
+  font-size: 24rpx;
+  color: #FFD08A;
+  margin-top: 16rpx;
+}
+.vipmask .vipcell {
+  position: relative;
+  width: 250rpx;
+  height: 250rpx;
+  border: 2rpx solid #FFD08A;
+  box-sizing: border-box;
+}
+.vipmask .vipcell image {
+  position: relative;
+  width: 60rpx;
+  height: 60rpx;
+  display: block;
+}
+.vipmask .text2 {
+  position: relative;
+  font-size: 20rpx;
+  color: #999;
+  line-height: 1.6;
+  width: 180rpx;
+  text-align: center;
+  margin-top: 20rpx;
+}
+.vipmask .vipbtn {
+  width: 420rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  background: #FFD08A;
+  color: #242627;
+  margin-top: 120rpx;
+  position: relative;
+}
+.vipmask .vipbtn .image_limit {
+  position: relative;
+  width: 450rpx;
+  height: 60rpx;
+  position: absolute;
+  bottom: 70rpx;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+.vipmask .vipbtn .image_limit .imagetxt {
+  position: relative;
+  width: 450rpx;
+  line-height: 40rpx;
+  font-size: 24rpx;
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.hottag {
+  position: absolute;
+  top: -26rpx;
+  right: -60rpx;
+  background: #FF4925;
+  height: 30rpx;
+  width: 60rpx;
+  font-size: 20rpx;
+  color: #fff;
+  border-top-right-radius: 15rpx;
+  border-top-left-radius: 15rpx;
+  border-bottom-right-radius: 15rpx;
+}
+.avatarlist .avatarcell {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 100%;
+  margin-left: -20rpx;
+}

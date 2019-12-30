@@ -1,0 +1,6 @@
+/* pages/main/rule.wxss */
+
+page {
+    background: #fff;
+    color: #333;
+}

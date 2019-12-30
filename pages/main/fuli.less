@@ -1,0 +1,101 @@
+image {
+    display: block;
+}
+
+.page {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+
+    .bg {
+        width: 100vw;
+        padding-top: 40rpx;
+        height: 1334rpx;
+        background: #ffdb09;
+        position: relative;
+
+        image {
+            width: 100%;
+            height: 100%;
+        }
+
+        .name {
+            line-height: 1;
+            position: absolute;
+            top: 200rpx;
+            left: 0;
+            width: 100vw;
+            font-size: 44rpx;
+            text-align: center;
+            z-index: 11;
+            font-weight: 500;
+            color: #242627;
+        }
+    }
+
+    .timebox {
+        width: 500rpx;
+        position: absolute;
+        top: 360rpx;
+        left: 50%;
+        transform: translate(-50%, 0);
+        line-height: 1;
+
+        .amount {
+            font-size: 32rpx;
+            color: #242627;
+        }
+
+        .clockbox {
+            margin-top: 30rpx;
+
+            .clockitem {
+                width: 50rpx;
+                height: 50rpx;
+                line-height: 50rpx;
+                text-align: center;
+                color: #fff;
+                background: #1E1E1E;
+                border-radius: 4rpx;
+            }
+        }
+    }
+
+    .vipbox {
+        position: absolute;
+        left: 50%;
+        bottom: 390rpx;
+        transform: translate(-50%, 0);
+
+        image {
+            width: 704rpx;
+            height: 230rpx;
+        }
+
+        .btn {
+            position: absolute;
+            right: 30rpx;
+            bottom: 50rpx;
+            width: 150rpx;
+            height: 60rpx;
+            line-height: 60rpx;
+            text-align: center;
+            color: #242627;
+            font-size: 24rpx;
+            background: #FFD08A;
+            z-index: 11;
+            border-radius: 30rpx;
+        }
+    }
+
+    .pagebottom {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        image {
+            width: 100vw;
+            height: 420rpx;
+        }
+    }
+}

@@ -1,0 +1,249 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+
+<view class="head" style="display: flex;justify-content: space-between;align-items: center;line-height: 1.1;padding: 20rpx 40rpx;">
+    <view>
+        <view style="font-size: 50rpx;width:400rpx;" class="nowrap">{{qrcode.name||'未设置'}}</view>
+        <view style="font-size: 22rpx;width:400rpx;" class="nowrap">{{qrcode.wifi.SSID||'这是一个未激活的WiFi码'}}</view>
+    </view>
+    <view style="display: flex;">
+        <view style="text-align: center;width:120rpx;">
+            <view style="color: #36ca58;font-size: 50rpx;">{{qrcode.data.connectToday||0}}</view>
+            <view style="color: #aaa;font-size: 22rpx;">今日连接</view>
+        </view>
+        <view style="text-align: center;max-width:120rpx;" wx:if="{{qrcode.appid=='wx7a58519f5e3929b7' && qrcode.requireNickname}}">
+            <view style="color: #36ca58;font-size: 50rpx;">{{qrcode.data.subscribe||0}}</view>
+            <view style="color: #aaa;font-size: 22rpx;">累计关注</view>
+        </view>
+        <view style="text-align: center;max-width:120rpx;" wx:else>
+            <view style="color: #36ca58;font-size: 50rpx;">{{qrcode.data.connect||0}}</view>
+            <view style="color: #aaa;font-size: 22rpx;">累计连接</view>
+        </view>
+    </view>
+</view>
+<view class="headtabs">
+    <view class="headtab" bindtap="tabChanged" data-tab="0" style="{{tab==0?'font-weight:bold;':'opacity: 0.8;'}}">连接</view>
+    <view class="headtab" bindtap="tabChanged" data-tab="1" style="{{tab==1?'font-weight:bold;':'opacity: 0.8;'}}">设置</view>
+    <!-- <view class="tab" bindtap="tabChanged" data-tab="2" style="{{tab==2?'font-weight:bold;':'opacity: 0.8;'}}"></view> -->
+</view>
+<view class="headtabs-cusor" style="margin-left: {{40 + tab * 120}}rpx;"></view>
+
+<view class="body" wx:if="{{tab==0}}">
+    <view class="connects" wx:if="{{connects.length}}">
+        <view class="connects">
+            <view class="connect" wx:for="{{connects}}" wx:key="index">
+                <view class="user" wx:if="{{item.user}}">
+                    <image src="{{item.user.headimgurl}}" style="width:60rpx;height:60rpx;border-radius: 4rpx;margin-right: 10rpx;"></image>
+                    <view>
+                        <view style="font-size: 22rpx;width:400rpx;" class="nowrap">{{item.user.nickname}}</view>
+                        <view style="font-size: 22rpx;width:400rpx;" class="nowrap" wx:if="{{item.user.phone}}">{{item.user.phone}}</view>
+                    </view>
+                </view>
+                <view wx:else>未授权用户信息</view>
+                <view>{{item.createTimeStr}}</view>
+            </view>
+        </view>
+    </view>
+    <view wx:else style="padding: 30rpx 40rpx;color: #aaa;">
+        暂无数据
+    </view>
+</view>
+<view class="body" wx:if="{{tab==1}}">
+    <!-- <map wx:if="{{qrcode && markers}}" longitude="{{qrcode.location[0]}}" latitude="{{qrcode.location[1]}}" markers="{{markers}}" style="width:750rpx;height: 300rpx;"></map> -->
+    <view class="settings">
+        <view class="setting" bindtap="showQrcode">
+            <view>
+                <view>
+                    二维码
+                    <view style="font-size: 22rpx;width:400rpx;margin-top: 8rpx;opacity: 0.5;;" class="nowrap" wx:if="{{qrcode.channel}}">{{qrcode.channel.nickname}}的推广</view>
+                    <view style="font-size: 22rpx;width:400rpx;margin-top: 8rpx;opacity: 0.5;;" class="nowrap" wx:if="{{!qrcode.channel && qrcode.bindBy}}">由{{qrcode.bindBy.nickname}}配置</view>
+                </view>
+            </view>
+            <view>
+                <button class="actionbtn">查看</button>
+            </view>
+        </view>
+        <block wx:if="{{qrcode.wifi}}">
+            <view class="setting" bindtap="toSetSSID">
+                <view>
+                    <view>当前绑定WiFi</view>
+                </view>
+                <view>
+                    <view style="padding: 10rpx 0;color: #36ca58;">{{qrcode.wifi.SSID}}</view>
+                </view>
+            </view>
+            <view class="setting" wx:if="{{qrcode.wifi}}" bindtap="showFieldModal" data-title="WiFi密码" data-value="{{qrcode.wifi.password}}" data-field="wifi.password">
+                <view>
+                    <view>WiFi密码</view>
+                </view>
+                <view>
+                    <!-- <button class="actionbtn" bindtap="toSetWifi">去修改</button> -->
+                    <view style="padding: 10rpx 0;color: #36ca58;">{{qrcode.wifi.password}}</view>
+                </view>
+            </view>
+            <view class="setting" bindtap="showFieldModal" data-title="店铺名称" data-value="{{qrcode.name}}" data-field="name">
+                <view>
+                    <view>店铺名称</view>
+                </view>
+                <view>
+                    <view style="padding: 10rpx 0;color: #36ca58;">{{qrcode.name||'未设置'}}</view>
+                </view>
+            </view>
+            <view class="setting" bindtap="openLocation">
+                <view>
+                    <view>店铺地址</view>
+                </view>
+                <view>
+                    <view style="padding: 10rpx 0;color: #36ca58;width:400rpx;text-align: right;">{{qrcode.address||'未设置'}}</view>
+                </view>
+            </view>
+            <view class="setting">
+                <view>
+                    在必要时显示密码
+                    <view style="font-size: 22rpx;color: #aaa;">以便支持电脑等更多设备手动连接</view>
+                </view>
+                <view>
+                    <switch checked="{{qrcode.showPassword}}" bindchange="switchChanged" data-field="showPassword" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                </view>
+            </view>
+            <view class="setting">
+                <view>
+                    联网要求授权昵称
+                    <view style="font-size: 22rpx;color: #aaa;">需用户授权，获取微信头像与昵称</view>
+                </view>
+                <view>
+                    <switch checked="{{qrcode.requireNickname}}" bindchange="switchChanged" data-field="requireNickname" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58" disabled="{{qrcode.group}}"></switch>
+                </view>
+            </view>
+            <view class="setting" wx:if="{{user.super}}">
+                <view>
+                    联网要求绑定手机
+                    <view style="font-size: 22rpx;color: #aaa;">需用户授权，请合法保护用户隐私</view>
+                </view>
+                <view>
+                    <switch checked="{{qrcode.requirePhone}}" bindchange="switchChanged" data-field="requirePhone" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                </view>
+            </view>
+            <view class="setting">
+                <view>
+                    连接后弹出广告图
+                    <view style="font-size: 22rpx;color: #aaa;">支持图里带小程序码长按跳转</view>
+                </view>
+                <view>
+                    <view wx:if="{{!qrcode.adImage}}" class="value" style="color: #36ca58;font-weight: bold;text-align: right;" bindtap="uploadAdImage">选择图片</view>
+                    <image wx:if="{{qrcode.adImage}}" src="{{qrcode.adImage+'@avatar'}}" style="height: 80rpx;width: 80rpx;border-radius: 4rpx;" mode="aspectFill" bindtap="modifyAdImage"></image>
+                </view>
+            </view>
+            <view class="setting" wx:if="{{user.super}}">
+                <view>
+                    连接后视频广告
+                    <view style="font-size: 22rpx;color: #aaa;">15秒内微信官方渠道广告</view>
+                </view>
+                <view>
+                    <switch checked="{{qrcode.showVideo}}" bindchange="switchChanged" data-field="showVideo" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                </view>
+            </view>
+            <view class="setting" wx:if="{{user.super}}">
+                <view>
+                    连接前视频广告
+                    <view style="font-size: 22rpx;color: #aaa;">15秒内微信官方渠道广告</view>
+                </view>
+                <view>
+                    <switch checked="{{qrcode.forceVideo}}" bindchange="switchChanged" data-field="forceVideo" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                </view>
+            </view>
+            <view class="setting" wx:if="{{user.super}}">
+                <view>
+                    连接后插屏广告
+                    <view style="font-size: 22rpx;color: #aaa;">需开通流量主并创建广告位</view>
+                </view>
+                <view>
+                    <switch checked="{{qrcode.showChaping}}" bindchange="switchChanged" data-field="showChaping" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                </view>
+            </view>
+            <view class="setting" wx:if="{{user.super}}">
+                <view>
+                    连接后渠道窗口
+                    <view style="font-size: 22rpx;color: #aaa;">需要后台配置支持</view>
+                </view>
+                <view>
+                    <switch checked="{{qrcode.channelMode}}" bindchange="switchChanged" data-field="channelMode" style="display: block;margin-right: 0;text-align: right;margin-right: -10rpx;" color="#36ca58"></switch>
+                </view>
+            </view>
+
+            <view class="setting">
+                <view>重置为初始状态</view>
+                <view>
+                    <!-- <button class="actionbtn" bindtap="toUnbind" style="color: red">重置</button> -->
+                    <view>
+                        <button class="actionbtn" style="background-color: #ff753b;" bindtap="toUnbind">重置</button>
+                    </view>
+                </view>
+            </view>
+        </block>
+    </view>
+</view>
+<view class="body" wx:if="{{tab==2}}">
+
+</view>
+
+<view class="mask-dark" wx:if="{{SSIDModal}}" bindtap="hideSSIDModal">
+    <view class="card" style="width:560rpx;" catchtap="doNothing">
+        <view class="card-head" style="background-color: #08be31;padding: 30rpx;">
+            <view>
+                <image src="/res/images/info-6.png" style="width:100rpx;height: 100rpx;margin-top: 16rpx;"></image>
+                <view style="padding: 0 30rpx;text-align: left;font-size: 28rpx;color:#fff;">设置新的WiFi</view>
+            </view>
+        </view>
+        <view class="card-foot" wx:if="{{connecting}}" style="padding: 40rpx;background-color: white;text-align: center;color: #aaa;line-height: 1.2">正在检查连接状态</view>
+        <view wx:else>
+            <view wx:if="{{error}}" class="card-foot" style="padding: 40rpx;background-color: white;text-align: center;color: #aaa;line-height: 1.2">{{error}}</view>
+            <view wx:else style="color: #333;">
+                <view wx:if="{{connectedWifi && connectedWifi.SSID!=qrcode.wifi.SSID}}" style="background-color: white;border-bottom-left-radius: 12rpx;border-bottom-right-radius: 12rpx;text-align: center;">
+                    <view class="setting">
+                        <view>WIFi名称</view>
+                        <view>{{connectedWifi.SSID}}</view>
+                    </view>
+                    <view class="setting">
+                        <view>WIFi密码</view>
+                        <input type="password" bindinput="valueChanged" data-field="password" style="text-align: right;" />
+                    </view>
+                    <view class="card-foot" bindtap="saveSSID">保存</view>
+                </view>
+                <view wx:else class="card-foot">
+                    您需要先连入一个新Wifi才能更换
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{fieldModal}}" bindtap="hideFieldModal">
+    <view class="card" style="width:560rpx;" catchtap="doNothing">
+        <view class="card-head" style="background-color: #08be31;padding: 30rpx;">
+            <view>
+                <image src="/res/images/info-6.png" style="width:100rpx;height: 100rpx;margin-top: 16rpx;"></image>
+                <view style="padding: 0 30rpx;text-align: left;font-size: 28rpx;color:#fff;">编辑{{fieldModal.title}}</view>
+            </view>
+        </view>
+        <view class="setting" style="padding:30rpx 40rpx;color:#333;background-color: #f1f1f1;text-align: center;border-top: 1rpx solid #333;">
+            <input style="width:480rpx;" focus value="{{fieldModal.value}}" bindinput="valueChanged" data-field="{{fieldModal.field}}"></input>
+        </view>
+        <view class="card-foot" bindtap="fieldSave" data-field="{{fieldModal.field}}">保存</view>
+    </view>
+</view>
+
+<view class="mask-dark" wx:if="{{unbindModal}}" bindtap="hideUnbind">
+    <view class="card" style="width:560rpx;" catchtap="doNothing">
+        <view class="card-head" style="background-color: #08be31;padding: 30rpx;">
+            <view>
+                <image src="/res/images/info-6.png" style="width:100rpx;height: 100rpx;margin-top: 16rpx;"></image>
+            </view>
+        </view>
+        <view class="setting" style="padding:30rpx 40rpx;color:#aaa;background-color: #f1f1f1;text-align: center;border-top: 1rpx solid #333;">
+            重置将清空该二维码的所有配置，并且无法恢复，确定要重置吗？
+        </view>
+        <view class="card-foot" bindtap="unbind">确定重置</view>
+    </view>
+</view>

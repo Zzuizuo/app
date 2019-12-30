@@ -1,0 +1,11 @@
+{
+    "navigationStyle": "custom",
+    "usingComponents": {
+        "searchbox": "/pages/component/searchbox",
+        "serverinfo": "/pages/component/serverinfo",
+        "goubox": "/pages/component/goubox",
+        "bowbox": "/pages/component/bowbox",
+        "pagenav": "/pages/component/pagenav",
+        "shopcard": "/pages/component/shopcard"
+    }
+}

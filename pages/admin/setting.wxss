@@ -1,0 +1,22 @@
+page {
+    background-color: #1a171a;
+}
+
+.grids {
+    border-top: 1rpx solid #000;
+    background-color: #1a171a;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.grid {
+    width: 373rpx;
+    height: 373rpx;
+    border-right: 1rpx solid #000;
+    border-bottom: 1rpx solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+}

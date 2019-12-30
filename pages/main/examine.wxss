@@ -1,0 +1,63 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: 128rpx;
+  box-sizing: border-box;
+}
+.page .pagetop {
+  font-weight: 100vw;
+  font-size: 48rpx;
+  color: #242627;
+  line-height: 1;
+  font-weight: 500;
+  padding: 26rpx 30rpx 52rpx 30rpx;
+  box-sizing: border-box;
+}
+.page .pagetop .tips {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 20rpx;
+}
+.page .questionbox {
+  padding: 0 30rpx;
+}
+.page .questionbox .questioncell {
+  margin-top: 52rpx;
+}
+.page .questionbox .boxright {
+  text-align: right;
+}
+.page .questionbox .boxright .boxbtn {
+  width: 150rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #666;
+  font-size: 24rpx;
+  background: #f0f0f0;
+  text-align: center;
+  border-radius: 30rpx;
+}
+.page .questionbox .boxright .activebtn {
+  background: #FFDB09;
+  color: #242627;
+}
+.page .questionbox .boxright input {
+  margin-right: 10rpx;
+}
+.page .questionbox .boxright textarea {
+  width: 690rpx;
+  height: 400rpx;
+  text-align: left;
+}
+.page .pageboxbtn {
+  position: fixed;
+  bottom: 40rpx;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 690rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  background: #FFDB09;
+  font-size: 32rpx;
+  text-align: center;
+}

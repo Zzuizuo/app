@@ -1,0 +1,79 @@
+page {
+    background-color: #333333;
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", "Arial", " Segoe UI", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun, sans-serif;
+    font-size: 28rpx;
+    line-height: 1.6;
+    color: white;
+}
+.head{
+    background-color: #232323;
+    padding: 30rpx;
+    text-align: center;
+    border-bottom: 1rpx solid #222;
+}
+.qrcode {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30rpx;
+    border-bottom: 1rpx solid #222;
+    color: #aaa;
+}
+.action{
+    background-color: #42a766;
+    color: #fff;
+    border-radius: 30rpx;
+    padding: 10rpx 30rpx;
+    margin: 0 auto;
+    width:200rpx;
+    text-align: center;
+}
+
+
+.datas {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.data {
+    width: 250rpx;
+    text-align: center;
+}
+
+.value {
+    font-size: 40rpx;
+    color: #42a766;
+}
+
+.value2 {
+    color: #888;
+    font-size: 22rpx;
+}
+
+.name {
+    color: #888;
+    font-size: 22rpx;
+}
+.locked{
+    margin-right: 10rpx;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 0 10rpx;
+    border-radius: 8rpx;
+    font-size: 22rpx;
+    line-height: 30rpx;
+    color: #aaa;
+}
+
+.search-bg {
+    background-color: #333;
+    text-align: left;
+    border-radius: 80rpx;
+    height: 80rpx;
+    display: flex;
+    margin-top: 30rpx;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 40rpx;
+}

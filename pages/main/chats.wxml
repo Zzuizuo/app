@@ -1,0 +1,72 @@
+<view wx:if="{{!session}}" class="loading">
+    <image class="icon" src="/res/images/loading1.png" style="width:100rpx;height:100rpx;"></image>
+</view>
+<view class="page-top">
+    <view class="imgBox" wx:if="{{setting.banners&&setting.banners.length}}">
+        <swiper style="width:750rpx;height:420rpx;" indicator-dots="{{(setting.banners.length<5&&setting.banners.length>1)?true:false}}" autoplay="{{true}}" bindchange="handleChangeBanner" circular="{{true}}" interval="{{5000}}" duration="{{1000}}">
+            <block wx:for="{{setting.banners}}" wx:key="index">
+                <swiper-item>
+                    <image src="{{item.image+'@cover7'}}" mode="aspectFill" bindtap="toBannerPath" data-item="{{item}}" />
+                </swiper-item>
+            </block>
+        </swiper>
+    </view>
+    <view class="imgBox" wx:else>
+        <image src="/res/images/logobg.png" />
+    </view>
+    <view class="userBox" wx:if="{{banner.icon}}">
+        <view class="nowrap" style="font-size: 28rpx;color: #fff;font-weight: 600;width: 500rpx;text-align: right;line-height: 140rpx;">{{banner.title}}</view>
+        <button class="simple" bindtap="toBannerPath" data-item="{{setting.banners[0]}}">
+            <image src="{{banner.icon}}"></image>
+        </button>
+    </view>
+    <view class="userBox" wx:else>
+        <view class="nowrap" style="font-size: 28rpx;color: #fff;font-weight: 600;width: 500rpx;text-align: right;line-height: 140rpx;">{{user.nickname}}</view>
+        <button class="simple" open-type="getUserInfo" bindgetuserinfo="auth">
+            <image src="{{user.headimgurl}}"></image>
+        </button>
+    </view>
+</view>
+
+<view class="searchBox">
+    <view class="search {{navFixed?'navFixed':''}}" style="padding-bottom: 40rpx;">
+        <view class="search-bg">
+            <button class="simple" bindtap="toUpdateLocation">
+                <view class="city">
+                    {{user.lastLocation?user.city:'附近'}}
+                    <!-- <image src="/res/images/location.png" style="width:30rpx;height: 30rpx;display: block;margin-left: 6rpx;"></image> -->
+                </view>
+            </button>
+            <input value="{{keywords}}" style="padding: 0 20rpx;flex: 1" placeholder-placeholder-style="color: #999" placeholder="输入关键字搜索" bindinput="keywordsChanged" bindconfirm="doSearch"></input>
+            <view class="search_deletebox" wx:if="{{keywords}}" bindtap="handleDeleteKeywords">
+                <image src="/res/images/search_deleteicon.png"></image>
+            </view>
+        </view>
+    </view>
+    <view class="{{navFixed?'nav-holder':''}}"></view>
+</view>
+
+<view class="comments">
+    <view wx:for="{{comments}}" wx:key="index">
+        <circle circle-data="{{item}}" circle-index="{{index}}" bindavatartap="showAvatar" bindcontentlongpress="showActions" bindtoShopPage="toShop" bindonReply="replyClicked"></circle>
+    </view>
+    <view wx:if="{{!loadingmore && !nomore}}" class="bottomloader">上拉加载更多</view>
+    <view wx:if="{{loadingmore && !nomore}}" class="bottomloader">正在加载更多</view>
+    <view wx:if="{{nomore && comments.length >0 }}" class="bottomloader">已全部加载</view>
+    <view wx:if="{{nomore && comments.length ==0 }}" class="nodataBox">
+        <view wx:if="{{query.keywords}}" class="blankbox">
+            <image src="/res/images/data_none.png" />
+            <view style="color: #999;font-size: 28rpx;margin-top: 60rpx">非常抱歉，暂无数据</view>
+        </view>
+        <view wx:if="{{!query.keywords}}" class="defaultbox">
+            <image src="/res/images/nodata.png"></image>
+            <view style="color: #999;font-size: 28rpx;margin-top: 20rpx">探索10%的靠谱好店</view>
+        </view>
+    </view>
+</view>
+
+<view class="mask-dark" style="background-color: rgba(0, 0, 0, 0.5);align-items: flex-end;" wx:if="{{replyModal}}" bindtap="hideReplyModal">
+    <view catchtap="doNothing">
+        <input value="{{form.content}}" type="text" style="padding:20rpx 30rpx;border-top:1rpx solid #ddd;background-color: #fcfcfc;width:690rpx;border-bottom: 1rpx solid #f1f1f1;" focus confirm-type="send" bindinput="replyChanged" bindconfirm="replySubmit" cursor-spacing="20rpx" placeholder="请输入" />
+    </view>
+</view>
